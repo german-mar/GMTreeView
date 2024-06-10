@@ -33,3 +33,13 @@ C:\Users\slava\Google Диск\ControlTreeViewLibrary\ControlTreeView\obj\Debug\
 C:\Users\slava\Google Диск\ControlTreeViewLibrary\ControlTreeView\obj\Debug\ControlTreeView.csproj.GenerateResource.Cache
 C:\Users\slava\Google Диск\ControlTreeViewLibrary\ControlTreeView\obj\Debug\ControlTreeView.dll
 C:\Users\slava\Google Диск\ControlTreeViewLibrary\ControlTreeView\obj\Debug\ControlTreeView.pdb
+C:\Users\gm\source\repos\GMTreeView\ControlTreeView\bin\Debug\ControlTreeView.XML
+C:\Users\gm\source\repos\GMTreeView\ControlTreeView\bin\Debug\ControlTreeView.dll
+C:\Users\gm\source\repos\GMTreeView\ControlTreeView\bin\Debug\ControlTreeView.pdb
+C:\Users\gm\source\repos\GMTreeView\ControlTreeView\obj\Debug\ControlTreeView.csproj.AssemblyReference.cache
+C:\Users\gm\source\repos\GMTreeView\ControlTreeView\obj\Debug\ControlTreeView.CTreeView.resources
+C:\Users\gm\source\repos\GMTreeView\ControlTreeView\obj\Debug\ControlTreeView.NodeControl.resources
+C:\Users\gm\source\repos\GMTreeView\ControlTreeView\obj\Debug\ControlTreeView.csproj.GenerateResource.cache
+C:\Users\gm\source\repos\GMTreeView\ControlTreeView\obj\Debug\ControlTreeView.csproj.CoreCompileInputs.cache
+C:\Users\gm\source\repos\GMTreeView\ControlTreeView\obj\Debug\ControlTreeView.dll
+C:\Users\gm\source\repos\GMTreeView\ControlTreeView\obj\Debug\ControlTreeView.pdb

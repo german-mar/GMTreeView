@@ -2,13 +2,13 @@
   "ExpandedNodes": [
     "",
     "\\ControlTreeView",
+    "\\ControlTreeView\\bin",
+    "\\ControlTreeView\\bin\\Debug",
     "\\ControlTreeView\\CTreeNode",
     "\\ControlTreeView\\CTreeNodeCollection",
     "\\ControlTreeView\\CTreeView",
-    "\\ControlTreeView\\obj",
-    "\\ControlTreeView\\Properties",
     "\\test"
   ],
-  "SelectedNode": "\\ControlTreeView\\INodeContainer.cs",
+  "SelectedNode": "\\ControlTreeView\\CTreeNode\\CTreeNode.Internal.cs",
   "PreviewInSolutionExplorer": false
 }
