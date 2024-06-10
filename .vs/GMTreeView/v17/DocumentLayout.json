@@ -3,6 +3,74 @@
   "WorkspaceRootPath": "C:\\Users\\gm\\source\\repos\\GMTreeView\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView.Protected.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ControlTreeView\\CTreeView\\CTreeView.Protected.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView.Public.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ControlTreeView\\CTreeView\\CTreeView.Public.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView.DragDrop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ControlTreeView\\CTreeView\\CTreeView.DragDrop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\test\\Form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:test\\Form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\test\\Class3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:test\\Class3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\test\\Class2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:test\\Class2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\test\\Class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:test\\Class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\Other Declarations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ControlTreeView\\Other Declarations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeViewEventArgs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ControlTreeView\\CTreeViewEventArgs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView.Internal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ControlTreeView\\CTreeView\\CTreeView.Internal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView(T).Public.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ControlTreeView\\CTreeView\\CTreeView(T).Public.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView(T).Protected.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ControlTreeView\\CTreeView\\CTreeView(T).Protected.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView(T).Internal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ControlTreeView\\CTreeView\\CTreeView(T).Internal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeNode\\CTreeNode.Public.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ControlTreeView\\CTreeNode\\CTreeNode.Public.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeNodeCollection\\CTreeNodeCollection.Public.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ControlTreeView\\CTreeNodeCollection\\CTreeNodeCollection.Public.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeNodeCollection\\CTreeNodeCollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ControlTreeView\\CTreeNodeCollection\\CTreeNodeCollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeNode\\CTreeNode.Internal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ControlTreeView\\CTreeNode\\CTreeNode.Internal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\INodeContainer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ControlTreeView\\INodeContainer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -18,7 +86,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,20 +94,224 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "CTreeViewEventArgs.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeViewEventArgs.cs",
+              "RelativeDocumentMoniker": "ControlTreeView\\CTreeViewEventArgs.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeViewEventArgs.cs",
+              "RelativeToolTip": "ControlTreeView\\CTreeViewEventArgs.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T20:14:25.733Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CTreeView.Public.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView.Public.cs",
+              "RelativeDocumentMoniker": "ControlTreeView\\CTreeView\\CTreeView.Public.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView.Public.cs",
+              "RelativeToolTip": "ControlTreeView\\CTreeView\\CTreeView.Public.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACUAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T20:14:10.604Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "CTreeView.Protected.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView.Protected.cs",
+              "RelativeDocumentMoniker": "ControlTreeView\\CTreeView\\CTreeView.Protected.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView.Protected.cs",
+              "RelativeToolTip": "ControlTreeView\\CTreeView\\CTreeView.Protected.cs",
+              "ViewState": "AQIAAP4AAAAAAAAAAAAswCcBAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T19:55:39.418Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Other Declarations.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\Other Declarations.cs",
+              "RelativeDocumentMoniker": "ControlTreeView\\Other Declarations.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\Other Declarations.cs",
+              "RelativeToolTip": "ControlTreeView\\Other Declarations.cs",
+              "ViewState": "AQIAACoAAAAAAAAAAAAcwDgAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T20:14:45.266Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CTreeView.DragDrop.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView.DragDrop.cs",
+              "RelativeDocumentMoniker": "ControlTreeView\\CTreeView\\CTreeView.DragDrop.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView.DragDrop.cs",
+              "RelativeToolTip": "ControlTreeView\\CTreeView\\CTreeView.DragDrop.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T18:39:38.763Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\test\\Class1.cs",
+              "RelativeDocumentMoniker": "test\\Class1.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\test\\Class1.cs",
+              "RelativeToolTip": "test\\Class1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T20:18:53.138Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Class2.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\test\\Class2.cs",
+              "RelativeDocumentMoniker": "test\\Class2.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\test\\Class2.cs",
+              "RelativeToolTip": "test\\Class2.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T20:19:00.745Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Class3.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\test\\Class3.cs",
+              "RelativeDocumentMoniker": "test\\Class3.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\test\\Class3.cs",
+              "RelativeToolTip": "test\\Class3.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T20:19:09.389Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\test\\Form1.cs",
+              "RelativeDocumentMoniker": "test\\Form1.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\test\\Form1.cs",
+              "RelativeToolTip": "test\\Form1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T20:19:21.485Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "CTreeView.Internal.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView.Internal.cs",
+              "RelativeDocumentMoniker": "ControlTreeView\\CTreeView\\CTreeView.Internal.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView.Internal.cs",
+              "RelativeToolTip": "ControlTreeView\\CTreeView\\CTreeView.Internal.cs",
+              "ViewState": "AQIAAKwAAAAAAAAAAAAAAL8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T19:46:58.518Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "CTreeView(T).Public.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView(T).Public.cs",
+              "RelativeDocumentMoniker": "ControlTreeView\\CTreeView\\CTreeView(T).Public.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView(T).Public.cs",
+              "RelativeToolTip": "ControlTreeView\\CTreeView\\CTreeView(T).Public.cs",
+              "ViewState": "AQIAAKQBAAAAAAAAAAAAAJ8BAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T18:29:26.338Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "CTreeView(T).Protected.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView(T).Protected.cs",
+              "RelativeDocumentMoniker": "ControlTreeView\\CTreeView\\CTreeView(T).Protected.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView(T).Protected.cs",
+              "RelativeToolTip": "ControlTreeView\\CTreeView\\CTreeView(T).Protected.cs",
+              "ViewState": "AQIAADoBAAAAAAAAAAAuwFsBAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T18:02:17.281Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "CTreeView(T).Internal.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView(T).Internal.cs",
+              "RelativeDocumentMoniker": "ControlTreeView\\CTreeView\\CTreeView(T).Internal.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeView\\CTreeView(T).Internal.cs",
+              "RelativeToolTip": "ControlTreeView\\CTreeView\\CTreeView(T).Internal.cs",
+              "ViewState": "AQIAAK8AAAAAAAAAAAAAALsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T17:35:41.216Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CTreeNodeCollection.Public.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeNodeCollection\\CTreeNodeCollection.Public.cs",
+              "RelativeDocumentMoniker": "ControlTreeView\\CTreeNodeCollection\\CTreeNodeCollection.Public.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeNodeCollection\\CTreeNodeCollection.Public.cs",
+              "RelativeToolTip": "ControlTreeView\\CTreeNodeCollection\\CTreeNodeCollection.Public.cs",
+              "ViewState": "AQIAAIQAAAAAAAAAAAAAAJ4AAAAUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T17:23:29.538Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "CTreeNodeCollection.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeNodeCollection\\CTreeNodeCollection.cs",
+              "RelativeDocumentMoniker": "ControlTreeView\\CTreeNodeCollection\\CTreeNodeCollection.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeNodeCollection\\CTreeNodeCollection.cs",
+              "RelativeToolTip": "ControlTreeView\\CTreeNodeCollection\\CTreeNodeCollection.cs",
+              "ViewState": "AQIAAKAAAAAAAAAAAAAAAK4AAAAwAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T17:17:29.779Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "CTreeNode.Public.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeNode\\CTreeNode.Public.cs",
+              "RelativeDocumentMoniker": "ControlTreeView\\CTreeNode\\CTreeNode.Public.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeNode\\CTreeNode.Public.cs",
+              "RelativeToolTip": "ControlTreeView\\CTreeNode\\CTreeNode.Public.cs",
+              "ViewState": "AQIAAHABAAAAAAAAAAAowH4BAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T16:17:49.92Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "CTreeNode.Internal.cs",
+              "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeNode\\CTreeNode.Internal.cs",
+              "RelativeDocumentMoniker": "ControlTreeView\\CTreeNode\\CTreeNode.Internal.cs",
+              "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\CTreeNode\\CTreeNode.Internal.cs",
+              "RelativeToolTip": "ControlTreeView\\CTreeNode\\CTreeNode.Internal.cs",
+              "ViewState": "AQIAAJoAAAAAAAAAAAAAAOEAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T15:41:49.548Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
               "Title": "INodeContainer.cs",
               "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\INodeContainer.cs",
               "RelativeDocumentMoniker": "ControlTreeView\\INodeContainer.cs",
               "ToolTip": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\INodeContainer.cs",
               "RelativeToolTip": "ControlTreeView\\INodeContainer.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T15:03:41.818Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-10T15:03:41.818Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 18,
               "Title": "INodeControl.cs",
               "DocumentMoniker": "C:\\Users\\gm\\source\\repos\\GMTreeView\\ControlTreeView\\INodeControl.cs",
               "RelativeDocumentMoniker": "ControlTreeView\\INodeControl.cs",
@@ -47,8 +319,7 @@
               "RelativeToolTip": "ControlTreeView\\INodeControl.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T15:03:37.166Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-10T15:03:37.166Z"
             },
             {
               "$type": "Bookmark",
