@@ -8,8 +8,11 @@ namespace ControlTreeView
 {
     public partial class CTreeNodeCollection
     {
+        #region properties
         private INodeContainer owner;
+        #endregion
 
+        #region Constructor
         /// <summary>
         /// Create a new instanse of CTreeNodeCollection assigned to specified owner.
         /// </summary>
@@ -18,7 +21,9 @@ namespace ControlTreeView
         {
             this.owner = owner;
         }
+        #endregion
 
+        #region ParentCTreeView
         /// <summary>
         /// Gets the parent CTreeView that this collection is assigned to.
         /// </summary>
@@ -26,7 +31,9 @@ namespace ControlTreeView
         {
             get { return owner.OwnerCTreeView; }
         }
+        #endregion
 
+        #region BeginUpdateCTreeView, EndUpdateCTreeView
         private void BeginUpdateCTreeView()
         {
             if (ParentCTreeView != null) ParentCTreeView.BeginUpdate();
@@ -36,7 +43,9 @@ namespace ControlTreeView
         {
             if (ParentCTreeView != null) ParentCTreeView.EndUpdate();
         }
+        #endregion
 
+        #region InsertItem, RemoveItem, SetItem, ClearItems
         /// <summary>
         /// Inserts an element into the Collection at the specified index.
         /// </summary>
@@ -141,7 +150,9 @@ namespace ControlTreeView
             base.ClearItems();
             EndUpdateCTreeView();
         }
+        #endregion
 
+        #region GetLines
         /// <summary>
         /// Get the list includes common line and lines for nodes of this CTreeNodeCollection.
         /// </summary>
@@ -155,5 +166,7 @@ namespace ControlTreeView
             foreach (CTreeNode childNode in this) lines.Add(childLineCalc(childNode));
             return lines;
         }
+        #endregion
+
     }
 }

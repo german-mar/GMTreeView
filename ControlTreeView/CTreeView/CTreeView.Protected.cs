@@ -9,6 +9,9 @@ namespace ControlTreeView
 {
     public partial class CTreeView
     {
+        #region Properties
+
+        #region DefaultSize
         /// <summary>
         /// Gets the default size of the control.
         /// </summary>
@@ -17,8 +20,13 @@ namespace ControlTreeView
         {
             get { return new Size(100, 100); }
         }
+        #endregion
+
+        #endregion
 
         #region Methods
+
+        #region OnCollapseNode
         /// <summary>
         /// Raises the CollapseNode event.
         /// </summary>
@@ -28,7 +36,9 @@ namespace ControlTreeView
             Recalculate();
             if (CollapseNode != null) CollapseNode(this, e);
         }
+        #endregion
 
+        #region OnExpandNode
         /// <summary>
         /// Raises the ExpandNode event.
         /// </summary>
@@ -38,7 +48,9 @@ namespace ControlTreeView
             Recalculate();
             if (ExpandNode != null) ExpandNode(this, e);
         }
+        #endregion
 
+        #region OnSelectNode
         /// <summary>
         /// Raises the SelectNode event.
         /// </summary>
@@ -50,7 +62,9 @@ namespace ControlTreeView
             OwnerCTreeView.Refresh();
             if (SelectNode != null) SelectNode(this, e);
         }
+        #endregion
 
+        #region OnDragOver
         /// <summary>
         /// Raises the DragOver event.
         /// </summary>
@@ -76,7 +90,9 @@ namespace ControlTreeView
             }
             base.OnDragOver(drgevent);
         }
+        #endregion
 
+        #region OnDragEnter
         /// <summary>
         /// Raises the DragEnter event.
         /// </summary>
@@ -102,7 +118,9 @@ namespace ControlTreeView
             }
             base.OnDragEnter(drgevent);
         }
+        #endregion
 
+        #region OnDragLeave
         /// <summary>
         /// Raises the DragLeave event.
         /// </summary>
@@ -113,7 +131,9 @@ namespace ControlTreeView
             ResetDragTargetPosition();
             base.OnDragLeave(e);
         }
+        #endregion
 
+        #region OnDragDrop
         /// <summary>
         /// Raises the DragDrop event.
         /// </summary>
@@ -152,7 +172,9 @@ namespace ControlTreeView
             base.OnDragDrop(drgevent);
             ResetDragTargetPosition();
         }
+        #endregion
 
+        #region OnMouseDown
         /// <summary>
         /// Raises the MouseDown event.
         /// </summary>
@@ -182,7 +204,9 @@ namespace ControlTreeView
 
             base.OnMouseDown(e);
         }
+        #endregion
 
+        #region OnPaint
         /// <summary>
         /// Raises the Paint event.
         /// </summary>
@@ -191,6 +215,7 @@ namespace ControlTreeView
         {
             e.Graphics.TranslateTransform(AutoScrollPosition.X, AutoScrollPosition.Y);
 
+            #region Paint lines
             //Paint lines
             if (ShowLines)
             {
@@ -200,14 +225,18 @@ namespace ControlTreeView
                 });
                 if (rootLines != null) foreach (CTreeNode.Line line in rootLines) e.Graphics.DrawLine(LinesPen, line.Point1, line.Point2);
             }
+            #endregion
 
+            #region Paint drag and drop destination animation
             //Paint drag and drop destination animation.
             if (DragTargetPosition.Enabled)
             {
                 if (!dragDropRectangle.IsEmpty) e.Graphics.FillRectangle(selectionBrush, dragDropRectangle);
                 if (!dragDropLinePoint1.IsEmpty && !dragDropLinePoint2.IsEmpty) e.Graphics.DrawLine(dragDropLinePen, dragDropLinePoint1, dragDropLinePoint2);
             }
+            #endregion
 
+            #region Paint selection
             //Paint selection
             foreach (CTreeNode node in SelectedNodes)
             {
@@ -217,7 +246,9 @@ namespace ControlTreeView
                 selectionRectangle.Width--; selectionRectangle.Height--;//костыль
                 e.Graphics.DrawRectangle(selectionPen, selectionRectangle);
             }
+            #endregion
 
+            #region Paint PlusMinus buttons
             //Paint PlusMinus buttons
             if (ShowPlusMinus)
             {
@@ -230,6 +261,7 @@ namespace ControlTreeView
                     }
                 });
             }
+            #endregion
 
             ////Test bounds
             //this.Nodes.TraverseNodes(node => node.Visible, node =>
@@ -239,6 +271,8 @@ namespace ControlTreeView
 
             base.OnPaint(e);
         }
+        #endregion
+
         #endregion
     }
 }

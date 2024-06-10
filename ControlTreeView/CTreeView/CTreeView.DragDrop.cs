@@ -11,6 +11,7 @@ namespace ControlTreeView
 {
     public partial class CTreeView
     {
+        #region SendMessage <-- user32.dll
         [DllImport("user32.dll")]
         static extern int SendMessage(
                int hWnd,      // handle to destination window
@@ -18,19 +19,24 @@ namespace ControlTreeView
                long wParam,  // first message parameter
                long lParam   // second message parameter
                );
+        #endregion
 
+        #region struct DragTargetPositionClass
         /// <summary>
         /// 
         /// </summary>
         public struct DragTargetPositionClass
         {
+            #region Constructor
             internal DragTargetPositionClass(CTreeNode nodeDirect, CTreeNode nodeBefore, CTreeNode nodeAfter)
             {
                 _nodeDirect = nodeDirect;
                 _nodeBefore = nodeBefore;
                 _nodeAfter = nodeAfter;
             }
+            #endregion
 
+            #region Ebabled
             /// <summary>
             /// Gets a value indicating whether drag destination nodes are not empty.
             /// </summary>
@@ -38,7 +44,9 @@ namespace ControlTreeView
             {
                 get { return (_nodeDirect != null || _nodeBefore != null || _nodeAfter != null); }
             }
+            #endregion
 
+            #region NodeDirect
             private CTreeNode _nodeDirect;
             /// <summary>
             /// The direct node of drag target position.
@@ -47,7 +55,9 @@ namespace ControlTreeView
             {
                 get { return _nodeDirect; }
             }
+            #endregion
 
+            #region NodeBefore
             private CTreeNode _nodeBefore;
             /// <summary>
             /// The upper node of drag target position.
@@ -56,7 +66,9 @@ namespace ControlTreeView
             {
                 get { return _nodeBefore; }
             }
+            #endregion
 
+            #region NodeAfter
             private CTreeNode _nodeAfter;
             /// <summary>
             /// The lower node of drag target position.
@@ -65,11 +77,15 @@ namespace ControlTreeView
             {
                 get { return _nodeAfter; }
             }
+            #endregion
         }
+        #endregion
 
         private Pen dragDropLinePen;
         private Point dragDropLinePoint1, dragDropLinePoint2;
         private Rectangle dragDropRectangle;
+
+        #region scrollTimer_Tick
         private Timer scrollTimer;
 
         private void scrollTimer_Tick(object sender, EventArgs e)
@@ -79,7 +95,9 @@ namespace ControlTreeView
             if (scrollRigh) SendMessage(this.Handle.ToInt32(), 276, 1, 0);
             else if (scrollLeft) SendMessage(this.Handle.ToInt32(), 276, 0, 0);
         }
+        #endregion
 
+        #region SetScrollDirections
         private bool scrollUp, scrollDown, scrollRigh, scrollLeft;
         /// <summary>
         /// Sets the directions in which need scroll.
@@ -97,7 +115,11 @@ namespace ControlTreeView
             this.scrollRigh = scrollRigh;
             this.scrollLeft = scrollLeft;
         }
+        #endregion
 
+        #region updateDragTargetPosition (3 methods)
+
+        #region updateDragTargetPosition()
         private void updateDragTargetPosition()
         {
             if (DragTargetPosition.NodeDirect != null || DragTargetPosition.NodeBefore != null || DragTargetPosition.NodeAfter != null)
@@ -109,7 +131,9 @@ namespace ControlTreeView
                 Refresh();
             }
         }
+        #endregion
 
+        #region updateDragTargetPosition(CTreeNode node)
         private void updateDragTargetPosition(CTreeNode node)
         {
             if (DragTargetPosition.NodeDirect != node)
@@ -122,7 +146,9 @@ namespace ControlTreeView
                 Refresh();
             }
         }
+        #endregion
 
+        #region updateDragTargetPosition(CTreeNode nodeBefore, CTreeNode nodeAfter)
         private void updateDragTargetPosition(CTreeNode nodeBefore, CTreeNode nodeAfter)
         {
             if (DragTargetPosition.NodeBefore != nodeBefore || DragTargetPosition.NodeAfter != nodeAfter)
@@ -177,14 +203,20 @@ namespace ControlTreeView
                 Refresh();
             }
         }
+        #endregion
+        
+        #endregion
 
+        #region ResetDragTargetPosition
         internal void ResetDragTargetPosition()
         {
             scrollTimer.Enabled = false;
 
             updateDragTargetPosition();
         }
+        #endregion
 
+        #region SetDragTargetPosition
         /// <summary>
         /// Sets the drag destination nodes according to specified cursor position.
         /// </summary>
@@ -293,7 +325,9 @@ namespace ControlTreeView
             }
             updateDragTargetPosition();
         }
+        #endregion
 
+        #region CheckValidDrop
         /// <summary>
         /// Checking a valid of drop operation in current destination.
         /// </summary>
@@ -347,4 +381,5 @@ namespace ControlTreeView
             return true;
         }
     }
+    #endregion
 }

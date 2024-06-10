@@ -8,6 +8,7 @@ namespace ControlTreeView
 {
     public partial class CTreeView
     {
+        #region SuspendUpdate
         private int suspendUpdateCount;
         /// <summary>
         /// 
@@ -20,23 +21,29 @@ namespace ControlTreeView
                 else return false;
             }
         }
+        #endregion
 
         /// <summary>
         /// The list of lines for the CTreeView.
         /// </summary>
         private List<CTreeNode.Line> rootLines;
 
+        #region Recalculate
         internal void Recalculate()
         {
             if (!SuspendUpdate)
             {
+                #region Func
                 Func<CTreeNode, Point> plusMinusCalc = null;
                 Func<CTreeNode, CTreeNode.Line> parentLineCalc = null;
                 Func<CTreeNodeCollection, CTreeNode.Line> commonLineCalc = null;
                 Func<CTreeNode, CTreeNode.Line> childLineCalc = null;
+                #endregion
+
                 const int endLineIndent = 2;
                 bool showRootPlusMinus = true;
 
+                #region Calculate Visible
                 //Calculate Visible
                 foreach (CTreeNode rootNode in Nodes)
                 {
@@ -46,9 +53,11 @@ namespace ControlTreeView
                         node.Visible = true;
                     });
                 }
+                #endregion
 
                 switch (DrawStyle)
                 {
+                    #region case CTreeViewDrawStyle.LinearTree
                     case CTreeViewDrawStyle.LinearTree:
                         showRootPlusMinus = ShowRootLines;
                         Point startLocation = new Point(Padding.Left + 3, Padding.Top + 3);
@@ -66,7 +75,9 @@ namespace ControlTreeView
                             new Point(child.Location.X - IndentDepth + 5, child.Location.Y + child.Bounds.Height / 2),
                             new Point(child.Location.X - endLineIndent, child.Location.Y + child.Bounds.Height / 2)));
                         break;
-
+                    #endregion
+                    
+                    #region case CTreeViewDrawStyle.HorizontalDiagram
                     case CTreeViewDrawStyle.HorizontalDiagram:
                         int startX = Padding.Left + 3;
                         int startYMax = Padding.Top + 3;
@@ -84,7 +95,9 @@ namespace ControlTreeView
                             new Point(child.Location.X - IndentDepth / 2, child.Location.Y + child.Bounds.Height / 2),
                             new Point(child.Location.X - endLineIndent, child.Location.Y + child.Bounds.Height / 2)));
                         break;
-
+                    #endregion
+                    
+                    #region case CTreeViewDrawStyle.VerticalDiagram
                     case CTreeViewDrawStyle.VerticalDiagram:
                         int startXMax = Padding.Left + 3;
                         int startY = Padding.Top + 3;
@@ -102,8 +115,10 @@ namespace ControlTreeView
                             new Point(child.Location.X + child.Bounds.Width / 2, child.Location.Y - IndentDepth / 2),
                             new Point(child.Location.X + child.Bounds.Width / 2, child.Location.Y - endLineIndent)));
                         break;
+                    #endregion
                 }
 
+                #region ShowPlusMinus, ShowLines
                 //Calculate PlusMinus
                 if (ShowPlusMinus)
                 {
@@ -117,7 +132,9 @@ namespace ControlTreeView
                     if (ShowRootLines) rootLines = Nodes.GetLines(commonLineCalc, childLineCalc);
                     else rootLines = null;
                 }
+                #endregion
 
+                #region Calculate Bounds
                 //Calculate Bounds
                 BoundsSubtree = Rectangle.Empty;
                 foreach (CTreeNode node in Nodes)
@@ -125,7 +142,9 @@ namespace ControlTreeView
                     node.CalculateBounds();
                     BoundsSubtree = Rectangle.Union(node.BoundsSubtree, BoundsSubtree);
                 }
+                #endregion
 
+                #region Locate controls
                 //Locate controls
                 this.SuspendLayout();
                 this.Nodes.TraverseNodes(node =>
@@ -142,7 +161,9 @@ namespace ControlTreeView
                 //Invalidate();
                 //Update();
                 Refresh();
+                #endregion
             }
         }
+        #endregion
     }
 }

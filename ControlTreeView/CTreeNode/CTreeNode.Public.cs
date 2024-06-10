@@ -11,7 +11,7 @@ namespace ControlTreeView
     /// </summary>
     public partial class CTreeNode : INodeContainer
     {
-        #region Constructors
+        #region Constructors (3)
         /// <summary>
         /// Initializes a new instance of the CTreeNode class with the default control.
         /// </summary>
@@ -41,6 +41,8 @@ namespace ControlTreeView
         #endregion
 
         #region Properties
+
+        #region Control
         private Control _Control;
         /// <summary>
         /// Gets or sets the user control assigned to the current tree node.
@@ -62,7 +64,9 @@ namespace ControlTreeView
                 if (notNull) OwnerCTreeView.Recalculate();
             }
         }
+        #endregion
 
+        #region Nodes, ParentNode, Parent
         /// <summary>
         /// Gets the collection of CTreeNode objects assigned to the current tree node.
         /// </summary>
@@ -87,7 +91,9 @@ namespace ControlTreeView
                 else return OwnerCTreeView;
             }
         }
+        #endregion
 
+        #region Name, Index
         /// <summary>
         /// Gets or sets the name of the tree node.
         /// </summary>
@@ -105,7 +111,9 @@ namespace ControlTreeView
                 else return -1;
             }
         }
+        #endregion
 
+        #region OwnerCTreeView
         private CTreeView _OwnerCTreeView;
         /// <summary>
         /// Gets the parent tree view that the tree node is assigned to.
@@ -127,12 +135,16 @@ namespace ControlTreeView
         //    }
         //    internal set { _CTreeView = value; }
         //}
+        #endregion
 
+        #region Tag
         /// <summary>
         /// Gets or sets the object that contains data about the tree node.
         /// </summary>
         public object Tag { get; set; }
+        #endregion
 
+        #region NextNode, PrevNode, FirstNode, LastNode
         /// <summary>
         /// Gets the next sibling tree node.
         /// </summary>
@@ -186,7 +198,9 @@ namespace ControlTreeView
                 else return null;
             }
         }
+        #endregion
 
+        #region Level
         private int _Level;
         /// <summary>
         /// Gets the zero-based depth of the tree node in the CTreeView.
@@ -201,7 +215,9 @@ namespace ControlTreeView
                 Nodes.TraverseNodes(node => { node._Level = node.ParentNode.Level + 1; });
             }
         }
+        #endregion
 
+        #region FullPath
         /// <summary>
         /// Gets the path from the root tree node to the current tree node.
         /// </summary>
@@ -215,7 +231,9 @@ namespace ControlTreeView
                 else return ParentNode.FullPath + OwnerCTreeView.PathSeparator + Name;
             }
         }
+        #endregion
 
+        #region IsExpanded, IsSelected, Visible
         /// <summary>
         /// Gets a value indicating whether the tree node is in the expanded state.
         /// </summary>
@@ -277,7 +295,9 @@ namespace ControlTreeView
         //        else return Parent.IsShown;
         //    }
         //}
+        #endregion
 
+        #region Bounds, BoundsSubtree
         /// <summary>
         /// Gets the bounds of the tree node.
         /// </summary>
@@ -306,11 +326,13 @@ namespace ControlTreeView
                 else return _boundsSubtree;
             }
         }
+        #endregion
 
         #endregion
 
         #region Methods
 
+        #region Expand, Collapse, ExpandAll, CollapseAll, Toggle
         /// <summary>
         /// Expands the tree node.
         /// </summary>
@@ -361,7 +383,9 @@ namespace ControlTreeView
             if (IsExpanded) Collapse();
             else Expand();
         }
+        #endregion
 
+        #region Drag
         //?
         public void Drag()
         {
@@ -382,7 +406,9 @@ namespace ControlTreeView
                 }
             }
         }
+        #endregion
 
+        #region GetNodeCount
         /// <summary>
         /// Returns the number of child tree nodes.
         /// </summary>
@@ -398,7 +424,9 @@ namespace ControlTreeView
             }
             else return Nodes.Count;
         }
+        #endregion
 
+        #region TraverseNodes (2 methods)
         /// <summary>
         /// Apply action to this node and recursively to each child node.
         /// </summary>
@@ -422,6 +450,8 @@ namespace ControlTreeView
                 foreach (CTreeNode childNode in Nodes) childNode.TraverseNodes(condition, action);
             }
         }
+        #endregion
+
         #endregion
     }
 }

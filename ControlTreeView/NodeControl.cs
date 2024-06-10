@@ -11,13 +11,18 @@ namespace ControlTreeView
     /// </summary>
     public class NodeControl : UserControl, INodeControl
     {
+        #region Constructor
         public NodeControl()
         {
             DoubleBuffered = true;
         }
+        #endregion
 
+        #region OwnerNode
         public CTreeNode OwnerNode { get; set; }
+        #endregion
 
+        #region Area
         /// <summary>
         /// Experimental property for changing control's position relative to lines
         /// </summary>
@@ -25,10 +30,12 @@ namespace ControlTreeView
         {
             get { return new Rectangle(Point.Empty,Size); }
         }
-        
+        #endregion
+
         private Point mouseDownPosition;
         private bool unselectAfterMouseUp, unselectOtherAfterMouseUp; //Flags that indicates what need to do on MouseUp
 
+        #region OnMouseDown
         /// <summary>
         /// Raises the MouseDown event.
         /// </summary>
@@ -64,7 +71,9 @@ namespace ControlTreeView
 
             base.OnMouseDown(e);
         }
+        #endregion
 
+        #region StartDragging
         //Start dragging if mouse was moved
         private void StartDragging(object sender, MouseEventArgs e)
         {
@@ -78,7 +87,9 @@ namespace ControlTreeView
                 OwnerNode.Drag();
             }
         }
+        #endregion
 
+        #region NotDragging
         //Do not start dragging if mouse was up
         private void NotDragging(object sender, MouseEventArgs e)
         {
@@ -95,7 +106,9 @@ namespace ControlTreeView
                 foreach (CTreeNode node in nodesToUnselect) node.IsSelected = false;
             }
         }
+        #endregion
 
+        #region InitializeComponent
         private void InitializeComponent()
         {
             this.SuspendLayout();
@@ -106,5 +119,6 @@ namespace ControlTreeView
             this.ResumeLayout(false);
 
         }
+        #endregion
     }
 }

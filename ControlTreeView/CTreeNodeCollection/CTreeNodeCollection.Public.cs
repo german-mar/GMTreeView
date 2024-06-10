@@ -11,6 +11,7 @@ namespace ControlTreeView
     /// </summary>
     public partial class CTreeNodeCollection : Collection<CTreeNode>
     {
+        #region TraverseNodes (2 methods)
         /// <summary>
         /// Apply action to each node in CTreeNodeCollection and recursively to child nodes.
         /// </summary>
@@ -29,7 +30,9 @@ namespace ControlTreeView
         {
             foreach (CTreeNode childNode in this) childNode.TraverseNodes(condition, action);
         }
+        #endregion
 
+        #region AddRange, InsertRange, RemoveRange(not implemented)
         /// <summary>
         /// Adds an array of previously created tree nodes to the collection.
         /// </summary>
@@ -42,7 +45,7 @@ namespace ControlTreeView
             foreach (CTreeNode node in nodes) Add(node);
             EndUpdateCTreeView();
         }
-
+        
         /// <summary>
         /// Inserts an array of previously created tree nodes to the collection at the specific position.
         /// </summary>
@@ -63,7 +66,9 @@ namespace ControlTreeView
         //    foreach (CTreeNode node in nodes) Remove(node);
         //    EndUpdateCTreeView();
         //}
+        #endregion
 
+        #region CTreeNodeCollection:   get, Find, RemoveByKey, IndexOfKey, ContainsKey
         /// <summary>
         /// Gets the tree node with the specified key from the collection.
         /// </summary>
@@ -137,5 +142,6 @@ namespace ControlTreeView
                 }
             return false;
         }
+        #endregion
     }
 }

@@ -9,11 +9,14 @@ namespace CTreeView
     [Designer(typeof(CTreeViewDesigner))]
     public partial class CTreeView<T> : ScrollableControl,INodeContainer
     {
+        #region BoundsSubtree
         /// <summary>
         /// The union of all child nodes bounds.
         /// </summary>
         public Rectangle BoundsSubtree { get; internal set; }
+        #endregion
 
+        #region SuspendUpdate
         private int suspendUpdateCount;
         /// <summary>
         /// 
@@ -26,7 +29,9 @@ namespace CTreeView
                 else return false;
             }
         }
+        #endregion
 
+        #region Recalculate
         /// <summary>
         /// The list of lines for the CTreeView.
         /// </summary>
@@ -38,13 +43,17 @@ namespace CTreeView
         {
             if (!SuspendUpdate)
             {
+                #region Func
                 Func<CTreeNode, Point> plusMinusCalc = null;
                 Func<CTreeNode, CTreeNode.Line> parentLineCalc = null;
                 Func<CTreeNodeCollection<T>, CTreeNode.Line> commonLineCalc = null;
                 Func<CTreeNode, CTreeNode.Line> childLineCalc = null;
+                #endregion
+
                 const int endLineIndent = 2;
                 bool showRootPlusMinus = true;
 
+                #region Calculate Visible
                 //Calculate Visible (may be optimized)
                 foreach (CTreeNode<T> rootNode in Nodes)
                 {
@@ -54,9 +63,11 @@ namespace CTreeView
                         node.Visible = true;
                     });
                 }
+                #endregion
 
                 switch (DrawStyle)
                 {
+                    #region case CTreeViewDrawStyle.LinearTree
                     case CTreeViewDrawStyle.LinearTree:
                         showRootPlusMinus = ShowRootLines;
                         Point startLocation = new Point(Padding.Left + 3, Padding.Top + 3);
@@ -74,7 +85,9 @@ namespace CTreeView
                             new Point(child.Location.X - IndentDepth + 5, child.Location.Y + child.Control.Height / 2),
                             new Point(child.Location.X - endLineIndent, child.Location.Y + child.Control.Height / 2)));
                         break;
+                    #endregion
 
+                    #region case CTreeViewDrawStyle.HorizontalDiagram
                     case CTreeViewDrawStyle.HorizontalDiagram:
                         int startX = Padding.Left + 3;
                         int startYMax = Padding.Top + 3;
@@ -92,7 +105,9 @@ namespace CTreeView
                             new Point(child.Location.X - IndentDepth / 2, child.Location.Y + child.Control.Height / 2),
                             new Point(child.Location.X - endLineIndent, child.Location.Y + child.Control.Height / 2)));
                         break;
+                    #endregion
 
+                    #region case CTreeViewDrawStyle.VerticalDiagram
                     case CTreeViewDrawStyle.VerticalDiagram:
                         int startXMax = Padding.Left + 3;
                         int startY = Padding.Top + 3;
@@ -110,8 +125,10 @@ namespace CTreeView
                             new Point(child.Location.X + child.Control.Width / 2, child.Location.Y - IndentDepth / 2),
                             new Point(child.Location.X + child.Control.Width / 2, child.Location.Y - endLineIndent)));
                         break;
+                    #endregion
                 }
 
+                #region Calculate PlusMinus, Calculate Lines, Calculate Bounds
                 //Calculate PlusMinus
                 if (ShowPlusMinus)
                 {
@@ -133,7 +150,9 @@ namespace CTreeView
                     node.CalculateBounds();
                     BoundsSubtree = Rectangle.Union(node.BoundsSubtree, BoundsSubtree);
                 }
+                #endregion
 
+                #region Locate controls
                 //Locate controls
                 this.SuspendLayout();
                 this.Nodes.TraverseNodes(node =>
@@ -147,6 +166,7 @@ namespace CTreeView
                     //}
                 });
                 this.ResumeLayout(false);
+                #endregion
 
                 this.AutoScrollMinSize = new Size(BoundsSubtree.Width + Padding.Right, BoundsSubtree.Height + Padding.Bottom);
                 //Invalidate();
@@ -154,5 +174,6 @@ namespace CTreeView
                 Refresh();
             }
         }
+        #endregion
     }
 }

@@ -8,6 +8,7 @@ namespace ControlTreeView
     {
         #region Properties
 
+        #region Location and Size
         private Point _location;
         /// <summary>
         /// The location of this node.
@@ -34,7 +35,9 @@ namespace ControlTreeView
             }
             //set { _size = value; }
         }
+        #endregion
 
+        #region Lines
         /// <summary>
         /// The list of lines for this node.
         /// </summary>
@@ -49,7 +52,9 @@ namespace ControlTreeView
             internal Point Point1;
             internal Point Point2;
         }
+        #endregion
 
+        #region PlusMinus
         /// <summary>
         /// The plus-sign (+) or minus-sign (-) button's area for this node.
         /// </summary>
@@ -73,8 +78,11 @@ namespace ControlTreeView
         }
         #endregion
 
+        #endregion
+
         #region Methods
 
+        #region NextLocation
         /// <summary>
         /// Calculate locations of this node and all child nodes for the CTreeViewDrawStyle.LinearTree.
         /// </summary>
@@ -93,7 +101,9 @@ namespace ControlTreeView
             }
             return currentLocation;
         }
+        #endregion
 
+        #region NextYMax, NextXMax
         /// <summary>
         /// Calculate locations of this node and all child nodes for the CTreeViewDrawStyle.HorizontalDiagram.
         /// </summary>
@@ -150,7 +160,9 @@ namespace ControlTreeView
             }
             return currentXMax;
         }
+        #endregion
 
+        #region CalculatePlusMinus, CalculateLines, CalculateBounds
         /// <summary>
         /// Calculates coordinats for PlusMinus button of this node and all child nodes.
         /// </summary>
@@ -206,8 +218,10 @@ namespace ControlTreeView
                     _boundsSubtree = Rectangle.Union(child.BoundsSubtree, _boundsSubtree);
                 }
             }
-        } 
+        }
+        #endregion
 
+        #region BeginUpdateCTreeView, EndUpdateCTreeView
         private void BeginUpdateCTreeView()
         {
             if (OwnerCTreeView != null) OwnerCTreeView.BeginUpdate();
@@ -217,6 +231,8 @@ namespace ControlTreeView
         {
             if (OwnerCTreeView != null) OwnerCTreeView.EndUpdate();
         }
+        #endregion
+
         #endregion
     }
 }

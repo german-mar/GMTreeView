@@ -11,12 +11,11 @@ namespace ControlTreeView
 {
     public partial class CTreeView : Panel, INodeContainer
     {
-        #region Constructors
+        #region Constructor
         /// <summary>
         /// Initializes a new instance of the CTreeView class.
         /// </summary>
-        public CTreeView()
-            : base()
+        public CTreeView() : base()
         {
             suspendUpdateCount = 0;
             //InitializeComponent();
@@ -63,26 +62,33 @@ namespace ControlTreeView
 
         #region Properties
 
+        #region OwnerCTreeView
         [BrowsableAttribute(false)]
         public CTreeView OwnerCTreeView
         {
             get { return this; }
         }
+        #endregion
 
+        #region Nodes
         /// <summary>
         /// Gets the collection of tree nodes that are assigned to the CTreeView control.
         /// </summary>
         //[EditorAttribute(typeof(CTreeViewEditor), typeof(System.Drawing.Design.UITypeEditor))]
         [BrowsableAttribute(false)]
         public CTreeNodeCollection Nodes { get; private set; }
+        #endregion
 
+        #region PathSeparator
         /// <summary>
         /// Gets or sets the delimiter string that the tree node path uses.
         /// </summary>
         /// <value>The delimiter string that the tree node CTreeNode.FullPath property uses. The default is the backslash character (\).</value>
         [DefaultValue(@"\")]
         public string PathSeparator { get; set; }
+        #endregion
 
+        #region FirstNode, LastNode
         /// <summary>
         /// Gets the first child tree node in the tree node collection.
         /// </summary>
@@ -92,7 +98,7 @@ namespace ControlTreeView
         {
             get { return Nodes[0]; }
         }
-
+        
         /// <summary>
         /// Gets the last child tree node in the tree node collection.
         /// </summary>
@@ -102,7 +108,9 @@ namespace ControlTreeView
         {
             get { return Nodes[Nodes.Count - 1]; }
         }
+        #endregion
 
+        #region SelectedNodes
         internal List<CTreeNode> _selectedNodes;
         /// <summary>
         /// 
@@ -114,7 +122,9 @@ namespace ControlTreeView
         }
         internal Pen selectionPen;
         internal SolidBrush selectionBrush;
+        #endregion
 
+        #region DrawStyle
         private CTreeViewDrawStyle _DrawStyle;
         /// <summary>
         /// Gets or sets way that will draw the CTreeView.
@@ -132,7 +142,9 @@ namespace ControlTreeView
                 }
             }
         }
+        #endregion
 
+        #region PlusMinus
         private CTreeViewPlusMinus _PlusMinus;
         /// <summary>
         /// Gets or sets a bitmaps for plus-sign (+) and minus-sign (-) buttons of this CTreeView.
@@ -147,7 +159,9 @@ namespace ControlTreeView
                     Refresh();
             }
         }
+        #endregion
 
+        #region ShowPlusMinus, ShowLines, ShowRootLines
         private bool _ShowPlusMinus;
         /// <summary>
         /// Gets or sets a value indicating whether plus-sign (+) and minus-sign (-) buttons are displayed next to tree nodes that contain child tree nodes.
@@ -166,7 +180,7 @@ namespace ControlTreeView
                 }
             }
         }
-
+        
         private bool _ShowLines;
         /// <summary>
         /// Gets or sets a value indicating whether lines are drawn between tree nodes.
@@ -204,7 +218,9 @@ namespace ControlTreeView
                 }
             }
         }
+        #endregion
 
+        #region MinimizeCollapsed
         private bool _MinimizeCollapsed;
         /// <summary>
         /// Gets or sets a value indicating whether position of nodes recalculated when collapsing for diagram style of this CTreeView.
@@ -222,7 +238,9 @@ namespace ControlTreeView
                 }
             }
         }
+        #endregion
 
+        #region SelectionMode
         private CTreeViewSelectionMode _SelectionMode;
         /// <summary>
         /// 
@@ -240,7 +258,9 @@ namespace ControlTreeView
                 }
             }
         }
+        #endregion
 
+        #region DragAndDropMode
         private CTreeViewDragAndDropMode _DragAndDropMode;
         [DefaultValue(typeof(CTreeViewDragAndDropMode), "ReplaceReorder")]
         public CTreeViewDragAndDropMode DragAndDropMode
@@ -255,7 +275,9 @@ namespace ControlTreeView
                 }
             }
         }
+        #endregion
 
+        #region IndentDepth
         private int _indentDepth;
         /// <summary>
         /// Gets or sets the distance to indent each child tree node level.
@@ -273,7 +295,9 @@ namespace ControlTreeView
                 }
             }
         }
+        #endregion
 
+        #region IndentWidth
         private int _indentWidth;
         /// <summary>
         /// Gets or sets the minimal distance between child tree nodes.
@@ -291,7 +315,9 @@ namespace ControlTreeView
                 }
             }
         }
+        #endregion
 
+        #region LinesPen
         private Pen _LinesPen;
         /// <summary>
         /// Gets or sets the Pen for drawing lines of this CTreeView
@@ -307,7 +333,9 @@ namespace ControlTreeView
                 Refresh();
             }
         }
+        #endregion
 
+        #region BoundsSubtree
         /// <summary>
         /// The union of all child nodes bounds.
         /// </summary>
@@ -319,6 +347,7 @@ namespace ControlTreeView
         /// </summary>
         [BrowsableAttribute(false)]
         public DragTargetPositionClass DragTargetPosition { get; private set; }
+        #endregion
 
         #endregion
 
