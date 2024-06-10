@@ -89,15 +89,20 @@ namespace CTreeView
                 {
                     List<CTreeNode> sourceNodes = drgevent.Data.GetData(typeof(List<CTreeNode>)) as List<CTreeNode>;
                     Point dragPosition = this.PointToClient(new Point(drgevent.X, drgevent.Y));
+
                     dragDestination.SetScroll(
                         VScroll && dragPosition.Y <20,
                         VScroll && dragPosition.Y > ClientSize.Height - 20,
                         HScroll && dragPosition.X > ClientSize.Width - 20,
                         HScroll && dragPosition.X < 20);
+
                     dragPosition.Offset(-AutoScrollPosition.X, -AutoScrollPosition.Y);
                     dragDestination.Set(dragPosition);
-                    if (/*dragDestination.Enabled &&*/ dragDestination.CheckValidDrop(sourceNodes)) drgevent.Effect = drgevent.AllowedEffect;
-                    else drgevent.Effect = DragDropEffects.None;
+
+                    if (/*dragDestination.Enabled &&*/ dragDestination.CheckValidDrop(sourceNodes))
+                        drgevent.Effect = drgevent.AllowedEffect;
+                    else 
+                        drgevent.Effect = DragDropEffects.None;
                 }
                 catch (Exception ex)
                 {
@@ -113,10 +118,13 @@ namespace CTreeView
         /// <param name="drgevent">A DragEventArgs that contains the event data.</param>
         protected override void OnDragEnter(DragEventArgs drgevent)
         {
-            if (drgevent.Data.GetDataPresent(typeof(List<CTreeNode>)) && DragAndDropMode != CTreeViewDragAndDropMode.Nothing)
+            bool isList_of_CTreeNodes = drgevent.Data.GetDataPresent(typeof(List<CTreeNode>);
+
+            if (isList_of_CTreeNodes) && DragAndDropMode != CTreeViewDragAndDropMode.Nothing)
             {
                 drgevent.Effect = drgevent.AllowedEffect;
             }
+
             base.OnDragEnter(drgevent);
         }
 
@@ -126,7 +134,9 @@ namespace CTreeView
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected override void OnDragLeave(EventArgs e)
         {
-            if (DragAndDropMode != CTreeViewDragAndDropMode.Nothing /*&& dragDestination.Enabled*/) dragDestination.Reset();
+            if (DragAndDropMode != CTreeViewDragAndDropMode.Nothing /*&& dragDestination.Enabled*/)
+                dragDestination.Reset();
+
             base.OnDragLeave(e);
         }
 
@@ -136,7 +146,9 @@ namespace CTreeView
         /// <param name="drgevent">A DragEventArgs that contains the event data.</param>
         protected override void OnDragDrop(DragEventArgs drgevent)
         {
-            if (drgevent.Data.GetDataPresent(typeof(List<CTreeNode>)) && DragAndDropMode != CTreeViewDragAndDropMode.Nothing)
+            bool isList_of_CTreeNodes = drgevent.Data.GetDataPresent(typeof(List<CTreeNode>);
+
+            if (isList_of_CTreeNodes) && DragAndDropMode != CTreeViewDragAndDropMode.Nothing)
             {
                 try
                 {
@@ -144,6 +156,7 @@ namespace CTreeView
                     Point dragPosition = this.PointToClient(new Point(drgevent.X, drgevent.Y));
                     dragPosition.Offset(-AutoScrollPosition.X, -AutoScrollPosition.Y);
                     dragDestination.Set(dragPosition);
+
                     if (dragDestination.CheckValidDrop(sourceNodes))
                     {
                         BeginUpdate();
@@ -165,21 +178,29 @@ namespace CTreeView
                         //}
                         //else
                         //{
-                            foreach (CTreeNode<T> sourceNode in sourceNodes) sourceNode.OwnerCollection.Remove(sourceNode);
-                            if (dragDestination.Node != null) dragDestination.Node.Nodes.AddRange(sourceNodes.ToArray());
-                            else if (dragDestination.NodeBefore != null && !sourceNodes.Contains(dragDestination.NodeBefore))
-                            {
-                                int index = dragDestination.NodeBefore.Index + 1;
-                                foreach (CTreeNode<T> sourceNode in sourceNodes) dragDestination.NodeBefore.OwnerCollection.Insert(index++, sourceNode);
-                            }
-                            else if (dragDestination.NodeAfter != null && !sourceNodes.Contains(dragDestination.NodeAfter))
-                            {
-                                int index = dragDestination.NodeAfter.Index;
-                                foreach (CTreeNode<T> sourceNode in sourceNodes) dragDestination.NodeAfter.OwnerCollection.Insert(index++, sourceNode);
-                            }
+                        foreach (CTreeNode<T> sourceNode in sourceNodes)
+                            sourceNode.OwnerCollection.Remove(sourceNode);
+
+                        if (dragDestination.Node != null)
+                            dragDestination.Node.Nodes.AddRange(sourceNodes.ToArray());
+
+                        else if (dragDestination.NodeBefore != null && !sourceNodes.Contains(dragDestination.NodeBefore))
+                        {
+                            int index = dragDestination.NodeBefore.Index + 1;
+                            foreach (CTreeNode<T> sourceNode in sourceNodes)
+                                dragDestination.NodeBefore.OwnerCollection.Insert(index++, sourceNode);
+                        }
+
+                        else if (dragDestination.NodeAfter != null && !sourceNodes.Contains(dragDestination.NodeAfter))
+                        {
+                            int index = dragDestination.NodeAfter.Index;
+                            foreach (CTreeNode<T> sourceNode in sourceNodes)
+                                dragDestination.NodeAfter.OwnerCollection.Insert(index++, sourceNode);
+                        }
                         //}
                         EndUpdate();
                     }
+
                     dragDestination.Reset();
                 }
                 catch (Exception ex)
@@ -187,6 +208,7 @@ namespace CTreeView
                     MessageBox.Show(ex.Message + '\n' + "Исключение в " + ex.Source + '\n' + ex.StackTrace, "Error"); //for debugging
                 }
             }
+
             base.OnDragDrop(drgevent);
         }
 
@@ -219,6 +241,7 @@ namespace CTreeView
             if (e.Button == MouseButtons.Left && ShowPlusMinus)
             {
                 CTreeNode<T> toggleNode = null;
+
                 this.Nodes.TraverseNodes(node => node.Visible && node.Nodes.Count > 0, node =>
                 {
                     Point cursorLocation = e.Location;
@@ -228,11 +251,14 @@ namespace CTreeView
                         toggleNode = node;
                     }
                 });
+
                 ClearSelection();
                 if (toggleNode != null)
                 {
                     toggleNode.Toggle();
-                    if (SelectionMode != CTreeViewSelectionMode.None) toggleNode.IsSelected = true;
+
+                    if (SelectionMode != CTreeViewSelectionMode.None)
+                        toggleNode.IsSelected = true;
                 }
             }
             this.Focus();
@@ -257,13 +283,17 @@ namespace CTreeView
                     {
                         if (node.Lines != null)
                         {
-                            foreach (CTreeNode.Line line in node.Lines) e.Graphics.DrawLine(LinesPen, line.Point1, line.Point2);
+                            foreach (CTreeNode.Line line in node.Lines)
+                                e.Graphics.DrawLine(LinesPen, line.Point1, line.Point2);
                         }
                     });
+
                     if (rootLines != null)
                     {
-                        foreach (CTreeNode.Line line in rootLines) e.Graphics.DrawLine(LinesPen, line.Point1, line.Point2);
+                        foreach (CTreeNode.Line line in rootLines)
+                            e.Graphics.DrawLine(LinesPen, line.Point1, line.Point2);
                     }
+
                     //g.Dispose();
                 }
 
@@ -281,7 +311,9 @@ namespace CTreeView
                     Rectangle selectionRectangle = node.Bounds;
                     selectionRectangle.Inflate(3, 3);
                     //if(!duringDragging) e.Graphics.FillRectangle(selectionBrush, selectionRectangle);
-                    if (!dragDestination.Enabled) e.Graphics.FillRectangle(selectionBrush, selectionRectangle);
+                    if (!dragDestination.Enabled)
+                        e.Graphics.FillRectangle(selectionBrush, selectionRectangle);
+
                     selectionRectangle.Width--; selectionRectangle.Height--;//костыль
                     e.Graphics.DrawRectangle(selectionPen, selectionRectangle);
                 }
@@ -294,8 +326,10 @@ namespace CTreeView
                     {
                         if (node.PlusMinus != null)
                         {
-                            if (node.IsExpanded) e.Graphics.DrawImage(PlusMinus.Minus, node.PlusMinus.Location);
-                            else e.Graphics.DrawImage(PlusMinus.Plus, node.PlusMinus.Location);
+                            if (node.IsExpanded)
+                                e.Graphics.DrawImage(PlusMinus.Minus, node.PlusMinus.Location);
+                            else
+                                e.Graphics.DrawImage(PlusMinus.Plus,  node.PlusMinus.Location);
                         }
                     });
                 }

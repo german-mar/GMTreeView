@@ -18,7 +18,8 @@ namespace ControlTreeView
         /// <param name="action">Action will be applied to the nodes.</param>
         public void TraverseNodes(Action<CTreeNode> action)
         {
-            foreach (CTreeNode childNode in this) childNode.TraverseNodes(action);
+            foreach (CTreeNode childNode in this)
+                childNode.TraverseNodes(action);
         }
 
         /// <summary>
@@ -28,7 +29,8 @@ namespace ControlTreeView
         /// <param name="action">Action will be applied to the nodes.</param>
         public void TraverseNodes(Func<CTreeNode, bool> condition, Action<CTreeNode> action)
         {
-            foreach (CTreeNode childNode in this) childNode.TraverseNodes(condition, action);
+            foreach (CTreeNode childNode in this)
+                childNode.TraverseNodes(condition, action);
         }
         #endregion
 
@@ -40,9 +42,12 @@ namespace ControlTreeView
         /// <exception cref="ArgumentNullException">Nodes is null.</exception>
         public virtual void AddRange(CTreeNode[] nodes)
         {
-            if (nodes == null) throw new ArgumentNullException("Nodes is null.");
+            if (nodes == null)
+                throw new ArgumentNullException("Nodes is null.");
+
             BeginUpdateCTreeView();
-            foreach (CTreeNode node in nodes) Add(node);
+            foreach (CTreeNode node in nodes)
+                Add(node);
             EndUpdateCTreeView();
         }
         
@@ -53,9 +58,12 @@ namespace ControlTreeView
         /// <param name="nodes">An array of CTreeNode objects representing the tree nodes to add to the collection.</param>
         public virtual void InsertRange(int index, CTreeNode[] nodes)
         {
-            if (nodes == null) throw new ArgumentNullException("Nodes is null.");
+            if (nodes == null)
+                throw new ArgumentNullException("Nodes is null.");
+
             BeginUpdateCTreeView();
-            foreach (CTreeNode node in nodes) Insert(index++, node);
+            foreach (CTreeNode node in nodes)
+                Insert(index++, node);
             EndUpdateCTreeView();
         }
 
@@ -80,8 +88,10 @@ namespace ControlTreeView
             {
                 foreach (CTreeNode node in this)
                 {
-                    if (node.Name == key) return node;
+                    if (node.Name == key)
+                        return node;
                 }
+
                 return null;
             }
         }
@@ -94,16 +104,22 @@ namespace ControlTreeView
         /// <returns>An array of CTreeNode objects whose Name property matches the specified key.</returns>
         public CTreeNode[] Find(string key, bool searchAllChildren)
         {
-            if (key == null || key == "") return new CTreeNode[0];
+            if (key == null || key == "")
+                return new CTreeNode[0];
+
             List<CTreeNode> foundNodes = new List<CTreeNode>();
+
             if (searchAllChildren)
             {
                 TraverseNodes(node => { if (node.Name == key) foundNodes.Add(node); });
             }
             else
             {
-                foreach (CTreeNode node in this) if (node.Name == key) foundNodes.Add(node);
+                foreach (CTreeNode node in this)
+                    if (node.Name == key)
+                        foundNodes.Add(node);
             }
+
             return foundNodes.ToArray();
         }
 
@@ -113,7 +129,8 @@ namespace ControlTreeView
         /// <param name="key">The name of the tree node to remove from the collection.</param>
         public virtual void RemoveByKey(string key)
         {
-            foreach (CTreeNode node in Find(key, false)) Remove(node);
+            foreach (CTreeNode node in Find(key, false))
+                Remove(node);
             // or
             // Remove(this[key]);
             // ?
@@ -137,9 +154,11 @@ namespace ControlTreeView
         public virtual bool ContainsKey(string key)
         {
             foreach (CTreeNode node in this)
-                {
-                    if (node.Name == key) return true;
-                }
+            {
+                if (node.Name == key)
+                    return true;
+            }
+
             return false;
         }
         #endregion

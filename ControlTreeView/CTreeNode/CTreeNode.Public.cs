@@ -31,12 +31,12 @@ namespace ControlTreeView
         /// <param name="name"></param>
         public CTreeNode(string name, Control control)
         {
-            Nodes = new CTreeNodeCollection(this);
-            Level = 0;
-            Visible = true;
-            IsExpanded = true;
-            Name = name;
-            Control = control;
+            Nodes       = new CTreeNodeCollection(this);
+            Level       = 0;
+            Visible     = true;
+            IsExpanded  = true;
+            Name        = name;
+            Control     = control;
         }
         #endregion
 
@@ -54,12 +54,15 @@ namespace ControlTreeView
             set
             {
                 bool notNull = (OwnerCTreeView != null);
+
                 if (notNull)
                 {
                     OwnerCTreeView.Controls.Remove(_Control);
                     OwnerCTreeView.Controls.Add(value);
                 }
+
                 _Control = value;
+
                 if (value is INodeControl)((INodeControl)_Control).OwnerNode = this;
                 if (notNull) OwnerCTreeView.Recalculate();
             }
@@ -107,8 +110,7 @@ namespace ControlTreeView
         {
             get
             {
-                if (Parent != null) return Parent.Nodes.IndexOf(this);
-                else return -1;
+                return (Parent != null) ? Parent.Nodes.IndexOf(this) : -1;
             }
         }
         #endregion
@@ -153,8 +155,7 @@ namespace ControlTreeView
         {
             get
             {
-                if (Index >= 0 && Index < Parent.Nodes.Count - 1) return Parent.Nodes[Index + 1];
-                else return null;
+                return (Index >= 0 && Index < Parent.Nodes.Count - 1) ? Parent.Nodes[Index + 1] : null;
             }
         }
 
@@ -166,8 +167,7 @@ namespace ControlTreeView
         {
             get
             {
-                if (Index > 0) return Parent.Nodes[Index - 1];
-                else return null;
+                return (Index > 0) ? Parent.Nodes[Index - 1] : null;
             }
         }
 
@@ -180,8 +180,7 @@ namespace ControlTreeView
         {
             get
             {
-                if (Nodes.Count > 0) return Nodes[0];
-                else return null;
+                return (Nodes.Count > 0) ? Nodes[0] : null;
             }
         }
 
@@ -194,8 +193,7 @@ namespace ControlTreeView
         {
             get
             {
-                if (Nodes.Count > 0) return Nodes[Nodes.Count - 1];
-                else return null;
+                return (Nodes.Count > 0) ? Nodes[Nodes.Count - 1] : null;
             }
         }
         #endregion
@@ -226,9 +224,10 @@ namespace ControlTreeView
         {
             get
             {
-                if (OwnerCTreeView == null) throw new InvalidOperationException("The node is not contained in a CTreeView.");
-                if (Level == 0) return Name;
-                else return ParentNode.FullPath + OwnerCTreeView.PathSeparator + Name;
+                if (OwnerCTreeView == null)
+                    throw new InvalidOperationException("The node is not contained in a CTreeView.");
+
+                return (Level == 0) ? Name : (ParentNode.FullPath + OwnerCTreeView.PathSeparator + Name);
             }
         }
         #endregion
@@ -248,12 +247,14 @@ namespace ControlTreeView
         {
             get
             {
-                if (OwnerCTreeView != null)return OwnerCTreeView.SelectedNodes.Contains(this);
-                else return false;
+                return (OwnerCTreeView != null) ? OwnerCTreeView.SelectedNodes.Contains(this) : false;
             }
             set
             {
-                if (OwnerCTreeView == null) throw new InvalidOperationException("The node is not contained in a CTreeView.");
+                if (OwnerCTreeView == null)
+                {
+                    throw new InvalidOperationException("The node is not contained in a CTreeView.");
+                }
                 else
                 {
                     if (value == true)
@@ -307,8 +308,7 @@ namespace ControlTreeView
         {
             get
             {
-                if (!Visible) return Rectangle.Empty;
-                else return new Rectangle(Location, Size);
+                return (!Visible) ? Rectangle.Empty : new Rectangle(Location, Size);
             }
         }
 
@@ -322,8 +322,7 @@ namespace ControlTreeView
         {
             get
             {
-                if (!Visible) return Rectangle.Empty;
-                else return _boundsSubtree;
+                return (!Visible) ? Rectangle.Empty : _boundsSubtree;
             }
         }
         #endregion
@@ -341,7 +340,8 @@ namespace ControlTreeView
             IsExpanded = true;
             //if (Visible) foreach (CTreeNode child in Nodes) child.Visible = true;
             //Nodes.TraverseNodes(node => node.ParentNode.IsExpanded, node => { node.IsShown = true; });
-            if (OwnerCTreeView != null) OwnerCTreeView.OnExpandNode(new CTreeViewEventArgs(this));
+            if (OwnerCTreeView != null)
+                OwnerCTreeView.OnExpandNode(new CTreeViewEventArgs(this));
         }
 
         /// <summary>
@@ -352,7 +352,8 @@ namespace ControlTreeView
             IsExpanded = false;
             //foreach (CTreeNode child in Nodes) child.Visible = false;
             //Nodes.TraverseNodes(node => node.IsShown, node => { node.IsShown = false; });
-            if (OwnerCTreeView != null) OwnerCTreeView.OnCollapseNode(new CTreeViewEventArgs(this));
+            if (OwnerCTreeView != null)
+                OwnerCTreeView.OnCollapseNode(new CTreeViewEventArgs(this));
         }
 
         /// <summary>
@@ -381,7 +382,7 @@ namespace ControlTreeView
         public void Toggle()
         {
             if (IsExpanded) Collapse();
-            else Expand();
+            else            Expand();
         }
         #endregion
 
@@ -393,9 +394,11 @@ namespace ControlTreeView
             {
                 //Checking that all selected nodes has same parent
                 bool checkSameParent = true;
+
                 foreach (CTreeNode selectedNode in OwnerCTreeView.SelectedNodes)
                 {
-                    if (selectedNode.ParentNode != OwnerCTreeView.SelectedNodes[0].ParentNode) checkSameParent = false;
+                    if (selectedNode.ParentNode != OwnerCTreeView.SelectedNodes[0].ParentNode)
+                        checkSameParent = false;
                 }
                 //Prepare and sort the dragged nodes
                 if (checkSameParent)
@@ -422,7 +425,10 @@ namespace ControlTreeView
                 foreach (CTreeNode child in Nodes) result += child.GetNodeCount(true);
                 return result;
             }
-            else return Nodes.Count;
+            else
+            {
+                return Nodes.Count;
+            }
         }
         #endregion
 
@@ -434,7 +440,8 @@ namespace ControlTreeView
         public void TraverseNodes(Action<CTreeNode> action)
         {
             action(this);
-            foreach (CTreeNode childNode in Nodes) childNode.TraverseNodes(action);
+            foreach (CTreeNode childNode in Nodes)
+                childNode.TraverseNodes(action);
         }
 
         /// <summary>
@@ -447,7 +454,9 @@ namespace ControlTreeView
             if (condition(this))
             {
                 action(this);
-                foreach (CTreeNode childNode in Nodes) childNode.TraverseNodes(condition, action);
+
+                foreach (CTreeNode childNode in Nodes)
+                    childNode.TraverseNodes(condition, action);
             }
         }
         #endregion

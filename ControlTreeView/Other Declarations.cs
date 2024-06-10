@@ -53,8 +53,9 @@ namespace ControlTreeView
         public CTreeViewPlusMinus(Bitmap plus, Bitmap minus)
         {
             _Size = plus.Size;
-            if (_Size != minus.Size) throw new ArgumentException("Images are of different sizes");
-            _Plus = plus;
+            if (_Size != minus.Size)
+                throw new ArgumentException("Images are of different sizes");
+            _Plus  = plus;
             _Minus = minus;
         }
     }

@@ -11,6 +11,9 @@ namespace ControlTreeView
 {
     public partial class CTreeView
     {
+        /// <summary>
+        /// Drag And Drop iplementation
+        /// </summary>
         #region SendMessage <-- user32.dll
         [DllImport("user32.dll")]
         static extern int SendMessage(
@@ -32,7 +35,7 @@ namespace ControlTreeView
             {
                 _nodeDirect = nodeDirect;
                 _nodeBefore = nodeBefore;
-                _nodeAfter = nodeAfter;
+                _nodeAfter  = nodeAfter;
             }
             #endregion
 
@@ -90,9 +93,10 @@ namespace ControlTreeView
 
         private void scrollTimer_Tick(object sender, EventArgs e)
         {
-            if (scrollDown)SendMessage(this.Handle.ToInt32(), 277, 1, 0);
-            else if (scrollUp) SendMessage(this.Handle.ToInt32(), 277, 0, 0);
-            if (scrollRigh) SendMessage(this.Handle.ToInt32(), 276, 1, 0);
+            if      (scrollDown) SendMessage(this.Handle.ToInt32(), 277, 1, 0);
+            else if (scrollUp)   SendMessage(this.Handle.ToInt32(), 277, 0, 0);
+
+            if      (scrollRigh) SendMessage(this.Handle.ToInt32(), 276, 1, 0);
             else if (scrollLeft) SendMessage(this.Handle.ToInt32(), 276, 0, 0);
         }
         #endregion
@@ -108,9 +112,9 @@ namespace ControlTreeView
         /// <param name="scrollLeft">true if need scroll left, otherwise, false.</param>
         internal void SetScrollDirections(bool scrollUp, bool scrollDown, bool scrollRigh, bool scrollLeft)
         {
-            if (scrollUp || scrollDown || scrollRigh || scrollLeft) scrollTimer.Enabled = true;
-            else scrollTimer.Enabled = false;
-            this.scrollUp = scrollUp;
+            scrollTimer.Enabled = (scrollUp || scrollDown || scrollRigh || scrollLeft);
+
+            this.scrollUp   = scrollUp;
             this.scrollDown = scrollDown;
             this.scrollRigh = scrollRigh;
             this.scrollLeft = scrollLeft;
@@ -125,9 +129,10 @@ namespace ControlTreeView
             if (DragTargetPosition.NodeDirect != null || DragTargetPosition.NodeBefore != null || DragTargetPosition.NodeAfter != null)
             {
                 DragTargetPosition = new DragTargetPositionClass(null, null, null);
+
                 dragDropLinePoint1 = Point.Empty;
                 dragDropLinePoint2 = Point.Empty;
-                dragDropRectangle = Rectangle.Empty;
+                dragDropRectangle  = Rectangle.Empty;
                 Refresh();
             }
         }
@@ -139,7 +144,8 @@ namespace ControlTreeView
             if (DragTargetPosition.NodeDirect != node)
             {
                 DragTargetPosition = new DragTargetPositionClass(node, null, null);
-                dragDropRectangle = node.Bounds;
+
+                dragDropRectangle  = node.Bounds;
                 dragDropRectangle.Inflate(2, 2);
                 dragDropLinePoint1 = Point.Empty;
                 dragDropLinePoint2 = Point.Empty;
@@ -154,6 +160,7 @@ namespace ControlTreeView
             if (DragTargetPosition.NodeBefore != nodeBefore || DragTargetPosition.NodeAfter != nodeAfter)
             {
                 DragTargetPosition = new DragTargetPositionClass(null, nodeBefore, nodeAfter);
+
                 if (nodeBefore == null)
                 {
                     if (DrawStyle == CTreeViewDrawStyle.VerticalDiagram)
@@ -163,7 +170,7 @@ namespace ControlTreeView
                     }
                     else
                     {
-                        dragDropLinePoint1 = new Point(nodeAfter.BoundsSubtree.X, nodeAfter.BoundsSubtree.Y - 2);
+                        dragDropLinePoint1 = new Point(nodeAfter.BoundsSubtree.X,     nodeAfter.BoundsSubtree.Y - 2);
                         dragDropLinePoint2 = new Point(nodeAfter.BoundsSubtree.Right, nodeAfter.BoundsSubtree.Y - 2);
                     }
                 }
@@ -176,7 +183,7 @@ namespace ControlTreeView
                     }
                     else
                     {
-                        dragDropLinePoint1 = new Point(nodeBefore.BoundsSubtree.X, nodeBefore.BoundsSubtree.Bottom + 2);
+                        dragDropLinePoint1 = new Point(nodeBefore.BoundsSubtree.X,     nodeBefore.BoundsSubtree.Bottom + 2);
                         dragDropLinePoint2 = new Point(nodeBefore.BoundsSubtree.Right, nodeBefore.BoundsSubtree.Bottom + 2);
                     }
                 }
@@ -186,7 +193,8 @@ namespace ControlTreeView
                     {
                         int y1 = nodeBefore.BoundsSubtree.Y;
                         int y2 = Math.Max(nodeBefore.BoundsSubtree.Bottom, nodeAfter.BoundsSubtree.Bottom);
-                        int x = nodeBefore.BoundsSubtree.Right + IndentWidth / 2;
+                        int x  = nodeBefore.BoundsSubtree.Right + IndentWidth / 2;
+
                         dragDropLinePoint1 = new Point(x, y1);
                         dragDropLinePoint2 = new Point(x, y2);
                     }
@@ -194,11 +202,13 @@ namespace ControlTreeView
                     {
                         int x1 = nodeBefore.BoundsSubtree.X;
                         int x2 = Math.Max(nodeBefore.BoundsSubtree.Right, nodeAfter.BoundsSubtree.Right);
-                        int y = nodeBefore.BoundsSubtree.Bottom + IndentWidth / 2;
+                        int y  = nodeBefore.BoundsSubtree.Bottom + IndentWidth / 2;
+
                         dragDropLinePoint1 = new Point(x1, y);
                         dragDropLinePoint2 = new Point(x2, y);
                     }
                 }
+
                 dragDropRectangle = Rectangle.Empty;
                 Refresh();
             }
@@ -225,11 +235,13 @@ namespace ControlTreeView
         {
             CTreeNode destinationNode = null;
             CTreeNodeCollection destinationCollection = Nodes;
+
             Nodes.TraverseNodes(node => node.Visible && node.BoundsSubtree.Contains(dragPosition), node =>
             {
                 destinationNode = node;
                 destinationCollection = node.Nodes;
             });
+
             if (destinationNode != null && destinationNode.Bounds.Contains(dragPosition)) //Drag position within node
             {
                 //Find drag position within node
@@ -237,17 +249,18 @@ namespace ControlTreeView
                 if (DrawStyle == CTreeViewDrawStyle.VerticalDiagram)
                 {
                     delta = destinationNode.Bounds.Width / 4;
-                    coordinate = dragPosition.X;
-                    firstBound = destinationNode.Bounds.Left;
+                    coordinate  = dragPosition.X;
+                    firstBound  = destinationNode.Bounds.Left;
                     secondBound = destinationNode.Bounds.Right;
                 }
                 else
                 {
                     delta = destinationNode.Bounds.Height / 4;
-                    coordinate = dragPosition.Y;
-                    firstBound = destinationNode.Bounds.Top;
+                    coordinate  = dragPosition.Y;
+                    firstBound  = destinationNode.Bounds.Top;
                     secondBound = destinationNode.Bounds.Bottom;
                 }
+
                 if (coordinate >= firstBound + delta && coordinate <= secondBound - delta)
                 {
                     updateDragTargetPosition(destinationNode);
@@ -269,29 +282,35 @@ namespace ControlTreeView
                 //Check drag position between two nodes
                 CTreeNode upperNode = null, lowerNode = null;
                 bool isBetween = false;
+
                 for (int count = 0; count <= destinationCollection.Count - 2; count++)
                 {
                     upperNode = destinationCollection[count];
                     lowerNode = destinationCollection[count + 1];
+
                     Point betweenLocation = Point.Empty;
-                    Size betweenSize = Size.Empty;
+                    Size  betweenSize     = Size.Empty;
+
                     if (DrawStyle == CTreeViewDrawStyle.VerticalDiagram)
                     {
                         betweenLocation = new Point(upperNode.BoundsSubtree.Right, upperNode.BoundsSubtree.Top);
-                        betweenSize = new Size(lowerNode.BoundsSubtree.Left - upperNode.BoundsSubtree.Right, Math.Max(upperNode.BoundsSubtree.Height, lowerNode.BoundsSubtree.Height));
+                        betweenSize     = new Size(lowerNode.BoundsSubtree.Left - upperNode.BoundsSubtree.Right, Math.Max(upperNode.BoundsSubtree.Height, lowerNode.BoundsSubtree.Height));
                     }
                     else
                     {
                         betweenLocation = new Point(upperNode.BoundsSubtree.Left, upperNode.BoundsSubtree.Bottom);
-                        betweenSize = new Size(Math.Max(upperNode.BoundsSubtree.Width, lowerNode.BoundsSubtree.Width), lowerNode.BoundsSubtree.Top - upperNode.BoundsSubtree.Bottom);
+                        betweenSize     = new Size(Math.Max(upperNode.BoundsSubtree.Width, lowerNode.BoundsSubtree.Width), lowerNode.BoundsSubtree.Top - upperNode.BoundsSubtree.Bottom);
                     }
+
                     Rectangle betweenRectangle = new Rectangle(betweenLocation, betweenSize);
+                    
                     if (betweenRectangle.Contains(dragPosition))
                     {
                         isBetween = true;
                         break;
                     }
                 }
+
                 if (isBetween) //Drag position between two nodes
                 {
                     updateDragTargetPosition(upperNode, lowerNode);
@@ -311,6 +330,7 @@ namespace ControlTreeView
                         isAbove = (dragPosition.Y <= ownerBounds.Top);
                         isBelow = (dragPosition.Y >= ownerBounds.Bottom);
                     }
+
                     if (isAbove) //before
                     {
                         updateDragTargetPosition(destinationNode.PrevNode, destinationNode);
@@ -323,6 +343,7 @@ namespace ControlTreeView
                     }
                 }
             }
+
             updateDragTargetPosition();
         }
         #endregion
@@ -335,11 +356,17 @@ namespace ControlTreeView
         /// <returns>true if drop of source nodes is allowed to current destination, otherwise, false.</returns>
         internal bool CheckValidDrop(List<CTreeNode> sourceNodes)
         {
-            if (!DragTargetPosition.Enabled) return false;
+            if (!DragTargetPosition.Enabled)
+                return false;
+
             bool isValid = true;
+
             if (DragTargetPosition.NodeDirect != null)
             {
-                if (DragAndDropMode == CTreeViewDragAndDropMode.Reorder) return false;
+                if (DragAndDropMode == CTreeViewDragAndDropMode.Reorder)
+                {
+                    return false;
+                }
                 else
                 {
                     //Check that destination node is not descendant of source nodes
@@ -347,9 +374,12 @@ namespace ControlTreeView
                     {
                         sourceNode.TraverseNodes(node => isValid, node =>
                         {
-                            if (node == DragTargetPosition.NodeDirect) isValid = false;
+                            if (node == DragTargetPosition.NodeDirect)
+                                isValid = false;
                         });
-                        if (!isValid) return false;
+
+                        if (!isValid)
+                            return false;
                     }
                 }
             }
@@ -358,12 +388,13 @@ namespace ControlTreeView
                 //Check that source nodes are not moved relative themselves
                 if (sourceNodes.Contains(DragTargetPosition.NodeBefore) && sourceNodes.Contains(DragTargetPosition.NodeAfter)) return false;
                 if (sourceNodes.Contains(DragTargetPosition.NodeBefore) && DragTargetPosition.NodeAfter == null) return false;
-                if (sourceNodes.Contains(DragTargetPosition.NodeAfter) && DragTargetPosition.NodeBefore == null) return false;
+                if (sourceNodes.Contains(DragTargetPosition.NodeAfter)  && DragTargetPosition.NodeBefore == null) return false;
+
                 if (DragAndDropMode == CTreeViewDragAndDropMode.Reorder)
                 {
                     //Check that source and destination nodes have same parent
                     if (DragTargetPosition.NodeBefore != null && DragTargetPosition.NodeBefore.Parent != sourceNodes[0].Parent) return false;
-                    if (DragTargetPosition.NodeAfter != null && DragTargetPosition.NodeAfter.Parent != sourceNodes[0].Parent) return false;
+                    if (DragTargetPosition.NodeAfter  != null && DragTargetPosition.NodeAfter.Parent  != sourceNodes[0].Parent) return false;
                 }
                 else
                 {
@@ -374,10 +405,12 @@ namespace ControlTreeView
                         {
                             if (DragTargetPosition.NodeBefore == node || DragTargetPosition.NodeAfter == node) isValid = false;
                         });
+
                         if (!isValid) return false;
                     }
                 }
             }
+
             return true;
         }
     }

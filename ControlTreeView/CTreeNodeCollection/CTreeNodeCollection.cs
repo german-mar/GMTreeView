@@ -8,7 +8,7 @@ namespace ControlTreeView
 {
     public partial class CTreeNodeCollection
     {
-        #region properties
+        #region Properties
         private INodeContainer owner;
         #endregion
 
@@ -61,19 +61,25 @@ namespace ControlTreeView
             {
                 base.InsertItem(index, item);
                 //item.OwnerCollection = this;
+
                 if (owner is CTreeNode)
                 {
                     CTreeNode ownerNode = (CTreeNode)owner;
                     item.ParentNode = ownerNode;
                     item.Level = ownerNode.Level + 1;
-                    if (!(ownerNode.IsExpanded && ownerNode.Visible)) item.Visible = false;
+
+                    if (!(ownerNode.IsExpanded && ownerNode.Visible))
+                        item.Visible = false;
                 }
+
                 if (ParentCTreeView != null)
                 {
                     item.OwnerCTreeView = ParentCTreeView;
+
                     ParentCTreeView.SuspendLayout();
                     item.TraverseNodes(node => { ParentCTreeView.Controls.Add(node.Control); });
                     ParentCTreeView.ResumeLayout(false);
+
                     ParentCTreeView.Recalculate();
                 }
             }
@@ -89,17 +95,21 @@ namespace ControlTreeView
             this[index].IsSelected = false;
             this[index].ParentNode = null;
             //this[index].OwnerCollection = null;
+
             if (ParentCTreeView != null)
             {
                 ParentCTreeView.SuspendLayout();
                 this[index].TraverseNodes(eachNode => { ParentCTreeView.Controls.Remove(eachNode.Control); });
                 ParentCTreeView.ResumeLayout(false);
+
                 this[index].OwnerCTreeView = null;
             }
-            this[index].Level = 0;
+
+            this[index].Level   = 0;
             this[index].Visible = true;
 
             base.RemoveItem(index);
+
             if (ParentCTreeView != null)
             {
                 ParentCTreeView.Recalculate();
@@ -136,6 +146,7 @@ namespace ControlTreeView
                 childNode.Level = 0;
                 childNode.Visible = true;
             }
+
             if (ParentCTreeView != null)
             {
                 ParentCTreeView.SuspendLayout();
@@ -147,6 +158,7 @@ namespace ControlTreeView
                 ParentCTreeView.ResumeLayout(false);
                 ParentCTreeView.Recalculate();//?
             }
+
             base.ClearItems();
             EndUpdateCTreeView();
         }
@@ -159,11 +171,20 @@ namespace ControlTreeView
         /// <param name="commonLineCalc">Function that calculates common line of nodes collection.</param>
         /// <param name="childLineCalc">Function that calculates line of each node in collection.</param>
         /// <returns>List of lines of this nodes collection.</returns>
-        internal List<CTreeNode.Line> GetLines(Func<CTreeNodeCollection, CTreeNode.Line> commonLineCalc, Func<CTreeNode, CTreeNode.Line> childLineCalc)
+        internal List<CTreeNode.Line> GetLines(
+                                                Func<CTreeNodeCollection,
+                                                CTreeNode.Line> commonLineCalc,
+                                                Func<CTreeNode,
+                                                CTreeNode.Line> childLineCalc)
         {
             List<CTreeNode.Line> lines = new List<CTreeNode.Line>();
-            if (Count > 1) lines.Add(commonLineCalc(this));
-            foreach (CTreeNode childNode in this) lines.Add(childLineCalc(childNode));
+
+            if (Count > 1)
+                lines.Add(commonLineCalc(this));
+
+            foreach (CTreeNode childNode in this)
+                lines.Add(childLineCalc(childNode));
+
             return lines;
         }
         #endregion

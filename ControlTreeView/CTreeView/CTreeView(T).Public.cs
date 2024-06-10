@@ -11,53 +11,53 @@ namespace CTreeView
     [Designer(typeof(CTreeViewDesigner))]
     public partial class CTreeView<T> : ScrollableControl, INodeContainer
     {
-        #region Constructors
+        #region Constructor
         /// <summary>
         /// Initializes a new instance of the CTreeView<T> class.
         /// </summary>
-        public CTreeView()
-            : base()
+        public CTreeView() : base()
         {
             suspendUpdateCount = 0;
             //InitializeComponent();
             //SuspendRecalculating = true;
             //DuringUpdating = true;
             //SuspendUpdate = true;
+
             BeginUpdate();
-            Nodes = new CTreeNodeCollection<T>(this);
-            PathSeparator=@"\";
-            //DragAndDrop = new DragAndDropView();
-            AutoScroll = true;
-            AllowDrop = true;//?
-            //DrawStyle = CTreeViewDrawStyle.Tree;
-            ShowPlusMinus = true;
-            ShowLines = true;
+            Nodes          = new CTreeNodeCollection<T>(this);
+            PathSeparator  = @"\";
+            //DragAndDrop  = new DragAndDropView();
+            AutoScroll     = true;
+            AllowDrop      = true;//?
+            //DrawStyle    = CTreeViewDrawStyle.Tree;
+            ShowPlusMinus  = true;
+            ShowLines      = true;
             //ShowControls = CTreeViewShowControls.Automatically;
-            ShowRootLines = true;
+            ShowRootLines  = true;
             _selectedNodes = new List<CTreeNode>();
             
-            RelocateCollapsing = true;
-            SelectionMode = CTreeViewSelectionMode.Multi;
-            DragAndDropMode = CTreeViewDragAndDropMode.ReplaceReorder;
-            //DragAndDropFlag = false;
-            IndentDepth = 30;
-            IndentWidth = 10;
-            selectionPen = new Pen(Color.Black, 1.0F);
+            RelocateCollapsing  = true;
+            SelectionMode       = CTreeViewSelectionMode.Multi;
+            DragAndDropMode     = CTreeViewDragAndDropMode.ReplaceReorder;
+            //DragAndDropFlag   = false;
+            IndentDepth         = 30;
+            IndentWidth         = 10;
+            selectionPen        = new Pen(Color.Black, 1.0F);
             selectionPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-            selectionBrush = new SolidBrush(SystemColors.Highlight);
-            _LinesPen = new Pen(Color.Black, 1.0F);
+            selectionBrush      = new SolidBrush(SystemColors.Highlight);
+            _LinesPen           = new Pen(Color.Black, 1.0F);
             _LinesPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-            Bitmap imagePlus = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("CTreeView.Resources.plus.bmp"));
-            Bitmap imageMinus = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("CTreeView.Resources.minus.bmp"));
-            PlusMinus = new CTreeViewPlusMinus(imagePlus, imageMinus);
-            dragDestination = new DragDestination(this);
+            Bitmap imagePlus    = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("CTreeView.Resources.plus.bmp"));
+            Bitmap imageMinus   = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("CTreeView.Resources.minus.bmp"));
+            PlusMinus           = new CTreeViewPlusMinus(imagePlus, imageMinus);
+            dragDestination     = new DragDestination(this);
 
             this.DoubleBuffered = true;
             //this.ResizeRedraw = true;
             //this.AutoScrollMinSize = new Size(0, 0);
-            //DuringUpdating = false;
+            //DuringUpdating    = false;
             //SuspendRecalculating = false;
-            //SuspendUpdate = false;
+            //SuspendUpdate     = false;
             EndUpdate();
         }
         #endregion
@@ -244,6 +244,7 @@ namespace CTreeView
         }
 
         private CTreeViewDragAndDropMode _DragAndDropMode;
+
         [DefaultValue(typeof(CTreeViewDragAndDropMode), "ReplaceReorder")]
         public CTreeViewDragAndDropMode DragAndDropMode
         {
@@ -318,7 +319,8 @@ namespace CTreeView
         public void CollapseAll()
         {
             BeginUpdate();
-            foreach (CTreeNode<T> node in Nodes) node.CollapseAll();
+            foreach (CTreeNode<T> node in Nodes)
+                node.CollapseAll();
             EndUpdate();
         }
 
@@ -328,7 +330,8 @@ namespace CTreeView
         public void ExpandAll()
         {
             BeginUpdate();
-            foreach (CTreeNode<T> node in Nodes) node.ExpandAll();
+            foreach (CTreeNode<T> node in Nodes)
+                node.ExpandAll();
             EndUpdate();
         }
 
@@ -340,10 +343,13 @@ namespace CTreeView
         public int GetNodeCount(bool includeSubTrees)
         {
             int result = Nodes.Count;
+
             if (includeSubTrees)
             {
-                foreach (CTreeNode<T> node in Nodes) result += node.GetNodeCount(true);
+                foreach (CTreeNode<T> node in Nodes)
+                    result += node.GetNodeCount(true);
             }
+
             return result;
         }
 
@@ -356,6 +362,7 @@ namespace CTreeView
         {
             bool success = false;
             CTreeNode<T> nodeAtPoint = null;
+
             Nodes.TraverseNodes(node => node.Visible && !success, node =>
             {
                 if (node.Bounds.Contains(pt))
@@ -364,6 +371,7 @@ namespace CTreeView
                     success = true;
                 }
             });
+
             return nodeAtPoint;
         }
 
@@ -407,7 +415,8 @@ namespace CTreeView
             if (suspendUpdateCount > 0)
             {
                 suspendUpdateCount--;
-                if (suspendUpdateCount == 0) Recalculate();
+                if (suspendUpdateCount == 0)
+                    Recalculate();
             }
         }
         #endregion

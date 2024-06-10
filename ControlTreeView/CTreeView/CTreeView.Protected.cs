@@ -75,19 +75,25 @@ namespace ControlTreeView
             {
                 List<CTreeNode> sourceNodes = drgevent.Data.GetData(typeof(List<CTreeNode>)) as List<CTreeNode>;
                 Point dragPoint = this.PointToClient(new Point(drgevent.X, drgevent.Y));
+
                 SetScrollDirections(
                     VScroll && dragPoint.Y < 20,
                     VScroll && dragPoint.Y > ClientSize.Height - 20,
-                    HScroll && dragPoint.X > ClientSize.Width - 20,
+                    HScroll && dragPoint.X > ClientSize.Width  - 20,
                     HScroll && dragPoint.X < 20);
+
                 dragPoint.Offset(-AutoScrollPosition.X, -AutoScrollPosition.Y);
                 SetDragTargetPosition(dragPoint);
+
                 if (sourceNodes[0].OwnerCTreeView == this)
                 {
-                    if (/*dragDestination.Enabled &&*/ CheckValidDrop(sourceNodes)) drgevent.Effect = DragDropEffects.Move;
-                    else drgevent.Effect = DragDropEffects.None;
+                    if (/*dragDestination.Enabled &&*/ CheckValidDrop(sourceNodes))
+                        drgevent.Effect = DragDropEffects.Move;
+                    else
+                        drgevent.Effect = DragDropEffects.None;
                 }
             }
+
             base.OnDragOver(drgevent);
         }
         #endregion
@@ -103,19 +109,23 @@ namespace ControlTreeView
             {
                 List<CTreeNode> sourceNodes = drgevent.Data.GetData(typeof(List<CTreeNode>)) as List<CTreeNode>;
                 Point dragPoint = this.PointToClient(new Point(drgevent.X, drgevent.Y));
+
                 SetScrollDirections(
                     VScroll && dragPoint.Y < 20,
                     VScroll && dragPoint.Y > ClientSize.Height - 20,
-                    HScroll && dragPoint.X > ClientSize.Width - 20,
+                    HScroll && dragPoint.X > ClientSize.Width  - 20,
                     HScroll && dragPoint.X < 20);
+
                 dragPoint.Offset(-AutoScrollPosition.X, -AutoScrollPosition.Y);
                 SetDragTargetPosition(dragPoint);
+
                 if (sourceNodes[0].OwnerCTreeView == this)
                 {
                     if (CheckValidDrop(sourceNodes)) drgevent.Effect = DragDropEffects.Move;
                     else drgevent.Effect = DragDropEffects.None;
                 }
             }
+
             base.OnDragEnter(drgevent);
         }
         #endregion
@@ -151,8 +161,13 @@ namespace ControlTreeView
                 {
                     BeginUpdate();
 
-                    foreach (CTreeNode sourceNode in sourceNodes) sourceNode.Parent.Nodes.Remove(sourceNode);
-                    if (DragTargetPosition.NodeDirect != null) DragTargetPosition.NodeDirect.Nodes.AddRange(sourceNodes.ToArray());
+                    foreach (CTreeNode sourceNode in sourceNodes) 
+                        sourceNode.Parent.Nodes.Remove(sourceNode);
+
+                    if (DragTargetPosition.NodeDirect != null)
+                    {
+                        DragTargetPosition.NodeDirect.Nodes.AddRange(sourceNodes.ToArray());
+                    }
                     else if (DragTargetPosition.NodeBefore != null && !sourceNodes.Contains(DragTargetPosition.NodeBefore))
                     {
                         int index = DragTargetPosition.NodeBefore.Index + 1;
@@ -165,10 +180,12 @@ namespace ControlTreeView
                         DragTargetPosition.NodeAfter.Parent.Nodes.InsertRange(index, sourceNodes.ToArray());
                         //foreach (CTreeNode sourceNode in sourceNodes) DragTargetPosition.NodeAfter.Parent.Nodes.Insert(index++, sourceNode);
                     }
+
                     EndUpdate();
                 }
                 //ResetDragTargetPosition();
             }
+
             base.OnDragDrop(drgevent);
             ResetDragTargetPosition();
         }
@@ -185,6 +202,7 @@ namespace ControlTreeView
             {
                 if (!Focused) Focus();//?
                 CTreeNode toggleNode = null;
+
                 this.Nodes.TraverseNodes(node => node.Visible && node.Nodes.Count > 0, node =>
                 {
                     Point cursorLocation = e.Location;
@@ -194,11 +212,15 @@ namespace ControlTreeView
                         toggleNode = node;
                     }
                 });
+
                 ClearSelection();
+
                 if (toggleNode != null)
                 {
                     toggleNode.Toggle();
-                    if (SelectionMode != CTreeViewSelectionMode.None) toggleNode.IsSelected = true;
+
+                    if (SelectionMode != CTreeViewSelectionMode.None)
+                        toggleNode.IsSelected = true;
                 }
             }
 
@@ -221,9 +243,14 @@ namespace ControlTreeView
             {
                 this.Nodes.TraverseNodes(node => node.IsExpanded, node =>
                 {
-                    if (node.Lines != null) foreach (CTreeNode.Line line in node.Lines) e.Graphics.DrawLine(LinesPen, line.Point1, line.Point2);
+                    if (node.Lines != null)
+                        foreach (CTreeNode.Line line in node.Lines)
+                            e.Graphics.DrawLine(LinesPen, line.Point1, line.Point2);
                 });
-                if (rootLines != null) foreach (CTreeNode.Line line in rootLines) e.Graphics.DrawLine(LinesPen, line.Point1, line.Point2);
+
+                if (rootLines != null)
+                    foreach (CTreeNode.Line line in rootLines)
+                        e.Graphics.DrawLine(LinesPen, line.Point1, line.Point2);
             }
             #endregion
 
@@ -231,8 +258,11 @@ namespace ControlTreeView
             //Paint drag and drop destination animation.
             if (DragTargetPosition.Enabled)
             {
-                if (!dragDropRectangle.IsEmpty) e.Graphics.FillRectangle(selectionBrush, dragDropRectangle);
-                if (!dragDropLinePoint1.IsEmpty && !dragDropLinePoint2.IsEmpty) e.Graphics.DrawLine(dragDropLinePen, dragDropLinePoint1, dragDropLinePoint2);
+                if (!dragDropRectangle.IsEmpty)
+                    e.Graphics.FillRectangle(selectionBrush, dragDropRectangle);
+
+                if (!dragDropLinePoint1.IsEmpty && !dragDropLinePoint2.IsEmpty)
+                    e.Graphics.DrawLine(dragDropLinePen, dragDropLinePoint1, dragDropLinePoint2);
             }
             #endregion
 
@@ -242,8 +272,11 @@ namespace ControlTreeView
             {
                 Rectangle selectionRectangle = node.Bounds;
                 selectionRectangle.Inflate(2, 2);
-                if (!DragTargetPosition.Enabled) e.Graphics.FillRectangle(selectionBrush, selectionRectangle);
-                selectionRectangle.Width--; selectionRectangle.Height--;//костыль
+
+                if (!DragTargetPosition.Enabled)
+                    e.Graphics.FillRectangle(selectionBrush, selectionRectangle);
+
+                selectionRectangle.Width--; selectionRectangle.Height--;    //костыль
                 e.Graphics.DrawRectangle(selectionPen, selectionRectangle);
             }
             #endregion
@@ -256,8 +289,10 @@ namespace ControlTreeView
                 {
                     if (node.PlusMinus != null)
                     {
-                        if (node.IsExpanded) e.Graphics.DrawImage(PlusMinus.Minus, node.PlusMinus.Location);
-                        else e.Graphics.DrawImage(PlusMinus.Plus, node.PlusMinus.Location);
+                        Bitmap image    = (node.IsExpanded) ? PlusMinus.Minus : PlusMinus.Plus;
+                        Point  location = node.PlusMinus.Location;
+
+                        e.Graphics.DrawImage(image, location);
                     }
                 });
             }

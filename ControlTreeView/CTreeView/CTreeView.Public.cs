@@ -20,24 +20,35 @@ namespace ControlTreeView
             suspendUpdateCount = 0;
             //InitializeComponent();
             BeginUpdate();
+
             Nodes = new CTreeNodeCollection(this);
+
             PathSeparator=@"\";
+
             //AutoScroll = true;
             //AllowDrop = true;
+
             ShowPlusMinus = true;
             ShowLines = true;
             ShowRootLines = true;
+
             _selectedNodes = new List<CTreeNode>();
-            MinimizeCollapsed = true;
             SelectionMode = CTreeViewSelectionMode.Multi;
+
+            MinimizeCollapsed = true;
+            
             DragAndDropMode = CTreeViewDragAndDropMode.ReplaceReorder;
+
             IndentDepth = 30;
             IndentWidth = 10;
+
             selectionPen = new Pen(Color.Black, 1.0F);
             selectionPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
             selectionBrush = new SolidBrush(SystemColors.Highlight);
+
             _LinesPen = new Pen(Color.Black, 1.0F);
             _LinesPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+
             Bitmap imagePlus = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("ControlTreeView.Resources.plus.bmp"));
             Bitmap imageMinus = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("ControlTreeView.Resources.minus.bmp"));
             PlusMinus = new CTreeViewPlusMinus(imagePlus, imageMinus);
@@ -45,7 +56,9 @@ namespace ControlTreeView
             scrollTimer = new Timer();
             scrollTimer.Tick += new EventHandler(scrollTimer_Tick);
             scrollTimer.Interval = 1;
+
             dragDropLinePen = new Pen(Color.Black, 2.0F);
+
             GraphicsPath path = new GraphicsPath();
             path.AddLines(new Point[] { new Point(0, 0), new Point(1, 1), new Point(-1, 1), new Point(0, 0) });
             CustomLineCap cap = new CustomLineCap(null, path);
@@ -70,7 +83,7 @@ namespace ControlTreeView
         }
         #endregion
 
-        #region Nodes
+        #region Get Nodes collection
         /// <summary>
         /// Gets the collection of tree nodes that are assigned to the CTreeView control.
         /// </summary>
@@ -120,9 +133,10 @@ namespace ControlTreeView
         {
             get { return _selectedNodes.AsReadOnly(); }
         }
-        internal Pen selectionPen;
-        internal SolidBrush selectionBrush;
         #endregion
+
+        internal Pen        selectionPen;
+        internal SolidBrush selectionBrush;
 
         #region DrawStyle
         private CTreeViewDrawStyle _DrawStyle;
@@ -155,8 +169,8 @@ namespace ControlTreeView
             get { return _PlusMinus; }
             set
             {
-                    _PlusMinus = value;
-                    Refresh();
+                _PlusMinus = value;
+                Refresh();
             }
         }
         #endregion
@@ -261,7 +275,11 @@ namespace ControlTreeView
         #endregion
 
         #region DragAndDropMode
+        /// <summary>
+        /// Gets or sets DragAndDrop mode
+        /// </summary>
         private CTreeViewDragAndDropMode _DragAndDropMode;
+
         [DefaultValue(typeof(CTreeViewDragAndDropMode), "ReplaceReorder")]
         public CTreeViewDragAndDropMode DragAndDropMode
         {
@@ -353,6 +371,7 @@ namespace ControlTreeView
 
         #region Methods
 
+        #region CollapseAll, ExpandAll
         /// <summary>
         /// Collapses all the tree nodes.
         /// </summary>
@@ -372,7 +391,9 @@ namespace ControlTreeView
             foreach (CTreeNode node in Nodes) node.ExpandAll();
             EndUpdate();
         }
+        #endregion
 
+        #region GetNodeCount
         /// <summary>
         /// Retrieves the number of tree nodes, optionally including those in all subtrees, assigned to the CTreeView control.
         /// </summary>
@@ -381,13 +402,17 @@ namespace ControlTreeView
         public int GetNodeCount(bool includeSubTrees)
         {
             int result = Nodes.Count;
+
             if (includeSubTrees)
             {
                 foreach (CTreeNode node in Nodes) result += node.GetNodeCount(true);
             }
+
             return result;
         }
+        #endregion
 
+        #region GetNodeAt (2 methods)
         /// <summary>
         /// Retrieves the tree node that is at the specified point.
         /// </summary>
@@ -397,14 +422,16 @@ namespace ControlTreeView
         {
             bool success = false;
             CTreeNode nodeAtPoint = null;
+
             Nodes.TraverseNodes(node => node.Visible && !success, node =>
             {
                 if (node.Bounds.Contains(pt))
                 {
                     nodeAtPoint = node;
-                    success = true;
+                    success     = true;
                 }
             });
+
             return nodeAtPoint;
         }
 
@@ -418,7 +445,9 @@ namespace ControlTreeView
         {
             return GetNodeAt(new Point(x,y));
         }
+        #endregion
 
+        #region ClearSelection
         /// <summary>
         /// 
         /// </summary>
@@ -429,7 +458,9 @@ namespace ControlTreeView
             //Update();
             Refresh();
         }
+        #endregion
 
+        #region BeginUpdate, EndUpdate
         /// <summary>
         /// Disables recalculating of the CTreeView.
         /// </summary>
@@ -451,6 +482,8 @@ namespace ControlTreeView
                 if (suspendUpdateCount == 0) Recalculate();
             }
         }
+        #endregion
+
         #endregion
 
         #region Events
