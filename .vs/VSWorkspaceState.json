@@ -1,7 +1,14 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\ControlTreeView",
+    "\\ControlTreeView\\CTreeNode",
+    "\\ControlTreeView\\CTreeNodeCollection",
+    "\\ControlTreeView\\CTreeView",
+    "\\ControlTreeView\\obj",
+    "\\ControlTreeView\\Properties",
+    "\\test"
   ],
-  "SelectedNode": "\\ControlTreeViewLibrary.sln",
+  "SelectedNode": "\\ControlTreeView\\INodeContainer.cs",
   "PreviewInSolutionExplorer": false
 }
