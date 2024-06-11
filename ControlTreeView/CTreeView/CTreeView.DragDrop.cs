@@ -161,48 +161,58 @@ namespace ControlTreeView
             {
                 DragTargetPosition = new DragTargetPositionClass(null, nodeBefore, nodeAfter);
 
+                bool isVerticalDiagram  =  (DrawStyle == CTreeViewDrawStyle.VerticalDiagram);
+
                 if (nodeBefore == null)
                 {
-                    if (DrawStyle == CTreeViewDrawStyle.VerticalDiagram)
+                    Rectangle rect_A = nodeAfter.BoundsSubtree;
+
+                    if (isVerticalDiagram)
                     {
-                        dragDropLinePoint1 = new Point(nodeAfter.BoundsSubtree.X - 2, nodeAfter.BoundsSubtree.Y);
-                        dragDropLinePoint2 = new Point(nodeAfter.BoundsSubtree.X - 2, nodeAfter.BoundsSubtree.Bottom);
+                        dragDropLinePoint1 = new Point(rect_A.X - 2, rect_A.Y);
+                        dragDropLinePoint2 = new Point(rect_A.X - 2, rect_A.Bottom);
                     }
                     else
                     {
-                        dragDropLinePoint1 = new Point(nodeAfter.BoundsSubtree.X,     nodeAfter.BoundsSubtree.Y - 2);
-                        dragDropLinePoint2 = new Point(nodeAfter.BoundsSubtree.Right, nodeAfter.BoundsSubtree.Y - 2);
+                        dragDropLinePoint1 = new Point(rect_A.X,     rect_A.Y - 2);
+                        dragDropLinePoint2 = new Point(rect_A.Right, rect_A.Y - 2);
                     }
                 }
                 else if (nodeAfter == null)
                 {
-                    if (DrawStyle == CTreeViewDrawStyle.VerticalDiagram)
+                    Rectangle rect_B = nodeBefore.BoundsSubtree;
+
+                    if (isVerticalDiagram)
                     {
-                        dragDropLinePoint1 = new Point(nodeBefore.BoundsSubtree.Right + 2, nodeBefore.BoundsSubtree.Y);
-                        dragDropLinePoint2 = new Point(nodeBefore.BoundsSubtree.Right + 2, nodeBefore.BoundsSubtree.Bottom);
+                        dragDropLinePoint1 = new Point(rect_B.Right + 2, rect_B.Y);
+                        dragDropLinePoint2 = new Point(rect_B.Right + 2, rect_B.Bottom);
                     }
                     else
                     {
-                        dragDropLinePoint1 = new Point(nodeBefore.BoundsSubtree.X,     nodeBefore.BoundsSubtree.Bottom + 2);
-                        dragDropLinePoint2 = new Point(nodeBefore.BoundsSubtree.Right, nodeBefore.BoundsSubtree.Bottom + 2);
+                        dragDropLinePoint1 = new Point(rect_B.X,     rect_B.Bottom + 2);
+                        dragDropLinePoint2 = new Point(rect_B.Right, rect_B.Bottom + 2);
                     }
                 }
                 else
                 {
-                    if (DrawStyle == CTreeViewDrawStyle.VerticalDiagram)
+                    Rectangle rect_A =  nodeAfter.BoundsSubtree;
+
+                    Rectangle rect_B = nodeBefore.BoundsSubtree;
+
+                    if (isVerticalDiagram)
                     {
-                        int y1 = nodeBefore.BoundsSubtree.Y;
-                        int y2 = Math.Max(nodeBefore.BoundsSubtree.Bottom, nodeAfter.BoundsSubtree.Bottom);
-                        int x  = nodeBefore.BoundsSubtree.Right + IndentWidth / 2;
+                        int y1 = rect_B.Y;
+                        int y2 = Math.Max(rect_B.Bottom, rect_A.Bottom);
+                        int x  = rect_B.Right + IndentWidth / 2;
 
                         dragDropLinePoint1 = new Point(x, y1);
                         dragDropLinePoint2 = new Point(x, y2);
                     }
                     else
                     {
-                        int x1 = nodeBefore.BoundsSubtree.X;
-                        int x2 = Math.Max(nodeBefore.BoundsSubtree.Right, nodeAfter.BoundsSubtree.Right);
-                        int y  = nodeBefore.BoundsSubtree.Bottom + IndentWidth / 2;
+                        int x1 = rect_B.X;
+                        int x2 = Math.Max(rect_B.Right, rect_A.Right);
+                        int y  = rect_B.Bottom + IndentWidth / 2;
 
                         dragDropLinePoint1 = new Point(x1, y);
                         dragDropLinePoint2 = new Point(x2, y);
