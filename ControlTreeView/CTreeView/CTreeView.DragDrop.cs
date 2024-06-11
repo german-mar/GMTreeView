@@ -282,16 +282,16 @@ namespace ControlTreeView
         #endregion
 
         private Rectangle rotateRectangle(Rectangle rect) {
-            //
-            //          +---------------+ y1        +--------+ x1
-            //          |               |           |        |
-            //          |               | --------> |        |
-            //          |               |           |        |
-            //          +---------------+ y2        |        |     
-            //          x1             x2           |        |
-            //                                      |        |
-            //                                      +--------+ x2
-            //                                      y1      y2
+            //          x1             x2             y1      y2
+            //      y1  +---------------+ y1       x1 +--------+ x1
+            //          |               |             |        |
+            //          |               | -------->   |        |
+            //          |               |             |        |
+            //      y2  +---------------+ y2          |        |     
+            //          x1             x2             |        |
+            //                                        |        |
+            //                                     x2 +--------+ x2
+            //                                        y1      y2
             //
             int x1 = rect.X;
             int x2 = rect.Right;
@@ -301,7 +301,7 @@ namespace ControlTreeView
             int width  = x2 - x1;
             int height = y2 - y1;
 
-            return new Rectangle(x1, y2, width, height);
+            return new Rectangle(y1, x1, height, width);
         }
 
         #endregion
