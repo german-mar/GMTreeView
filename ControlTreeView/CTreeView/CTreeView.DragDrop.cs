@@ -171,14 +171,25 @@ namespace ControlTreeView
                 if (nodeBefore == null)
                 {
                     Rectangle rect_A = nodeAfter.BoundsSubtree;
-
-                    if (isVerticalDiagram)
-                    {
+                    
+                    if (isVerticalDiagram) {
+                        //          +-----------+ y1
+                        //          |           |
+                        //          |           |
+                        //          |           |
+                        //          +-----------+ y2
+                        //          x1
+                        //          x2
                         x1 = rect_A.X - 2;  y1 = rect_A.Y;
                         x2 = x1;            y2 = rect_A.Bottom;
-                    }
-                    else
-                    {
+
+                    } else {
+                        //          +-----------+ y1 y2
+                        //          |           |
+                        //          |           |
+                        //          |           |
+                        //          +-----------+
+                        //          x1         x2
                         x1 = rect_A.X;      y1 = rect_A.Y - 2;
                         x2 = rect_A.Right;  y2 = y1;
                     }
@@ -189,11 +200,24 @@ namespace ControlTreeView
 
                     if (isVerticalDiagram)
                     {
+                        //          +-----------+ y1
+                        //          |           |
+                        //          |           |
+                        //          |           |
+                        //          +-----------+ y2
+                        //                     x1
+                        //                     x2
                         x1 = rect_B.Right + 2;  y1 = rect_B.Y;
                         x2 = x1;                y2 = rect_B.Bottom;
                     }
                     else
                     {
+                        //          +-----------+
+                        //          |           |
+                        //          |           |
+                        //          |           |
+                        //          +-----------+ y1 y2
+                        //          x1         x2
                         x1 = rect_B.X;          y1 = rect_B.Bottom + 2;
                         x2 = rect_B.Right;      y2 = y1;
                     }
@@ -203,19 +227,48 @@ namespace ControlTreeView
                     Rectangle rect_A =  nodeAfter.BoundsSubtree;
                     Rectangle rect_B = nodeBefore.BoundsSubtree;
 
+                    int offset = IndentWidth / 2;
+
                     if (isVerticalDiagram)
                     {
-                        y1 = rect_B.Y;
-                        y2 = Math.Max(rect_B.Bottom, rect_A.Bottom);
-                        x1 = rect_B.Right + IndentWidth / 2;
-                        x2 = x1;
+
+                        //                      +-----------+ y1
+                        //                      |nodeBefore |
+                        //                      |           |
+                        //                      |           |
+                        //                      +----+------+
+                        //                           |     x1
+                        //                +----------+     x2
+                        //                |
+                        //          +-----+-----+
+                        //          | nodeAfter |
+                        //          |           |
+                        //          |           |
+                        //          +-----------+             y2 = maxBottom
+                        int maxBottom = Math.Max(rect_B.Bottom, rect_A.Bottom);
+                        
+                        x1 = rect_B.Right + offset; y1 = rect_B.Y;
+                        x2 = x1;                    y2 = maxBottom;
                     }
                     else
                     {
-                        x1 = rect_B.X;
-                        x2 = Math.Max(rect_B.Right, rect_A.Right);
-                        y1 = rect_B.Bottom + IndentWidth / 2;
-                        y2 = y1;
+                        //          
+                        //          +-----------+
+                        //          |nodeBefore |
+                        //          |           |
+                        //          |           |
+                        //          +----+------+ y1 y2
+                        //          x1   |
+                        //               |      +-----------+
+                        //               |      | nodeAfter |
+                        //               +------+           |
+                        //                      |           |
+                        //                      +-----------+ 
+                        //                                 x2 = maxRight
+                        int maxRight = Math.Max(rect_B.Right, rect_A.Right);
+
+                        x1 = rect_B.X;              y1 = rect_B.Bottom + offset;
+                        x2 = maxRight;              y2 = y1;
                     }
                 }
 
@@ -227,7 +280,30 @@ namespace ControlTreeView
             }
         }
         #endregion
-        
+
+        private Rectangle rotateRectangle(Rectangle rect) {
+            //
+            //          +---------------+ y1        +--------+ x1
+            //          |               |           |        |
+            //          |               | --------> |        |
+            //          |               |           |        |
+            //          +---------------+ y2        |        |     
+            //          x1             x2           |        |
+            //                                      |        |
+            //                                      +--------+ x2
+            //                                      y1      y2
+            //
+            int x1 = rect.X;
+            int x2 = rect.Right;
+            int y1 = rect.Y;
+            int y2 = rect.Bottom;
+
+            int width  = x2 - x1;
+            int height = y2 - y1;
+
+            return new Rectangle(x1, y2, width, height);
+        }
+
         #endregion
 
         #region ResetDragTargetPosition
