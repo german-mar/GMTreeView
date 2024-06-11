@@ -163,19 +163,24 @@ namespace ControlTreeView
 
                 bool isVerticalDiagram  =  (DrawStyle == CTreeViewDrawStyle.VerticalDiagram);
 
+                int x1;
+                int x2;
+                int y1;
+                int y2;
+
                 if (nodeBefore == null)
                 {
                     Rectangle rect_A = nodeAfter.BoundsSubtree;
 
                     if (isVerticalDiagram)
                     {
-                        dragDropLinePoint1 = new Point(rect_A.X - 2, rect_A.Y);
-                        dragDropLinePoint2 = new Point(rect_A.X - 2, rect_A.Bottom);
+                        x1 = rect_A.X - 2;  y1 = rect_A.Y;
+                        x2 = x1;            y2 = rect_A.Bottom;
                     }
                     else
                     {
-                        dragDropLinePoint1 = new Point(rect_A.X,     rect_A.Y - 2);
-                        dragDropLinePoint2 = new Point(rect_A.Right, rect_A.Y - 2);
+                        x1 = rect_A.X;      y1 = rect_A.Y - 2;
+                        x2 = rect_A.Right;  y2 = y1;
                     }
                 }
                 else if (nodeAfter == null)
@@ -184,40 +189,38 @@ namespace ControlTreeView
 
                     if (isVerticalDiagram)
                     {
-                        dragDropLinePoint1 = new Point(rect_B.Right + 2, rect_B.Y);
-                        dragDropLinePoint2 = new Point(rect_B.Right + 2, rect_B.Bottom);
+                        x1 = rect_B.Right + 2;  y1 = rect_B.Y;
+                        x2 = x1;                y2 = rect_B.Bottom;
                     }
                     else
                     {
-                        dragDropLinePoint1 = new Point(rect_B.X,     rect_B.Bottom + 2);
-                        dragDropLinePoint2 = new Point(rect_B.Right, rect_B.Bottom + 2);
+                        x1 = rect_B.X;          y1 = rect_B.Bottom + 2;
+                        x2 = rect_B.Right;      y2 = y1;
                     }
                 }
                 else
                 {
                     Rectangle rect_A =  nodeAfter.BoundsSubtree;
-
                     Rectangle rect_B = nodeBefore.BoundsSubtree;
 
                     if (isVerticalDiagram)
                     {
-                        int y1 = rect_B.Y;
-                        int y2 = Math.Max(rect_B.Bottom, rect_A.Bottom);
-                        int x  = rect_B.Right + IndentWidth / 2;
-
-                        dragDropLinePoint1 = new Point(x, y1);
-                        dragDropLinePoint2 = new Point(x, y2);
+                        y1 = rect_B.Y;
+                        y2 = Math.Max(rect_B.Bottom, rect_A.Bottom);
+                        x1 = rect_B.Right + IndentWidth / 2;
+                        x2 = x1;
                     }
                     else
                     {
-                        int x1 = rect_B.X;
-                        int x2 = Math.Max(rect_B.Right, rect_A.Right);
-                        int y  = rect_B.Bottom + IndentWidth / 2;
-
-                        dragDropLinePoint1 = new Point(x1, y);
-                        dragDropLinePoint2 = new Point(x2, y);
+                        x1 = rect_B.X;
+                        x2 = Math.Max(rect_B.Right, rect_A.Right);
+                        y1 = rect_B.Bottom + IndentWidth / 2;
+                        y2 = y1;
                     }
                 }
+
+                dragDropLinePoint1 = new Point(x1, y1);
+                dragDropLinePoint2 = new Point(x2, y2);
 
                 dragDropRectangle = Rectangle.Empty;
                 Refresh();
