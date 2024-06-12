@@ -116,29 +116,19 @@
             <returns>List of lines of this nodes collection.</returns>
         </member>
         <member name="T:ControlTreeView.CTreeView.DragTargetPositionClass">
-            <summary>
-            
-            </summary>
+            <summary>Struct that stores nodeDirect, nodeBefore and nodeAfter.</summary>
         </member>
         <member name="P:ControlTreeView.CTreeView.DragTargetPositionClass.Enabled">
-            <summary>
-            Gets a value indicating whether drag destination nodes are not empty.
-            </summary>
+            <summary>Gets a value indicating whether drag destination nodes are not empty.</summary>
         </member>
         <member name="P:ControlTreeView.CTreeView.DragTargetPositionClass.NodeDirect">
-            <summary>
-            The direct node of drag target position.
-            </summary>
+            <summary>The direct node of drag target position.</summary>
         </member>
         <member name="P:ControlTreeView.CTreeView.DragTargetPositionClass.NodeBefore">
-            <summary>
-            The upper node of drag target position.
-            </summary>
+            <summary>The upper node of drag target position.</summary>
         </member>
         <member name="P:ControlTreeView.CTreeView.DragTargetPositionClass.NodeAfter">
-            <summary>
-            The lower node of drag target position.
-            </summary>
+            <summary>The lower node of drag target position.</summary>
         </member>
         <member name="M:ControlTreeView.CTreeView.SetScrollDirections(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
             <summary>
@@ -149,16 +139,19 @@
             <param name="scrollRigh">true if need scroll right, otherwise, false.</param>
             <param name="scrollLeft">true if need scroll left, otherwise, false.</param>
         </member>
-        <member name="M:ControlTreeView.CTreeView.SetDragTargetPosition(System.Drawing.Point)">
+        <member name="M:ControlTreeView.CTreeView.rotateRectangle(System.Drawing.Rectangle)">
             <summary>
-            Sets the drag destination nodes according to specified cursor position.
+            Rotate rectngle
             </summary>
+            <param name="rect">The rectangle to rotate.</param>
+            <returns>A new rectangle rotated.</returns>
+        </member>
+        <member name="M:ControlTreeView.CTreeView.SetDragTargetPosition(System.Drawing.Point)">
+            <summary>Sets the drag destination nodes according to specified cursor position.</summary>
             <param name="dragPosition">The position of mouse cursor during drag.</param>
         </member>
         <member name="M:ControlTreeView.CTreeView.CheckValidDrop(System.Collections.Generic.List{ControlTreeView.CTreeNode})">
-            <summary>
-            Checking a valid of drop operation in current destination.
-            </summary>
+            <summary>Checking a valid of drop operation in current destination.</summary>
             <param name="sourceNodes">The source nodes of drag and drop operation.</param>
             <returns>true if drop of source nodes is allowed to current destination, otherwise, false.</returns>
         </member>
@@ -291,6 +284,11 @@
         <member name="P:ControlTreeView.CTreeView.SelectionMode">
             <summary>
             
+            </summary>
+        </member>
+        <member name="F:ControlTreeView.CTreeView._DragAndDropMode">
+            <summary>
+            Gets or sets DragAndDrop mode
             </summary>
         </member>
         <member name="P:ControlTreeView.CTreeView.IndentDepth">
