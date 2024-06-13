@@ -15,7 +15,7 @@ namespace ControlTreeView
     public partial class CTreeView
     {
 
-        #region SendMessage <-- user32.dll, scrollTimer_Tick
+        #region scrollTimer_Tick
         //[DllImport("user32.dll")]
         //static extern int SendMessage(
         //       int hWnd,     // handle to destination window
@@ -41,7 +41,7 @@ namespace ControlTreeView
             if      (scrollDown) { Top  -= 1; }
             else if (scrollUp)   { Top  += 1; }
 
-            if      (scrollRigh) { Left -= 1; }
+            if      (scrollRight) { Left -= 1; }
             else if (scrollLeft) { Left += 1; }
 
             foreach (Control control in this.Controls) {
@@ -102,7 +102,7 @@ namespace ControlTreeView
         private Rectangle dragDropRectangle;
 
         #region SetScrollDirections
-        private bool scrollUp, scrollDown, scrollRigh, scrollLeft;
+        private bool scrollUp, scrollDown, scrollRight, scrollLeft;
         /// <summary>
         /// Sets the directions in which need scroll.
         /// </summary>
@@ -116,7 +116,7 @@ namespace ControlTreeView
 
             this.scrollUp   = scrollUp;
             this.scrollDown = scrollDown;
-            this.scrollRigh = scrollRigh;
+            this.scrollRight = scrollRigh;
             this.scrollLeft = scrollLeft;
         }
         #endregion
