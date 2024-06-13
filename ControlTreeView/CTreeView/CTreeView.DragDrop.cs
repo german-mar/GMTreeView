@@ -14,8 +14,15 @@ namespace ControlTreeView
     // -------------------------------------------------------------------------
     public partial class CTreeView
     {
+        #region drag and drop properties
+        private Pen dragDropLinePen;
+        private Point dragDropLinePoint1, dragDropLinePoint2;
+        private Rectangle dragDropRectangle;
+        #endregion
 
-        #region scrollTimer_Tick
+        #region scroll management
+
+        #region scrollTimer_Tick event handler
         //[DllImport("user32.dll")]
         //static extern int SendMessage(
         //       int hWnd,     // handle to destination window
@@ -23,32 +30,56 @@ namespace ControlTreeView
         //       long wParam,  // first message parameter
         //       long lParam   // second message parameter
         //       );
-        private Timer scrollTimer;
 
+        private Timer scrollTimer;
         private void scrollTimer_Tick(object sender, EventArgs e)
         {
+            this.HorizontalScroll.Value = (scrollLeft) ? -1 : (scrollRight) ? 1 : 0;
+            this.VerticalScroll.Value   = (scrollDown) ? -1 : (scrollUp)    ? 1 : 0;
+
+            // ------------------------------------------------------------------
+            //int top  = (scrollDown) ? -1 : (scrollUp)    ? 1 : 0;
+            //int left = (scrollLeft) ? -1 : (scrollRight) ? 1 : 0;
+
+            //if (top != 0 || left != 0) {
+            //    foreach (Control control in this.Controls) {
+            //        control.Top  += top;
+            //        control.Left += left;
+            //    }
+            //}
+            // ------------------------------------------------------------------
+
+            // ------------------------------------------------------------------
             //int handle = this.Handle.ToInt32();
 
-            //if      (scrollDown) SendMessage(handle, 277, 1, 0);
-            //else if (scrollUp)   SendMessage(handle, 277, 0, 0);
+            //if      (scrollDown)  SendMessage(handle, 277, 1, 0);
+            //else if (scrollUp)    SendMessage(handle, 277, 0, 0);
 
-            //if      (scrollRigh) SendMessage(handle, 276, 1, 0);
-            //else if (scrollLeft) SendMessage(handle, 276, 0, 0);
-
-            int Top  = 0;
-            int Left = 0;
-
-            if      (scrollDown) { Top  -= 1; }
-            else if (scrollUp)   { Top  += 1; }
-
-            if      (scrollRight) { Left -= 1; }
-            else if (scrollLeft) { Left += 1; }
-
-            foreach (Control control in this.Controls) {
-                control.Top  += Top;
-                control.Left += Left;
-            }
+            //if      (scrollRight) SendMessage(handle, 276, 1, 0);
+            //else if (scrollLeft)  SendMessage(handle, 276, 0, 0);
+            // ------------------------------------------------------------------
         }
+        #endregion
+
+        #region SetScrollDirections
+        private bool scrollUp, scrollDown, scrollRight, scrollLeft;
+        /// <summary>
+        /// Sets the directions in which need scroll.
+        /// </summary>
+        /// <param name="scrollUp">true if need scroll up, otherwise, false.</param>
+        /// <param name="scrollDown">true if need scroll down, otherwise, false.</param>
+        /// <param name="scrollRigh">true if need scroll right, otherwise, false.</param>
+        /// <param name="scrollLeft">true if need scroll left, otherwise, false.</param>
+        internal void SetScrollDirections(bool scrollUp, bool scrollDown, bool scrollRigh, bool scrollLeft) {
+            scrollTimer.Enabled = (scrollUp || scrollDown || scrollRigh || scrollLeft);
+
+            this.scrollUp = scrollUp;
+            this.scrollDown = scrollDown;
+            this.scrollRight = scrollRigh;
+            this.scrollLeft = scrollLeft;
+        }
+        #endregion
+
         #endregion
 
         #region struct DragTargetPositionClass
@@ -94,30 +125,6 @@ namespace ControlTreeView
                 get { return _nodeAfter; }
             }
             #endregion
-        }
-        #endregion
-
-        private Pen dragDropLinePen;
-        private Point dragDropLinePoint1, dragDropLinePoint2;
-        private Rectangle dragDropRectangle;
-
-        #region SetScrollDirections
-        private bool scrollUp, scrollDown, scrollRight, scrollLeft;
-        /// <summary>
-        /// Sets the directions in which need scroll.
-        /// </summary>
-        /// <param name="scrollUp">true if need scroll up, otherwise, false.</param>
-        /// <param name="scrollDown">true if need scroll down, otherwise, false.</param>
-        /// <param name="scrollRigh">true if need scroll right, otherwise, false.</param>
-        /// <param name="scrollLeft">true if need scroll left, otherwise, false.</param>
-        internal void SetScrollDirections(bool scrollUp, bool scrollDown, bool scrollRigh, bool scrollLeft)
-        {
-            scrollTimer.Enabled = (scrollUp || scrollDown || scrollRigh || scrollLeft);
-
-            this.scrollUp   = scrollUp;
-            this.scrollDown = scrollDown;
-            this.scrollRight = scrollRigh;
-            this.scrollLeft = scrollLeft;
         }
         #endregion
 
