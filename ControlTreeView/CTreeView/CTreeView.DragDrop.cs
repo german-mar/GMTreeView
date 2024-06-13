@@ -15,28 +15,39 @@ namespace ControlTreeView
     public partial class CTreeView
     {
 
-        #region SendMessage <-- user32.dll
-        [DllImport("user32.dll")]
-        static extern int SendMessage(
-               int hWnd,     // handle to destination window
-               uint Msg,     // message
-               long wParam,  // first message parameter
-               long lParam   // second message parameter
-               );
-        #endregion
-
-        #region scrollTimer_Tick
+        #region SendMessage <-- user32.dll, scrollTimer_Tick
+        //[DllImport("user32.dll")]
+        //static extern int SendMessage(
+        //       int hWnd,     // handle to destination window
+        //       uint Msg,     // message
+        //       long wParam,  // first message parameter
+        //       long lParam   // second message parameter
+        //       );
         private Timer scrollTimer;
 
         private void scrollTimer_Tick(object sender, EventArgs e)
         {
-            int handle = this.Handle.ToInt32();
+            //int handle = this.Handle.ToInt32();
 
-            if      (scrollDown) SendMessage(handle, 277, 1, 0);
-            else if (scrollUp)   SendMessage(handle, 277, 0, 0);
+            //if      (scrollDown) SendMessage(handle, 277, 1, 0);
+            //else if (scrollUp)   SendMessage(handle, 277, 0, 0);
 
-            if      (scrollRigh) SendMessage(handle, 276, 1, 0);
-            else if (scrollLeft) SendMessage(handle, 276, 0, 0);
+            //if      (scrollRigh) SendMessage(handle, 276, 1, 0);
+            //else if (scrollLeft) SendMessage(handle, 276, 0, 0);
+
+            int Top  = 0;
+            int Left = 0;
+
+            if      (scrollDown) { Top  -= 1; }
+            else if (scrollUp)   { Top  += 1; }
+
+            if      (scrollRigh) { Left -= 1; }
+            else if (scrollLeft) { Left += 1; }
+
+            foreach (Control control in this.Controls) {
+                control.Top  += Top;
+                control.Left += Left;
+            }
         }
         #endregion
 
@@ -110,7 +121,7 @@ namespace ControlTreeView
         }
         #endregion
 
-        #region updateDragTargetPosition (3 methods)
+        #region updateDragTargetPosition (3 methods + utility methods)
 
         #region updateDragTargetPosition()
         private void updateDragTargetPosition()
@@ -168,7 +179,9 @@ namespace ControlTreeView
                 Refresh();
             }
         }
+        #endregion
 
+        #region set oordinates for one or tuo nodes (2 methods)
         // ------------------------------------------------------------------------------------
         // same method for nodeBefore and nodeAffter,
         // the only difference is the offset = -2 and +2 respectively
@@ -237,6 +250,7 @@ namespace ControlTreeView
                 rect_B = rotateRectangle(rect_B);
             }
 
+
             // ---------------------------------------------------------------------------------------------
             // update drag target position (for both, horizontal or vertical diagram rectangles)
             // ---------------------------------------------------------------------------------------------
@@ -264,7 +278,9 @@ namespace ControlTreeView
             dragDropLinePoint1 = new Point(x1, y1);
             dragDropLinePoint2 = new Point(x2, y2);
         }
+        #endregion
 
+        #region rotate rectangle (convert vertical diagram coordinates to horizontal diagram coordinates)
         /// <summary>
         /// Rotate rectngle
         /// </summary>
@@ -322,6 +338,7 @@ namespace ControlTreeView
                 destinationCollection = node.Nodes;
             });
 
+            // if inside of destination node
             if (destinationNode != null && destinationNode.Bounds.Contains(dragPosition)) //Drag position within node
             {
                 //Find drag position within node
@@ -329,32 +346,43 @@ namespace ControlTreeView
 
                 if (DrawStyle == CTreeViewDrawStyle.VerticalDiagram)
                 {
-                    // ----------------------------------------------------
-                    //          Destination Node  delta     Drag Node
-                    //          +-----------+ ya1   |       +-----------+ yb1
-                    //          |           |       V       |           |
-                    //          |           |     <-------- |           |
-                    //          |           |               |           |
-                    //          +-----------+ ya2           +-----------+ yb2
-                    //          xa1       xa2               xb1       xb2
-                    //     firstBound   secondBound
-                    // ----------------------------------------------------
-                    coordinate = dragPosition.X;                    // coordinate  = xb1
+                    // ----------------------------------------------------------------------
+                    // VERTICAL DIAGRAM
+                    // ----------------------------------------------------------------------
+                    //                                 coordinate = MousePosition.X
+                    //                                      |
+                    //              Destination Node        |        Drag Node
+                    //              +-----------+ ya1       |       +-----------+ yb1
+                    //              |           |           V       |           |
+                    //              |           |         <-------- |           |      Drag node is being dragged to the left
+                    //              |           |                   |           |
+                    //              +-----------+ ya2               +-----------+ yb2
+                    // firstBound = xa1       xa2 = secondBound     xb1       xb2
+                    //                 ^     ^
+                    //                 |     |
+                    //                 |     |
+                    // firstBound + delta   secondBound - delta
+                    // ----------------------------------------------------------------------
+                    coordinate = dragPosition.X;                    // coordinate  = MousePosition.X
 
                     delta = destinationNode.Bounds.Width / 4;       // delta       = (xa2 - xa1) / 4
                     firstBound  = destinationNode.Bounds.Left;      // firstBound  = xa1
                     secondBound = destinationNode.Bounds.Right;     // secondBound = xa2
                 }
                 else
-                    // ----------------------------------------------------
+                {
+                    // ----------------------------------------------------------------------
+                    // HORIZONTAL DIAGRAM
+                    // ----------------------------------------------------------------------
                     //          Destination Node
-                    //          +-----------+ ya1   firstBound
+                    //          +-----------+ ya1 firstBound
+                    //          |           |   <-------------- firstBound  + delta
                     //          |           |
-                    //          |           |
-                    //          |           |
-                    //          +-----------+ ya2   secondBound
-                    //          xa1   ^   xa2
-                    //                |         <-- delta
+                    //          |           |   <-------------- secondBound - delta
+                    //          +-----------+ ya2 secondBound
+                    //          xa1       xa2
+                    //                ^
+                    //                |     <--- coordinate = MousePosition.Y
                     //                |
                     //            Drag Node
                     //          +-----------+ yb1
@@ -363,30 +391,52 @@ namespace ControlTreeView
                     //          |           |
                     //          +-----------+ yb2
                     //          xb1       xb2
-                    // ----------------------------------------------------
-                    coordinate = dragPosition.Y;
+                    // ----------------------------------------------------------------------
+                    coordinate = dragPosition.Y;                    // coordinate  = MousePosition.Y
 
                     delta = destinationNode.Bounds.Height / 4;      // delta       = (ya2 - ya1) / 4
                     firstBound  = destinationNode.Bounds.Top;       // firstBound  = ya1
                     secondBound = destinationNode.Bounds.Bottom;    // secondBound = ya2
                 }
 
-                if (coordinate >= firstBound + delta && coordinate <= secondBound - delta)
+                // ----------------------------------------------------------------------
+                //                                 coordinate = MousePosition.X
+                //                                      |
+                //              Destination Node        |        Drag Node
+                //              +-----------+ ya1       |       +-----------+ yb1
+                //              |           |           V       |           |
+                //              |           |         <-------- |           |      Drag node is being dragged to the left
+                //              |           |                   |           |
+                //              +-----------+ ya2               +-----------+ yb2
+                // firstBound = xa1       xa2 = secondBound     xb1       xb2
+                //                 ^     ^
+                //                 |     |
+                //                 |     |
+                // firstBound + delta   secondBound - delta
+                // ----------------------------------------------------------------------
+                int x1 = firstBound  + delta;
+                int x2 = secondBound - delta;
+
+                // if I am inside the destination node deltas
+                if (coordinate >= x1 && coordinate <= x2)
                 {
                     updateDragTargetPosition(destinationNode);
                     return;
                 }
-                else if (coordinate < firstBound + delta) //before
+                // if I am to the left of the destination node delta
+                else if (coordinate < x1) //before
                 {
                     updateDragTargetPosition(destinationNode.PrevNode, destinationNode);
                     return;
                 }
-                else if (coordinate > secondBound - delta) //after
+                // if I am to the right of the destination node delta
+                else if (coordinate > x2) //after
                 {
                     updateDragTargetPosition(destinationNode, destinationNode.NextNode);
                     return;
                 }
             }
+            // if outside of destination node
             else //Drag position out of the nodes
             {
                 //Check drag position between two nodes
