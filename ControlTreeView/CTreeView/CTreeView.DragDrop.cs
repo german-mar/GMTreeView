@@ -169,8 +169,10 @@ namespace ControlTreeView
             }
         }
 
+        // ------------------------------------------------------------------------------------
         // same method for nodeBefore and nodeAffter,
         // the only difference is the offset = -2 and +2 respectively
+        // ------------------------------------------------------------------------------------
         private void setCoordinates_ForOneNode(CTreeNode node, int offset, bool isVerticalDiagram) {
             Rectangle rect = node.BoundsSubtree;
 
@@ -270,7 +272,7 @@ namespace ControlTreeView
         /// <returns>A new rectangle rotated.</returns>
         private Rectangle rotateRectangle(Rectangle rect) {
             // -------------------------------------------------------------
-            // Rotates a triangle through the axis (x1, y1) - (x2, y2) 
+            // Rotates a rectangle through the axis (x1, y1) - (x2, y2) 
             // -------------------------------------------------------------
             //          x1             x2               y1      y2
             //      y1  *---------------+ y1         x1 *--------+ x1
@@ -324,19 +326,49 @@ namespace ControlTreeView
             {
                 //Find drag position within node
                 int delta, coordinate, firstBound, secondBound;
+
                 if (DrawStyle == CTreeViewDrawStyle.VerticalDiagram)
                 {
-                    delta = destinationNode.Bounds.Width / 4;
-                    coordinate  = dragPosition.X;
-                    firstBound  = destinationNode.Bounds.Left;
-                    secondBound = destinationNode.Bounds.Right;
+                    // ----------------------------------------------------
+                    //          Destination Node  delta     Drag Node
+                    //          +-----------+ ya1   |       +-----------+ yb1
+                    //          |           |       V       |           |
+                    //          |           |     <-------- |           |
+                    //          |           |               |           |
+                    //          +-----------+ ya2           +-----------+ yb2
+                    //          xa1       xa2               xb1       xb2
+                    //     firstBound   secondBound
+                    // ----------------------------------------------------
+                    coordinate = dragPosition.X;                    // coordinate  = xb1
+
+                    delta = destinationNode.Bounds.Width / 4;       // delta       = (xa2 - xa1) / 4
+                    firstBound  = destinationNode.Bounds.Left;      // firstBound  = xa1
+                    secondBound = destinationNode.Bounds.Right;     // secondBound = xa2
                 }
                 else
-                {
-                    delta = destinationNode.Bounds.Height / 4;
-                    coordinate  = dragPosition.Y;
-                    firstBound  = destinationNode.Bounds.Top;
-                    secondBound = destinationNode.Bounds.Bottom;
+                    // ----------------------------------------------------
+                    //          Destination Node
+                    //          +-----------+ ya1   firstBound
+                    //          |           |
+                    //          |           |
+                    //          |           |
+                    //          +-----------+ ya2   secondBound
+                    //          xa1   ^   xa2
+                    //                |         <-- delta
+                    //                |
+                    //            Drag Node
+                    //          +-----------+ yb1
+                    //          |           |
+                    //          |           |
+                    //          |           |
+                    //          +-----------+ yb2
+                    //          xb1       xb2
+                    // ----------------------------------------------------
+                    coordinate = dragPosition.Y;
+
+                    delta = destinationNode.Bounds.Height / 4;      // delta       = (ya2 - ya1) / 4
+                    firstBound  = destinationNode.Bounds.Top;       // firstBound  = ya1
+                    secondBound = destinationNode.Bounds.Bottom;    // secondBound = ya2
                 }
 
                 if (coordinate >= firstBound + delta && coordinate <= secondBound - delta)
