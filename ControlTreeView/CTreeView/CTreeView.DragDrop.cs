@@ -15,14 +15,31 @@ namespace ControlTreeView
     public partial class CTreeView
     {
         #region drag and drop properties
+        // ---------------------------------------------------
+        // CTreeView line pen
+        // ---------------------------------------------------
         private Pen dragDropLinePen;
+
+        // ---------------------------------------------------
+        // drag and drop target position in a drag and drop operation
+        // ---------------------------------------------------
+        // line indicating the drag target position
         private Point dragDropLinePoint1, dragDropLinePoint2;
+
+        // rectangle indicating the drag target position
         private Rectangle dragDropRectangle;
+
+        // ---------------------------------------------------
+        // scrolling
+        // ---------------------------------------------------
+        // scrolling timer
+        private Timer scrollTimer;
+
+        // indicates what type of scrolling the CTreeView requires
+        private bool scrollUp, scrollDown, scrollRight, scrollLeft;
         #endregion
 
-        #region scroll management
-
-        #region scrollTimer_Tick event handler
+        #region scroll management:  scrollTimer_Tick event handler, SetScrollDirections
         //[DllImport("user32.dll")]
         //static extern int SendMessage(
         //       int hWnd,     // handle to destination window
@@ -31,9 +48,13 @@ namespace ControlTreeView
         //       long lParam   // second message parameter
         //       );
 
-        private Timer scrollTimer;
-        private void scrollTimer_Tick(object sender, EventArgs e)
+        // -------------------------------------------------------------------------
+        // Timer tick event handler. Used to scroll the CTreeView
+        // -------------------------------------------------------------------------
+        private void ScrollTimer_Tick(object sender, EventArgs e)
         {
+            // scroll left = -1, scroll right = 1
+            // scroll down = -1, scroll up   = -1
             this.HorizontalScroll.Value = (scrollLeft) ? -1 : (scrollRight) ? 1 : 0;
             this.VerticalScroll.Value   = (scrollDown) ? -1 : (scrollUp)    ? 1 : 0;
 
@@ -59,10 +80,7 @@ namespace ControlTreeView
             //else if (scrollLeft)  SendMessage(handle, 276, 0, 0);
             // ------------------------------------------------------------------
         }
-        #endregion
 
-        #region SetScrollDirections
-        private bool scrollUp, scrollDown, scrollRight, scrollLeft;
         /// <summary>
         /// Sets the directions in which need scroll.
         /// </summary>
@@ -78,8 +96,6 @@ namespace ControlTreeView
             this.scrollRight = scrollRigh;
             this.scrollLeft = scrollLeft;
         }
-        #endregion
-
         #endregion
 
         #region struct DragTargetPositionClass
@@ -131,9 +147,11 @@ namespace ControlTreeView
         #region updateDragTargetPosition (3 methods + utility methods)
 
         #region updateDragTargetPosition()
-        private void updateDragTargetPosition()
+        private void UpdateDragTargetPosition()
         {
-            bool haveANode  =  (DragTargetPosition.NodeDirect != null || DragTargetPosition.NodeBefore != null || DragTargetPosition.NodeAfter != null);
+            bool haveANode  =  (DragTargetPosition.NodeDirect != null ||
+                                DragTargetPosition.NodeBefore != null ||
+                                DragTargetPosition.NodeAfter  != null);
 
             if (haveANode)
             {
@@ -141,30 +159,34 @@ namespace ControlTreeView
 
                 dragDropLinePoint1 = Point.Empty;
                 dragDropLinePoint2 = Point.Empty;
+
                 dragDropRectangle  = Rectangle.Empty;
+
                 Refresh();
             }
         }
         #endregion
 
         #region updateDragTargetPosition(CTreeNode node)
-        private void updateDragTargetPosition(CTreeNode node)
+        private void UpdateDragTargetPosition(CTreeNode node)
         {
             if (DragTargetPosition.NodeDirect != node)
             {
                 DragTargetPosition = new DragTargetPositionClass(node, null, null);
 
-                dragDropRectangle  = node.Bounds;
-                dragDropRectangle.Inflate(2, 2);
                 dragDropLinePoint1 = Point.Empty;
                 dragDropLinePoint2 = Point.Empty;
+
+                dragDropRectangle  = node.Bounds;
+                dragDropRectangle.Inflate(2, 2);
+                
                 Refresh();
             }
         }
         #endregion
 
         #region updateDragTargetPosition(CTreeNode nodeBefore, CTreeNode nodeAfter)
-        private void updateDragTargetPosition(CTreeNode nodeBefore, CTreeNode nodeAfter)
+        private void UpdateDragTargetPosition(CTreeNode nodeBefore, CTreeNode nodeAfter)
         {
             if (DragTargetPosition.NodeBefore != nodeBefore || DragTargetPosition.NodeAfter != nodeAfter)
             {
@@ -172,17 +194,14 @@ namespace ControlTreeView
 
                 bool isVerticalDiagram  =  (DrawStyle == CTreeViewDrawStyle.VerticalDiagram);
 
-                if (nodeBefore == null) {
-                    setCoordinates_ForOneNode(nodeAfter, -2, isVerticalDiagram);
+                int offset = 2; // It can never be 0 (for now). I don't know if it can have a value different from 2.
 
-                } else if (nodeAfter == null) {
-                    setCoordinates_ForOneNode(nodeBefore, 2, isVerticalDiagram);
-
-                } else {
-                    setCoordinates_ForTwoNodes(nodeBefore, nodeAfter, isVerticalDiagram);
-                }
+                if      (nodeBefore == null) { SetCoordinates(nodeAfter, -offset,    isVerticalDiagram); }
+                else if (nodeAfter  == null) { SetCoordinates(nodeBefore, offset,    isVerticalDiagram); } 
+                else                         { SetCoordinates(nodeBefore, nodeAfter, isVerticalDiagram); }
 
                 dragDropRectangle = Rectangle.Empty;
+
                 Refresh();
             }
         }
@@ -193,7 +212,8 @@ namespace ControlTreeView
         // same method for nodeBefore and nodeAffter,
         // the only difference is the offset = -2 and +2 respectively
         // ------------------------------------------------------------------------------------
-        private void setCoordinates_ForOneNode(CTreeNode node, int offset, bool isVerticalDiagram) {
+        private void SetCoordinates(CTreeNode node, int offset, bool isVerticalDiagram) {
+            //Rectangle rect = (!isVerticalDiagram) ? node.BoundsSubtree : rotateRectangle(node.BoundsSubtree);
             Rectangle rect = node.BoundsSubtree;
 
             if (isVerticalDiagram) {
@@ -208,17 +228,17 @@ namespace ControlTreeView
                 //                     x1           x1         x2
                 //                     x2
                 // ----------------------------------------------------
-                rect = rotateRectangle(rect);
+                rect = RotateRectangle(rect);
             }
 
             // --------------------------------------------------------
             // update drag target position (for both, horizontal or vertical diagram rectangles)
             // --------------------------------------------------------
-            //          +-----------+ y1, y2    for NodeAfter
+            //          +-----------+ y1, y2    for NodeAfter   YY = rect.Y
             //          |           |
             //          |           |
             //          |           |
-            //          +-----------+ y1, y2    for NodeBefore
+            //          +-----------+ y1, y2    for NodeBefore  YY = rect.Bottom
             //          x1         x2
             // --------------------------------------------------------
             // offset < 0 for NodeAfter, offset > 0 for NodeBefore
@@ -231,7 +251,7 @@ namespace ControlTreeView
             dragDropLinePoint2 = new Point(x2, y2);
         }
 
-        private void setCoordinates_ForTwoNodes(CTreeNode nodeBefore, CTreeNode nodeAfter, bool isVerticalDiagram) {
+        private void SetCoordinates(CTreeNode nodeBefore, CTreeNode nodeAfter, bool isVerticalDiagram) {
             Rectangle rect_A =  nodeAfter.BoundsSubtree;
             Rectangle rect_B = nodeBefore.BoundsSubtree;
 
@@ -253,10 +273,9 @@ namespace ControlTreeView
                 //                  +-----------+ y2 = maxBottom                    +-----------+
                 //                                                                             x2 = maxRight
                 // -----------------------------------------------------------------------------------------                                                                          x2 = maxRight
-                rect_A = rotateRectangle(rect_A);
-                rect_B = rotateRectangle(rect_B);
+                rect_A = RotateRectangle(rect_A);
+                rect_B = RotateRectangle(rect_B);
             }
-
 
             // ---------------------------------------------------------------------------------------------
             // update drag target position (for both, horizontal or vertical diagram rectangles)
@@ -279,8 +298,8 @@ namespace ControlTreeView
             int maxRight = Math.Max(rect_B.Right, rect_A.Right);
             int offset   = IndentWidth / 2;
 
-            int x1 = rect_B.X;      int y1 = rect_B.Bottom + offset;
-            int x2 = maxRight;      int y2 = y1;
+            int x1 = rect_B.X;  int y1 = rect_B.Bottom + offset;
+            int x2 = maxRight;  int y2 = y1;
             
             dragDropLinePoint1 = new Point(x1, y1);
             dragDropLinePoint2 = new Point(x2, y2);
@@ -293,7 +312,7 @@ namespace ControlTreeView
         /// </summary>
         /// <param name="rect">The rectangle to rotate.</param>
         /// <returns>A new rectangle rotated.</returns>
-        private Rectangle rotateRectangle(Rectangle rect) {
+        private Rectangle RotateRectangle(Rectangle rect) {
             // -------------------------------------------------------------
             // Rotates a rectangle through the axis (x1, y1) - (x2, y2) 
             // -------------------------------------------------------------
@@ -327,7 +346,7 @@ namespace ControlTreeView
         {
             scrollTimer.Enabled = false;
 
-            updateDragTargetPosition();
+            UpdateDragTargetPosition();
         }
         #endregion
 
@@ -427,19 +446,19 @@ namespace ControlTreeView
                 // if I am inside the destination node deltas
                 if (coordinate >= x1 && coordinate <= x2)
                 {
-                    updateDragTargetPosition(destinationNode);
+                    UpdateDragTargetPosition(destinationNode);
                     return;
                 }
                 // if I am to the left of the destination node delta
                 else if (coordinate < x1) //before
                 {
-                    updateDragTargetPosition(destinationNode.PrevNode, destinationNode);
+                    UpdateDragTargetPosition(destinationNode.PrevNode, destinationNode);
                     return;
                 }
                 // if I am to the right of the destination node delta
                 else if (coordinate > x2) //after
                 {
-                    updateDragTargetPosition(destinationNode, destinationNode.NextNode);
+                    UpdateDragTargetPosition(destinationNode, destinationNode.NextNode);
                     return;
                 }
             }
@@ -480,7 +499,7 @@ namespace ControlTreeView
 
                 if (isBetween) //Drag position between two nodes
                 {
-                    updateDragTargetPosition(upperNode, lowerNode);
+                    UpdateDragTargetPosition(upperNode, lowerNode);
                     return;
                 }
                 else if (destinationNode != null)
@@ -500,18 +519,18 @@ namespace ControlTreeView
 
                     if (isAbove) //before
                     {
-                        updateDragTargetPosition(destinationNode.PrevNode, destinationNode);
+                        UpdateDragTargetPosition(destinationNode.PrevNode, destinationNode);
                         return;
                     }
                     else if (isBelow) //after
                     {
-                        updateDragTargetPosition(destinationNode, destinationNode.NextNode);
+                        UpdateDragTargetPosition(destinationNode, destinationNode.NextNode);
                         return;
                     }
                 }
             }
 
-            updateDragTargetPosition();
+            UpdateDragTargetPosition();
         }
         #endregion
 

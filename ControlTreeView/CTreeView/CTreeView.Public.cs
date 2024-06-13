@@ -54,7 +54,7 @@ namespace ControlTreeView
             PlusMinus = new CTreeViewPlusMinus(imagePlus, imageMinus);
 
             scrollTimer = new Timer();
-            scrollTimer.Tick += new EventHandler(scrollTimer_Tick);
+            scrollTimer.Tick += new EventHandler(ScrollTimer_Tick);
             scrollTimer.Interval = 1;
 
             dragDropLinePen = new Pen(Color.Black, 2.0F);
