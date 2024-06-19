@@ -3,205 +3,273 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
 using System.ComponentModel;
+using System.Drawing.Text;
 
-namespace ControlTreeView
-{
-    public partial class CTreeView
-    {
+namespace ControlTreeView {
+    /// <summary>
+    /// Calculates the coordinates (x1, y1)-(x2, y2) of the TreeView lines and (x, y) of the PlusMinus button.
+    /// </summary>
+    public partial class CTreeView {
         #region SuspendUpdate
         private int suspendUpdateCount;
         /// <summary>
         /// 
         /// </summary>
-        internal bool SuspendUpdate
-        {
-            get
-            {
-                return (suspendUpdateCount > 0);
-            }
+        internal bool SuspendUpdate {
+            get { return (suspendUpdateCount > 0); }
         }
         #endregion
 
+        #region list of lines for the CTreeView
         /// <summary>
         /// The list of lines for the CTreeView.
         /// </summary>
         private List<CTreeNode.Line> rootLines;
+        #endregion
+
+        #region Line_Coordinates struct: Delegates for Lines and PlusMinus coordinates calculus
+        private struct Line_Coordinates {
+            public Func<CTreeNode, Point> plusMinusCalc;
+            public Func<CTreeNode, CTreeNode.Line> parentLineCalc;
+            public Func<CTreeNodeCollection, CTreeNode.Line> commonLineCalc;
+            public Func<CTreeNode, CTreeNode.Line> childLineCalc;
+        }
+
+        private Line_Coordinates LC;
+        #endregion
 
         #region Recalculate
-        internal void Recalculate()
-        {
-            if (!SuspendUpdate)
-            {
-                #region Func
-                Func<CTreeNode, Point>                    plusMinusCalc  = null;
-                Func<CTreeNode, CTreeNode.Line>           parentLineCalc = null;
-                Func<CTreeNodeCollection, CTreeNode.Line> commonLineCalc = null;
-                Func<CTreeNode, CTreeNode.Line>           childLineCalc  = null;
-                #endregion
-
+        internal void Recalculate() {
+            if (!SuspendUpdate) {
                 const int endLineIndent = 2;
                 bool showRootPlusMinus = true;
 
-                #region Calculate Visible
-                //Calculate Visible
-                foreach (CTreeNode rootNode in Nodes)
-                {
-                    rootNode.Nodes.TraverseNodes(node => { node.Visible = false; });
+                Calculate_Visible();
 
-                    rootNode.Nodes.TraverseNodes(node => node.ParentNode.IsExpanded, node =>
-                    {
-                        node.Visible = true;
-                    });
-                }
-                #endregion
-
-                switch (DrawStyle)
-                {
-                    #region case CTreeViewDrawStyle.LinearTree
+                switch (DrawStyle) {
                     case CTreeViewDrawStyle.LinearTree:
-                        showRootPlusMinus   = ShowRootLines;
-                        Point startLocation = new Point(Padding.Left + 3, Padding.Top + 3);
-                        
-                        if (ShowRootLines)
-                            startLocation.X += IndentDepth;
-                        
-                        foreach (CTreeNode node in Nodes)
-                            startLocation.Y = node.NextLocation(startLocation).Y;
-                        
-                        plusMinusCalc = new Func<CTreeNode, Point>(eachNode =>
-                            new Point(eachNode.Location.X - IndentDepth + 5, eachNode.Location.Y + eachNode.Bounds.Height / 2));
-                        
-                        parentLineCalc = new Func<CTreeNode, CTreeNode.Line>(parent => new CTreeNode.Line(
-                            new Point(parent.Location.X + 5, parent.Location.Y + parent.Bounds.Height + endLineIndent),
-                            new Point(parent.Location.X + 5, parent.FirstNode.Location.Y + parent.FirstNode.Bounds.Height / 2)));
-                        
-                        commonLineCalc = new Func<CTreeNodeCollection, CTreeNode.Line>(nodes => new CTreeNode.Line(
-                            new Point(nodes[0].Location.X - IndentDepth + 5, nodes[0].Location.Y + nodes[0].Bounds.Height / 2),
-                            new Point(nodes[0].Location.X - IndentDepth + 5, nodes[nodes.Count - 1].Location.Y + nodes[nodes.Count - 1].Bounds.Height / 2)));
-                        
-                        childLineCalc = new Func<CTreeNode, CTreeNode.Line>(child => new CTreeNode.Line(
-                            new Point(child.Location.X - IndentDepth + 5, child.Location.Y + child.Bounds.Height / 2),
-                            new Point(child.Location.X - endLineIndent,   child.Location.Y + child.Bounds.Height / 2)));
-                        
-                        break;
-                    #endregion
-                    
-                    #region case CTreeViewDrawStyle.HorizontalDiagram
-                    case CTreeViewDrawStyle.HorizontalDiagram:
-                        int startX    = Padding.Left + 3;
-                        int startYMax = Padding.Top + 3;
-                        
-                        if (ShowRootLines)
-                            startX += IndentDepth;
-                        
-                        foreach (CTreeNode node in Nodes)
-                            startYMax = node.NextYMax(startX, startYMax);
-                        
-                        plusMinusCalc = new Func<CTreeNode, Point>(eachNode =>
-                            new Point(eachNode.Location.X + eachNode.Bounds.Width + PlusMinus.Size.Width / 2 + 2, eachNode.Location.Y + eachNode.Bounds.Height / 2));
-                        
-                        parentLineCalc = new Func<CTreeNode, CTreeNode.Line>(parent => new CTreeNode.Line(
-                            new Point(parent.Location.X + parent.Bounds.Width + endLineIndent,   parent.Location.Y + parent.Bounds.Height / 2),
-                            new Point(parent.Location.X + parent.Bounds.Width + IndentDepth / 2, parent.Location.Y + parent.Bounds.Height / 2)));
-                        
-                        commonLineCalc = new Func<CTreeNodeCollection, CTreeNode.Line>(nodes => new CTreeNode.Line(
-                            new Point(nodes[0].Location.X - IndentDepth / 2, nodes[0].Location.Y               + nodes[0].Bounds.Height / 2),
-                            new Point(nodes[0].Location.X - IndentDepth / 2, nodes[nodes.Count - 1].Location.Y + nodes[nodes.Count - 1].Bounds.Height / 2)));
-                        
-                        childLineCalc = new Func<CTreeNode, CTreeNode.Line>(child => new CTreeNode.Line(
-                            new Point(child.Location.X - IndentDepth / 2, child.Location.Y + child.Bounds.Height / 2),
-                            new Point(child.Location.X - endLineIndent,   child.Location.Y + child.Bounds.Height / 2)));
-                        
-                        break;
-                    #endregion
-                    
-                    #region case CTreeViewDrawStyle.VerticalDiagram
-                    case CTreeViewDrawStyle.VerticalDiagram:
-                        int startXMax = Padding.Left + 3;
-                        int startY    = Padding.Top + 3;
-                        
-                        if (ShowRootLines)
-                            startY += IndentDepth;
-                        
-                        foreach (CTreeNode node in Nodes)
-                            startXMax = node.NextXMax(startXMax, startY);
-                        
-                        plusMinusCalc = new Func<CTreeNode, Point>(eachNode =>
-                            new Point(eachNode.Location.X + eachNode.Bounds.Width / 2, eachNode.Location.Y + eachNode.Bounds.Height + PlusMinus.Size.Width / 2 + 2));
-                        
-                        parentLineCalc = new Func<CTreeNode, CTreeNode.Line>(parent => new CTreeNode.Line(
-                            new Point(parent.Location.X + parent.Bounds.Width / 2, parent.Location.Y + parent.Bounds.Height + endLineIndent),
-                            new Point(parent.Location.X + parent.Bounds.Width / 2, parent.Location.Y + parent.Bounds.Height + IndentDepth / 2)));
-                        
-                        commonLineCalc = new Func<CTreeNodeCollection, CTreeNode.Line>(nodes => new CTreeNode.Line(
-                            new Point(nodes[0].Location.X               + nodes[0].Bounds.Width / 2,               nodes[0].Location.Y - IndentDepth / 2),
-                            new Point(nodes[nodes.Count - 1].Location.X + nodes[nodes.Count - 1].Bounds.Width / 2, nodes[0].Location.Y - IndentDepth / 2)));
-                        
-                        childLineCalc = new Func<CTreeNode, CTreeNode.Line>(child => new CTreeNode.Line(
-                            new Point(child.Location.X + child.Bounds.Width / 2, child.Location.Y - IndentDepth / 2),
-                            new Point(child.Location.X + child.Bounds.Width / 2, child.Location.Y - endLineIndent)));
-                        
-                        break;
-                    #endregion
+                        showRootPlusMinus = ShowRootLines;
+                        Recalculate_LinearTree(endLineIndent); break;
+
+                    case CTreeViewDrawStyle.HorizontalDiagram: Recalculate_HorizontalTree(endLineIndent); break;
+
+                    case CTreeViewDrawStyle.VerticalDiagram: Recalculate_VerticalTree(endLineIndent); break;
                 }
 
-                #region ShowPlusMinus, ShowLines
-                //Calculate PlusMinus
-                if (ShowPlusMinus)
-                {
-                    foreach (CTreeNode node in Nodes)
-                        node.CalculatePlusMinus(plusMinusCalc, showRootPlusMinus);
-                }
+                Calculate_PlusMinus(showRootPlusMinus);
+                Calculate_Lines();
+                Calculate_Bounds();
+                Locate_Controls();
 
-                //Calculate Lines
-                if (ShowLines)
-                {
-                    foreach (CTreeNode node in Nodes)
-                        node.CalculateLines(parentLineCalc, commonLineCalc, childLineCalc);
-                    
-                    if (ShowRootLines)
-                        rootLines = Nodes.GetLines(commonLineCalc, childLineCalc);
-                    else
-                        rootLines = null;
-                }
-                #endregion
-
-                #region Calculate Bounds
-                //Calculate Bounds
-                BoundsSubtree = Rectangle.Empty;
-                
-                foreach (CTreeNode node in Nodes)
-                {
-                    node.CalculateBounds();
-                    BoundsSubtree = Rectangle.Union(node.BoundsSubtree, BoundsSubtree);
-                }
-                #endregion
-
-                #region Locate controls
-                //Locate controls
-                this.SuspendLayout();
-
-                this.Nodes.TraverseNodes(node =>
-                {
-                    node.Control.Visible  = node.Visible;
-                    Point controlLocation = node.Location;
-                    controlLocation.Offset(AutoScrollPosition);
-                    
-                    if (node.Control is NodeControl)
-                        controlLocation.Offset(-((NodeControl)node.Control).Area.X, -((NodeControl)node.Control).Area.Y);
-
-                    node.Control.Location = controlLocation;
-                });
-
-                this.ResumeLayout(false);
-
-                this.AutoScrollMinSize = new Size(BoundsSubtree.Width + Padding.Right, BoundsSubtree.Height + Padding.Bottom);
+                this.AutoScrollMinSize = new Size(BoundsSubtree.Width + Padding.Right,
+                                                  BoundsSubtree.Height + Padding.Bottom);
                 //Invalidate();
                 //Update();
                 Refresh();
-                #endregion
             }
         }
         #endregion
+
+        #region Calculate_Visible
+        private void Calculate_Visible() {
+            foreach (CTreeNode rootNode in Nodes) {
+                rootNode.Nodes.TraverseNodes(node => { node.Visible = false; });
+
+                rootNode.Nodes.TraverseNodes(node => node.ParentNode.IsExpanded, node => {
+                    node.Visible = true;
+                });
+            }
+        }
+        #endregion
+
+        #region Recalculating the coordinates of the tree lines
+
+        #region Recalculate_LinearTree
+        private void Recalculate_LinearTree(int endLineIndent) {
+            Point startLocation = new Point(Padding.Left + 3, Padding.Top + 3);
+
+            if (ShowRootLines)
+                startLocation.X += IndentDepth;
+
+            foreach (CTreeNode node in Nodes)
+                startLocation.Y = node.NextLocation(startLocation).Y;
+
+            LC.plusMinusCalc = new Func<CTreeNode, Point>(eachNode =>
+                                   getPoint(eachNode, -IndentDepth + 5));
+
+            LC.parentLineCalc = new Func<CTreeNode, CTreeNode.Line>(parent =>
+                new CTreeNode.Line(getPoint(parent, 5, parent, endLineIndent),
+                                   getPoint(parent, 5, parent.FirstNode)));
+
+            LC.commonLineCalc = new Func<CTreeNodeCollection, CTreeNode.Line>(nodes =>
+                new CTreeNode.Line(getPoint(nodes[0], -IndentDepth + 5, nodes[0]),
+                                   getPoint(nodes[0], -IndentDepth + 5, nodes[nodes.Count - 1])));
+
+            LC.childLineCalc = new Func<CTreeNode, CTreeNode.Line>(child =>
+                new CTreeNode.Line(getPoint(child, -IndentDepth + 5),
+                                   getPoint(child, -endLineIndent)));
+
+        }
+        #endregion
+
+        #region Recalculate_HorizontalTree
+        private void Recalculate_HorizontalTree(int endLineIndent) {
+            int startX = Padding.Left + 3;
+            int startYMax = Padding.Top + 3;
+
+            if (ShowRootLines)
+                startX += IndentDepth;
+
+            foreach (CTreeNode node in Nodes)
+                startYMax = node.NextYMax(startX, startYMax);
+
+            LC.plusMinusCalc = new Func<CTreeNode, Point>(eachNode =>
+                                    getHD_Point2(eachNode, PlusMinus.Size.Width / 2 + 2));
+
+            LC.parentLineCalc = new Func<CTreeNode, CTreeNode.Line>(parent =>
+                new CTreeNode.Line(getHD_Point2(parent, endLineIndent),
+                                    getHD_Point2(parent, IndentDepth / 2)));
+
+            LC.commonLineCalc = new Func<CTreeNodeCollection, CTreeNode.Line>(nodes =>
+                new CTreeNode.Line(getHD_Point(nodes[0], -IndentDepth / 2),
+                                    getHD_Point(nodes[0], -IndentDepth / 2, nodes[nodes.Count - 1])));
+
+            LC.childLineCalc = new Func<CTreeNode, CTreeNode.Line>(child =>
+                new CTreeNode.Line(getHD_Point(child, -IndentDepth / 2),
+                                    getHD_Point(child, -endLineIndent)));
+
+        }
+        #endregion
+
+        #region Recalculate_VerticalTree
+        private void Recalculate_VerticalTree(int endLineIndent) {
+            int startXMax = Padding.Left + 3;
+            int startY = Padding.Top + 3;
+
+            if (ShowRootLines)
+                startY += IndentDepth;
+
+            foreach (CTreeNode node in Nodes)
+                startXMax = node.NextXMax(startXMax, startY);
+
+            LC.plusMinusCalc = new Func<CTreeNode, Point>(eachNode =>
+                                    getVD_Point2(eachNode, PlusMinus.Size.Width / 2 + 2));
+
+            LC.parentLineCalc = new Func<CTreeNode, CTreeNode.Line>(parent =>
+                new CTreeNode.Line(getVD_Point2(parent, endLineIndent),
+                                    getVD_Point2(parent, IndentDepth / 2)));
+
+            LC.commonLineCalc = new Func<CTreeNodeCollection, CTreeNode.Line>(nodes =>
+                new CTreeNode.Line(getVD_Point(nodes[0], -IndentDepth / 2),
+                                    getVD_Point(nodes[nodes.Count - 1], -IndentDepth / 2, nodes[0])));
+
+            LC.childLineCalc = new Func<CTreeNode, CTreeNode.Line>(child =>
+                new CTreeNode.Line(getVD_Point(child, -IndentDepth / 2),
+                                    getVD_Point(child, -endLineIndent)));
+        }
+        #endregion
+
+        #region getPoint  CTreeViewDrawStyle LinearTree, HorizontalTree, VerticalTree
+        // -------------------- LinearTree -------------------------------------------------
+        private Point getPoint(CTreeNode nodeX, int offsetX) {
+            return getPoint(nodeX, offsetX, nodeX);
+        }
+        private Point getPoint(CTreeNode nodeX, int offsetX, CTreeNode nodeY) {
+            return getPoint(nodeX, offsetX, nodeY, 0);
+        }
+
+        private Point getPoint(CTreeNode nodeX, int offsetX, CTreeNode nodeY, int offsetY) {
+            return new Point(nodeX.Location.X + offsetX,
+                             nodeY.Location.Y + offsetY + nodeY.Bounds.Height / 2);
+        }
+        // -------------------- HorizontalTree ---------------------------------------------
+        private Point getHD_Point(CTreeNode node, int offsetX) {
+            return getHD_Point(node, offsetX, node);
+        }
+
+        private Point getHD_Point(CTreeNode node, int offsetX, CTreeNode node2) {
+            return new Point(node.Location.X + offsetX,
+                             node2.Location.Y + node2.Bounds.Height / 2);
+        }
+
+        private Point getHD_Point2(CTreeNode node, int offsetX) {
+            return new Point(node.Location.X + node.Bounds.Width + offsetX,
+                             node.Location.Y + node.Bounds.Height / 2);
+        }
+        // -------------------- VerticalTree -----------------------------------------------
+        private Point getVD_Point(CTreeNode node, int offsetY) {
+            return getVD_Point(node, offsetY, node);
+        }
+
+        private Point getVD_Point(CTreeNode node, int offsetY, CTreeNode node2) {
+            return new Point(node.Location.X + node.Bounds.Width / 2,
+                             node2.Location.Y + offsetY);
+        }
+
+        private Point getVD_Point2(CTreeNode node, int offsetY) {
+            return new Point(node.Location.X + node.Bounds.Width / 2,
+                             node.Location.Y + node.Bounds.Height + offsetY);
+        }
+        #endregion
+
+        #endregion
+
+        #region Calculate lines and locations
+
+        #region Calculate_PlusMinus
+        private void Calculate_PlusMinus(Boolean showRootPlusMinus) {
+            if (ShowPlusMinus) {
+                foreach (CTreeNode node in Nodes)
+                    node.CalculatePlusMinus(LC.plusMinusCalc, showRootPlusMinus);
+            }
+        }
+        #endregion
+
+        #region Calculate_Lines
+        private void Calculate_Lines() {
+
+            if (ShowLines) {
+                foreach (CTreeNode node in Nodes)
+                    node.CalculateLines(LC.parentLineCalc, LC.commonLineCalc, LC.childLineCalc);
+
+                rootLines = (ShowRootLines) ? Nodes.GetLines(LC.commonLineCalc, LC.childLineCalc) : null;
+            }
+        }
+        #endregion
+
+        #region Calculate Bounds
+        private void Calculate_Bounds() {
+            //Calculate Bounds
+            BoundsSubtree = Rectangle.Empty;
+
+            foreach (CTreeNode node in Nodes) {
+                node.CalculateBounds();
+                BoundsSubtree = Rectangle.Union(node.BoundsSubtree, BoundsSubtree);
+            }
+        }
+        #endregion
+
+        #region Locate controls
+        private void Locate_Controls() {
+            //Locate controls
+            this.SuspendLayout();
+
+            this.Nodes.TraverseNodes(node => {
+                node.Control.Visible = node.Visible;
+                Point controlLocation = node.Location;
+                controlLocation.Offset(AutoScrollPosition);
+
+                if (node.Control is NodeControl)
+                    controlLocation.Offset(-((NodeControl)node.Control).Area.X, -((NodeControl)node.Control).Area.Y);
+
+                node.Control.Location = controlLocation;
+            });
+
+            this.ResumeLayout(false);
+        }
+        #endregion
+
+        #endregion
+
     }
 }
