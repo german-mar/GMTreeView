@@ -82,8 +82,8 @@
     <Compile Include="CTreeView\Other Declarations.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram2.cd" />
-    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagrams\ClassDiagram2.cd" />
+    <None Include="ClassDiagrams\ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CTreeView\CTreeView.Internal.resx">
