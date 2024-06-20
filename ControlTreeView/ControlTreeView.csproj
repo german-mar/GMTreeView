@@ -72,8 +72,8 @@
     </Compile>
     <Compile Include="CTreeNode\CTreeNode.Internal.cs" />
     <!--  <Compile Include="DragNodeEventArgs.cs" />  -->
-    <Compile Include="CTreeViewEventArgs.cs" />
-    <Compile Include="INodeContainer.cs" />
+    <Compile Include="CTreeView\CTreeViewEventArgs.cs" />
+    <Compile Include="CTreeNodeCollection\INodeContainer.cs" />
     <Compile Include="INodeControl.cs" />
     <Compile Include="NodeControl.cs">
       <SubType>UserControl</SubType>
