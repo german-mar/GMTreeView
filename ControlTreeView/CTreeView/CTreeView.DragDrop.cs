@@ -460,56 +460,75 @@ namespace ControlTreeView
             {
                 //Check drag position between two nodes
                 CTreeNode upperNode = null, lowerNode = null;
-                bool isBetween = false;
 
+                // ---------------------------------------------------------------------
+                // 
+                // ---------------------------------------------------------------------
                 for (int count = 0; count <= destinationCollection.Count - 2; count++)
                 {
                     upperNode = destinationCollection[count];
                     lowerNode = destinationCollection[count + 1];
 
+                    Rectangle upperBounds = upperNode.BoundsSubtree;
+                    Rectangle lowerBounds = lowerNode.BoundsSubtree;
+
                     Point betweenLocation = Point.Empty;
                     Size  betweenSize     = Size.Empty;
 
+                    // --------------------------------------------------------
+                    // 
+                    // --------------------------------------------------------
                     if (DrawStyle == CTreeViewDrawStyle.VerticalDiagram)
                     {
-                        betweenLocation = new Point(upperNode.BoundsSubtree.Right, upperNode.BoundsSubtree.Top);
-                        betweenSize     = new Size(lowerNode.BoundsSubtree.Left - upperNode.BoundsSubtree.Right, Math.Max(upperNode.BoundsSubtree.Height, lowerNode.BoundsSubtree.Height));
+                        betweenLocation = new Point(upperBounds.Right, upperBounds.Top);
+                        betweenSize     = new Size(lowerBounds.Left - upperBounds.Right, Math.Max(upperBounds.Height, lowerBounds.Height));
                     }
                     else
                     {
-                        betweenLocation = new Point(upperNode.BoundsSubtree.Left, upperNode.BoundsSubtree.Bottom);
-                        betweenSize     = new Size(Math.Max(upperNode.BoundsSubtree.Width, lowerNode.BoundsSubtree.Width), lowerNode.BoundsSubtree.Top - upperNode.BoundsSubtree.Bottom);
+                        betweenLocation = new Point(upperBounds.Left, upperBounds.Bottom);
+                        betweenSize     = new Size(Math.Max(upperBounds.Width, lowerBounds.Width), lowerBounds.Top - upperBounds.Bottom);
                     }
+                    // --------------------------------------------------------
 
                     Rectangle betweenRectangle = new Rectangle(betweenLocation, betweenSize);
-                    
+
+                    // --------------------------------------------------------
+                    // Drag position between two nodes
+                    // --------------------------------------------------------
                     if (betweenRectangle.Contains(dragPosition))
                     {
-                        isBetween = true;
-                        break;
+                        UpdateDragTargetPosition(upperNode, lowerNode);
+                        return;
                     }
+                    // --------------------------------------------------------
                 }
+                // ---------------------------------------------------------------------
 
-                if (isBetween) //Drag position between two nodes
+                // ---------------------------------------------------------------------
+                // 
+                // ---------------------------------------------------------------------
+                if (destinationNode != null)
                 {
-                    UpdateDragTargetPosition(upperNode, lowerNode);
-                    return;
-                }
-                else if (destinationNode != null)
-                {
-                    Rectangle ownerBounds = destinationNode.Bounds;
+                    Rectangle destination = destinationNode.Bounds;
                     bool isAbove, isBelow;
+
+                    // --------------------------------------------------------
+                    // 
+                    // --------------------------------------------------------
                     if (DrawStyle == CTreeViewDrawStyle.VerticalDiagram)
                     {
-                        isAbove = (dragPosition.X <= ownerBounds.Left);
-                        isBelow = (dragPosition.X >= ownerBounds.Right);
+                        isAbove = (dragPosition.X <= destination.Left);
+                        isBelow = (dragPosition.X >= destination.Right);
                     }
                     else
                     {
-                        isAbove = (dragPosition.Y <= ownerBounds.Top);
-                        isBelow = (dragPosition.Y >= ownerBounds.Bottom);
+                        isAbove = (dragPosition.Y <= destination.Top);
+                        isBelow = (dragPosition.Y >= destination.Bottom);
                     }
 
+                    // --------------------------------------------------------
+                    // 
+                    // --------------------------------------------------------
                     if (isAbove) //before
                     {
                         UpdateDragTargetPosition(destinationNode.PrevNode, destinationNode);
@@ -520,7 +539,9 @@ namespace ControlTreeView
                         UpdateDragTargetPosition(destinationNode, destinationNode.NextNode);
                         return;
                     }
+                    // --------------------------------------------------------
                 }
+                // ---------------------------------------------------------------------
             }
 
             UpdateDragTargetPosition();

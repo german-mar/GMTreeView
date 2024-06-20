@@ -260,8 +260,8 @@ namespace ControlTreeView {
                 controlLocation.Offset(AutoScrollPosition);
 
                 if (node.Control is NodeControl) {
-                    NodeControl NC = (NodeControl) node.Control;
-                    controlLocation.Offset(-NC.Area.X, -NC.Area.Y);
+                    Rectangle area = ((NodeControl) node.Control).Area;
+                    controlLocation.Offset(-area.X, -area.Y);
                 }
 
                 node.Control.Location = controlLocation;
