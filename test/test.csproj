@@ -57,16 +57,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs">
+    <Compile Include="Classes\Class1.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Class2.cs">
+    <Compile Include="Classes\Class2.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Class3.cs">
+    <Compile Include="Classes\Class3.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Class4.cs">
+    <Compile Include="Classes\Class4.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Form1.cs">
@@ -77,16 +77,16 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Class1.resx">
+    <EmbeddedResource Include="Classes\Class1.resx">
       <DependentUpon>Class1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Class2.resx">
+    <EmbeddedResource Include="Classes\Class2.resx">
       <DependentUpon>Class2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Class3.resx">
+    <EmbeddedResource Include="Classes\Class3.resx">
       <DependentUpon>Class3.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Class4.resx">
+    <EmbeddedResource Include="Classes\Class4.resx">
       <DependentUpon>Class4.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
