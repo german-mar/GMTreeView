@@ -71,7 +71,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CTreeNode\CTreeNode.Internal.cs" />
-    <Compile Include="DragNodeEventArgs.cs" />
+    <!--  <Compile Include="DragNodeEventArgs.cs" />  -->
     <Compile Include="CTreeViewEventArgs.cs" />
     <Compile Include="INodeContainer.cs" />
     <Compile Include="INodeControl.cs" />
