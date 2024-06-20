@@ -15,12 +15,8 @@ namespace ControlTreeView
         /// </summary>
         internal Point Location
         {
-            get
-            {
-                return _location;
-            }
-
-            set{_location = value;}
+            get { return _location;  }
+            set { _location = value; }
         }
 
         //private Size _size;
@@ -71,13 +67,14 @@ namespace ControlTreeView
 
             internal NodePlusMinus(Rectangle plusMinusArea)
             {
-                Location = plusMinusArea.Location;
+                Location       = plusMinusArea.Location;
                 underMouseArea = plusMinusArea;
                 underMouseArea.Inflate(MinCursorDistance, MinCursorDistance);
             }
+
             internal bool IsUnderMouse(Point cursorLocation)
             {
-                return (underMouseArea.Contains(cursorLocation)) ? true : false;
+                return underMouseArea.Contains(cursorLocation);
             }
         }
         #endregion
@@ -97,7 +94,11 @@ namespace ControlTreeView
             if (Visible || !OwnerCTreeView.MinimizeCollapsed)
             {
                 Location = currentLocation;
-                currentLocation.Offset(OwnerCTreeView.IndentDepth, Control.Height + OwnerCTreeView.IndentWidth);
+
+                int offsetX = OwnerCTreeView.IndentDepth;
+                int offsetY = OwnerCTreeView.IndentWidth + Control.Height;
+
+                currentLocation.Offset(offsetX, offsetY);
 
                 foreach (CTreeNode child in Nodes)
                 {
@@ -130,10 +131,10 @@ namespace ControlTreeView
                 int minY = FirstNode.Location.Y + FirstNode.Size.Height / 2;
                 int maxY = LastNode.Location.Y  + LastNode.Size.Height  / 2;
 
-                if (nextYMax - currentYMax - OwnerCTreeView.IndentWidth < Bounds.Height)
-                {
-                    //
-                }
+                //if (nextYMax - currentYMax - OwnerCTreeView.IndentWidth < Bounds.Height)
+                //{
+                //    //
+                //}
 
                 Location = new Point(currentX, (minY + maxY) / 2 - Size.Height / 2);
             }
@@ -186,14 +187,16 @@ namespace ControlTreeView
         {
             if (Visible && Nodes.Count > 0)
             {
-                if (needRootPlusMinus == true)
+                if (needRootPlusMinus)
                 {
+                    int offset = -OwnerCTreeView.PlusMinus.Size.Width / 2;
+
                     Point locationPlusMinus = plusMinusCalc(this);
-                    locationPlusMinus.Offset(-OwnerCTreeView.PlusMinus.Size.Width / 2, -OwnerCTreeView.PlusMinus.Size.Width / 2);
+                    locationPlusMinus.Offset(offset, offset);
 
                     PlusMinus = new NodePlusMinus(new Rectangle(locationPlusMinus, OwnerCTreeView.PlusMinus.Size));
-                }
-                else
+
+                } else
                 {
                     PlusMinus = null;
                 }
@@ -217,7 +220,7 @@ namespace ControlTreeView
                 {
                     Lines = new List<Line>();
                     Lines.Add(parentLineCalc(this));
-                    Lines.AddRange(Nodes.GetLines(commonLineCalc, childLineCalc));
+                    Lines.AddRange( Nodes.GetLines(commonLineCalc, childLineCalc) );
 
                     foreach (CTreeNode child in Nodes)
                         child.CalculateLines(parentLineCalc, commonLineCalc, childLineCalc);
@@ -236,6 +239,7 @@ namespace ControlTreeView
         internal void CalculateBounds()
         {
             _boundsSubtree = new Rectangle(Location, Size);
+
             foreach (CTreeNode child in Nodes)
             {
                 if (child.Visible)
