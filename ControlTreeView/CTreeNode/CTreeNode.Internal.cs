@@ -187,6 +187,8 @@ namespace ControlTreeView
         {
             if (Visible && Nodes.Count > 0)
             {
+                PlusMinus = null;
+
                 if (needRootPlusMinus)
                 {
                     int offset = -OwnerCTreeView.PlusMinus.Size.Width / 2;
@@ -195,10 +197,6 @@ namespace ControlTreeView
                     locationPlusMinus.Offset(offset, offset);
 
                     PlusMinus = new NodePlusMinus(new Rectangle(locationPlusMinus, OwnerCTreeView.PlusMinus.Size));
-
-                } else
-                {
-                    PlusMinus = null;
                 }
                 
                 foreach (CTreeNode child in Nodes)
