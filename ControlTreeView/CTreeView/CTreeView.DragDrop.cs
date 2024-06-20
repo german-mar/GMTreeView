@@ -371,13 +371,13 @@ namespace ControlTreeView
                     //                                 coordinate = MousePosition.X
                     //                                      |
                     //              Destination Node        |        Drag Node
-                    //              +-----------+ ya1       |       +-----------+ yb1
-                    //              |           |           V       |           |
-                    //              |           |         <-------- |           |      Drag node is being dragged to the left
-                    //              |           |                   |           |
-                    //              +-----------+ ya2               +-----------+ yb2
+                    //              ┌───────────┐ ya1       |       ┌───────────┐ yb1
+                    //              │           │           ↓       │           │
+                    //              |           |       ←---------- |           |      Drag node is being dragged to the left
+                    //              │           │                   │           │
+                    //              └───────────┘ ya2               └───────────┘ yb2
                     // firstBound = xa1       xa2 = secondBound     xb1       xb2
-                    //                 ^     ^
+                    //                 ↑     ↑
                     //                 |     |
                     //                 |     |
                     // firstBound + delta   secondBound - delta
@@ -394,21 +394,21 @@ namespace ControlTreeView
                     // HORIZONTAL DIAGRAM
                     // ----------------------------------------------------------------------
                     //          Destination Node
-                    //          +-----------+ ya1 firstBound
-                    //          |           |   <-------------- firstBound  + delta
-                    //          |           |
-                    //          |           |   <-------------- secondBound - delta
-                    //          +-----------+ ya2 secondBound
+                    //          ┌───────────┐ ya1 firstBound
+                    //          |           |   ←-------------- firstBound  + delta
+                    //          │           │
+                    //          |           |   ←-------------- secondBound - delta
+                    //          └───────────┘ ya2 secondBound
                     //          xa1       xa2
-                    //                ^
-                    //                |     <--- coordinate = MousePosition.Y
+                    //                ↑
+                    //                |     ←--- coordinate = MousePosition.Y
                     //                |
                     //            Drag Node
-                    //          +-----------+ yb1
+                    //          ┌───────────┐ yb1
                     //          |           |
+                    //          │           │
                     //          |           |
-                    //          |           |
-                    //          +-----------+ yb2
+                    //          └───────────┘ yb2
                     //          xb1       xb2
                     // ----------------------------------------------------------------------
                     coordinate = dragPosition.Y;                    // coordinate  = MousePosition.Y
@@ -419,19 +419,21 @@ namespace ControlTreeView
                 }
 
                 // ----------------------------------------------------------------------
-                //                                 coordinate = MousePosition.X
-                //                                      |
-                //              Destination Node        |        Drag Node
-                //              +-----------+ ya1       |       +-----------+ yb1
-                //              |           |           V       |           |
-                //              |           |         <-------- |           |      Drag node is being dragged to the left
-                //              |           |                   |           |
-                //              +-----------+ ya2               +-----------+ yb2
-                // firstBound = xa1       xa2 = secondBound     xb1       xb2
-                //                 ^     ^
-                //                 |     |
-                //                 |     |
-                // firstBound + delta   secondBound - delta
+                // Now we treat both vertical and horizontal diagrams in the same way, as vertical diagrams.
+                // ----------------------------------------------------------------------
+                //                                         coordinate = MousePosition.X
+                //                                              |
+                //                      Destination Node        |        Drag Node
+                //                      ┌───────────┐ ya1       |       ┌───────────┐ yb1
+                //                      │           │           ↓       |           |       Drag node is being dragged to the left
+                //                      │           │       ←---------- │           │       or to the right when you are to the left
+                //                      │           │                   |           |       of the destination node
+                //                      └───────────┘ ya2               └───────────┘ yb2
+                //         firstBound = xa1       xa2 = secondBound     xb1       xb2
+                //                         ↑     ↑
+                //                         |     |
+                //                         |     |
+                //   firstBound + delta = x1     x2 = secondBound - delta
                 // ----------------------------------------------------------------------
                 int x1 = firstBound  + delta;
                 int x2 = secondBound - delta;
