@@ -74,8 +74,8 @@
     <!--  <Compile Include="DragNodeEventArgs.cs" />  -->
     <Compile Include="CTreeView\CTreeViewEventArgs.cs" />
     <Compile Include="CTreeNodeCollection\INodeContainer.cs" />
-    <Compile Include="INodeControl.cs" />
-    <Compile Include="NodeControl.cs">
+    <Compile Include="CTreeNode\INodeControl.cs" />
+    <Compile Include="CTreeNode\NodeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -91,7 +91,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="NodeControl.resx">
+    <EmbeddedResource Include="CTreeNode\NodeControl.resx">
       <DependentUpon>NodeControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\minus.bmp" />
