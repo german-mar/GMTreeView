@@ -10,7 +10,9 @@ using System.Runtime.InteropServices;
 namespace ControlTreeView
 {
     // -------------------------------------------------------------------------
-    // Drag And Drop iplementation
+    /// <summary>
+    /// Drag And Drop iplementation
+    /// </summary>
     // -------------------------------------------------------------------------
     public partial class CTreeView
     {
@@ -40,13 +42,13 @@ namespace ControlTreeView
         #endregion
 
         #region scroll management:  scrollTimer_Tick event handler, SetScrollDirections
-        //[DllImport("user32.dll")]
-        //static extern int SendMessage(
-        //       int hWnd,     // handle to destination window
-        //       uint Msg,     // message
-        //       long wParam,  // first message parameter
-        //       long lParam   // second message parameter
-        //       );
+        [DllImport("user32.dll")]
+        static extern int SendMessage(
+               int hWnd,     // handle to destination window
+               uint Msg,     // message
+               long wParam,  // first message parameter
+               long lParam   // second message parameter
+        );
 
         // -------------------------------------------------------------------------
         // Timer tick event handler. Used to scroll the CTreeView
@@ -55,8 +57,8 @@ namespace ControlTreeView
         {
             // scroll left = -1, scroll right = 1
             // scroll down = -1, scroll up   = -1
-            this.HorizontalScroll.Value = (scrollLeft) ? -1 : (scrollRight) ? 1 : 0;
-            this.VerticalScroll.Value   = (scrollDown) ? -1 : (scrollUp)    ? 1 : 0;
+            //this.HorizontalScroll.Value = (scrollLeft) ? -1 : (scrollRight) ? 1 : 0;
+            //this.VerticalScroll.Value   = (scrollDown) ? -1 : (scrollUp)    ? 1 : 0;
 
             // ------------------------------------------------------------------
             //int top  = (scrollDown) ? -1 : (scrollUp)    ? 1 : 0;
@@ -71,13 +73,13 @@ namespace ControlTreeView
             // ------------------------------------------------------------------
 
             // ------------------------------------------------------------------
-            //int handle = this.Handle.ToInt32();
+            int handle = this.Handle.ToInt32();
 
-            //if      (scrollDown)  SendMessage(handle, 277, 1, 0);
-            //else if (scrollUp)    SendMessage(handle, 277, 0, 0);
+            if      (scrollDown)  SendMessage(handle, 277, 1, 0);
+            else if (scrollUp)    SendMessage(handle, 277, 0, 0);
 
-            //if      (scrollRight) SendMessage(handle, 276, 1, 0);
-            //else if (scrollLeft)  SendMessage(handle, 276, 0, 0);
+            if      (scrollRight) SendMessage(handle, 276, 1, 0);
+            else if (scrollLeft)  SendMessage(handle, 276, 0, 0);
             // ------------------------------------------------------------------
         }
 
@@ -91,10 +93,10 @@ namespace ControlTreeView
         internal void SetScrollDirections(bool scrollUp, bool scrollDown, bool scrollRigh, bool scrollLeft) {
             scrollTimer.Enabled = (scrollUp || scrollDown || scrollRigh || scrollLeft);
 
-            this.scrollUp = scrollUp;
-            this.scrollDown = scrollDown;
+            this.scrollUp    = scrollUp;
+            this.scrollDown  = scrollDown;
             this.scrollRight = scrollRigh;
-            this.scrollLeft = scrollLeft;
+            this.scrollLeft  = scrollLeft;
         }
         #endregion
 
@@ -122,24 +124,15 @@ namespace ControlTreeView
             #region get nodes of drag target position: NodeDirect, NodeBefore, NodeAfter
             private CTreeNode _nodeDirect;
             /// <summary>The direct node of drag target position.</summary>
-            public CTreeNode NodeDirect
-            {
-                get { return _nodeDirect; }
-            }
+            public  CTreeNode NodeDirect    {  get { return _nodeDirect; }  }
             
             private CTreeNode _nodeBefore;
             /// <summary>The upper node of drag target position.</summary>
-            public CTreeNode NodeBefore
-            {
-                get { return _nodeBefore; }
-            }
+            public  CTreeNode NodeBefore    {  get { return _nodeBefore; }  }
             
             private CTreeNode _nodeAfter;
             /// <summary>The lower node of drag target position.</summary>
-            public CTreeNode NodeAfter
-            {
-                get { return _nodeAfter; }
-            }
+            public  CTreeNode NodeAfter     {  get { return _nodeAfter;  }  }
             #endregion
         }
         #endregion

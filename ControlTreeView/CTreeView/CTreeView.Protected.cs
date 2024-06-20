@@ -24,9 +24,9 @@ namespace ControlTreeView
 
         #endregion
 
-        #region Methods
+        #region Events
 
-        #region OnCollapseNode
+        #region OnCollapseNode, OnExpandNode
         /// <summary>
         /// Raises the CollapseNode event.
         /// </summary>
@@ -36,9 +36,7 @@ namespace ControlTreeView
             Recalculate();
             if (CollapseNode != null) CollapseNode(this, e);
         }
-        #endregion
-
-        #region OnExpandNode
+        
         /// <summary>
         /// Raises the ExpandNode event.
         /// </summary>
@@ -63,6 +61,8 @@ namespace ControlTreeView
             if (SelectNode != null) SelectNode(this, e);
         }
         #endregion
+
+        #region Drag Events: OnDragOver, OnDragEnter, OnDragLeave, OnDragDrop
 
         #region OnDragOver
         /// <summary>
@@ -189,6 +189,8 @@ namespace ControlTreeView
             base.OnDragDrop(drgevent);
             ResetDragTargetPosition();
         }
+        #endregion
+
         #endregion
 
         #region OnMouseDown
