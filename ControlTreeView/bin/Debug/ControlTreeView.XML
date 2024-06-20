@@ -115,6 +115,20 @@
             <param name="childLineCalc">Function that calculates line of each node in collection.</param>
             <returns>List of lines of this nodes collection.</returns>
         </member>
+        <member name="T:ControlTreeView.CTreeView">
+            <summary>
+            Calculates the coordinates (x1, y1)-(x2, y2) of the TreeView lines and (x, y) of the PlusMinus button.
+            </summary>
+        </member>
+        <member name="M:ControlTreeView.CTreeView.SetScrollDirections(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Sets the directions in which need scroll.
+            </summary>
+            <param name="scrollUp">true if need scroll up, otherwise, false.</param>
+            <param name="scrollDown">true if need scroll down, otherwise, false.</param>
+            <param name="scrollRigh">true if need scroll right, otherwise, false.</param>
+            <param name="scrollLeft">true if need scroll left, otherwise, false.</param>
+        </member>
         <member name="T:ControlTreeView.CTreeView.DragTargetPositionClass">
             <summary>Struct that stores nodeDirect, nodeBefore and nodeAfter.</summary>
         </member>
@@ -130,16 +144,7 @@
         <member name="P:ControlTreeView.CTreeView.DragTargetPositionClass.NodeAfter">
             <summary>The lower node of drag target position.</summary>
         </member>
-        <member name="M:ControlTreeView.CTreeView.SetScrollDirections(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
-            <summary>
-            Sets the directions in which need scroll.
-            </summary>
-            <param name="scrollUp">true if need scroll up, otherwise, false.</param>
-            <param name="scrollDown">true if need scroll down, otherwise, false.</param>
-            <param name="scrollRigh">true if need scroll right, otherwise, false.</param>
-            <param name="scrollLeft">true if need scroll left, otherwise, false.</param>
-        </member>
-        <member name="M:ControlTreeView.CTreeView.rotateRectangle(System.Drawing.Rectangle)">
+        <member name="M:ControlTreeView.CTreeView.RotateRectangle(System.Drawing.Rectangle)">
             <summary>
             Rotate rectngle
             </summary>
@@ -616,17 +621,6 @@
         <member name="M:ControlTreeView.CTreeNode.CalculateBounds">
             <summary>
             Calculates fullBounds of this node and all child nodes.
-            </summary>
-        </member>
-        <member name="M:ControlTreeView.DragNodesEventArgs.#ctor(System.Collections.Generic.List{ControlTreeView.CTreeNode})">
-            <summary>
-            Initializes a new instance of the DragNodeEventArgs class.
-            </summary>
-            <param name="nodes">The tree nodes that the event is responding to.</param>
-        </member>
-        <member name="P:ControlTreeView.DragNodesEventArgs.Nodes">
-            <summary>
-            Gets the tree nodes that have been dragged.
             </summary>
         </member>
         <member name="M:ControlTreeView.CTreeViewEventArgs.#ctor(ControlTreeView.CTreeNode)">
