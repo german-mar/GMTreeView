@@ -633,7 +633,7 @@ namespace ControlTreeView
 
             CTreeNode NodeBefore = DragTargetPosition.NodeBefore;
             CTreeNode NodeAfter  = DragTargetPosition.NodeAfter;
-            CTreeView NodeDirect = DragTargetPosition.NodeDirect;
+            CTreeNode NodeDirect = DragTargetPosition.NodeDirect;
 
             // ----------------------------------------------------------------------------
             // have node direct
@@ -723,7 +723,6 @@ namespace ControlTreeView
 
         #endregion
     }
-#endregion
 
 
 }
