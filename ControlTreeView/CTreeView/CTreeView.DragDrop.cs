@@ -9,11 +9,11 @@ using System.Runtime.InteropServices;
 
 namespace ControlTreeView
 {
-    // -------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     /// <summary>
     /// Drag And Drop implementation
     /// </summary>
-    // -------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
     public partial class CTreeView
     {
         #region drag and drop properties
@@ -83,6 +83,7 @@ namespace ControlTreeView
             // ------------------------------------------------------------------
         }
 
+        // ---------------------------------------------------------------------------------------------
         /// <summary>
         /// Sets the directions in which need scroll.
         /// </summary>
@@ -90,6 +91,7 @@ namespace ControlTreeView
         /// <param name="scrollDown">true if need scroll down, otherwise, false.</param>
         /// <param name="scrollRigh">true if need scroll right, otherwise, false.</param>
         /// <param name="scrollLeft">true if need scroll left, otherwise, false.</param>
+        // ---------------------------------------------------------------------------------------------
         internal void SetScrollDirections(bool scrollUp, bool scrollDown, bool scrollRigh, bool scrollLeft) {
             scrollTimer.Enabled = (scrollUp || scrollDown || scrollRigh || scrollLeft);
 
@@ -623,9 +625,11 @@ namespace ControlTreeView
         #region CheckValidDrop and utilities
 
         #region CheckValidDrop
+        // -------------------------------------------------------------------------------------
         /// <summary>Checking a valid of drop operation in current destination.</summary>
         /// <param name="sourceNodes">The source nodes of drag and drop operation.</param>
         /// <returns>true if drop of source nodes is allowed to current destination, otherwise, false.</returns>
+        // -------------------------------------------------------------------------------------
         internal bool CheckValidDrop(List<CTreeNode> sourceNodes)
         {
             if (!DragTargetPosition.Enabled)
@@ -635,9 +639,9 @@ namespace ControlTreeView
             CTreeNode NodeAfter  = DragTargetPosition.NodeAfter;
             CTreeNode NodeDirect = DragTargetPosition.NodeDirect;
 
-            // ----------------------------------------------------------------------------
-            // have node direct
-            // ----------------------------------------------------------------------------
+            // ------------------------------------------------------------------
+            // have node direct                     (Mouse over a node) --> Draw a box
+            // ------------------------------------------------------------------
             if (NodeDirect != null)
             {
                 if (DragAndDropMode == CTreeViewDragAndDropMode.Reorder)
@@ -646,28 +650,34 @@ namespace ControlTreeView
                 }
                 else
                 {
-                    // --------------------------------------------------------------------
+                    // ---------------------------------------------
                     // Check that destination node is not descendant of source nodes
                     // test to draw or not a box around a node
-                    // --------------------------------------------------------------------
+                    // ---------------------------------------------
                     if ( isDescendant(sourceNodes, NodeDirect) ) return false;
                 }
             }
-            // ----------------------------------------------------------------------------
-            // have node before or node after
-            // ----------------------------------------------------------------------------
+            // ------------------------------------------------------------------
+            // have node before or node after       (Mouse between nodes) --> Draw a line
+            // ------------------------------------------------------------------
             else if (NodeBefore != null || NodeAfter != null)
             {
+                // -------------------------------------------------
                 // test to draw or not a line between two nodes
+                // -------------------------------------------------
                 if ( ! isValidPositionToDrop(sourceNodes, NodeBefore, NodeAfter) ) return false;
             }
-            // ----------------------------------------------------------------------------
+            // ------------------------------------------------------------------
             
             return true;
         }
         #endregion
 
         #region utilities: isValidPositionToDrop, haveSameParent, isDescendant
+        // -------------------------------------------------------------------------------------
+        // return true if it is a valid position to drop
+        // is used to see if the drag and drop line is drawn or not
+        // -------------------------------------------------------------------------------------
         private bool isValidPositionToDrop(List<CTreeNode> sourceNodes, CTreeNode NodeBefore, CTreeNode NodeAfter) {
             // ------------------------------------------------------------------
             // Check that source nodes are not moved relative themselves
@@ -683,12 +693,16 @@ namespace ControlTreeView
             // more checks
             // ------------------------------------------------------------------
             if (DragAndDropMode == CTreeViewDragAndDropMode.Reorder) {
+                // ---------------------------------------------------
                 // Check that source and destination nodes have same parent
+                // ---------------------------------------------------
                 if ( ! haveSameParent(sourceNodes, NodeBefore) ) return false;
                 if ( ! haveSameParent(sourceNodes, NodeAfter ) ) return false;
 
             } else {
+                // ---------------------------------------------------
                 // Check that destination nodes are not descendants of source nodes
+                // ---------------------------------------------------
                 if ( isDescendant(sourceNodes, NodeBefore) ) return false;
                 if ( isDescendant(sourceNodes, NodeAfter ) ) return false;
             }
@@ -697,15 +711,22 @@ namespace ControlTreeView
             return true;
         }
 
+        // -------------------------------------------------------------------------------------
         // Check that a node and destination nodes have same parent
+        // -------------------------------------------------------------------------------------
         private bool haveSameParent(List<CTreeNode> sourceNodes, CTreeNode node) {
             return ! ( node != null  &&  node.Parent != sourceNodes[0].Parent );
         }
-        
+
+        // -------------------------------------------------------------------------------------
         // Check that a node is not descendant of source nodes
+        // -------------------------------------------------------------------------------------
         private bool isDescendant(List<CTreeNode> sourceNodes, CTreeNode nodeToTest) {
             bool descendant = false;
 
+            // ----------------------------------------------------
+            // check if nodeToTest is descendant of some sourceNode
+            // ----------------------------------------------------
             foreach (CTreeNode sourceNode in sourceNodes) {
                 sourceNode.TraverseNodes(node => true, node => {
                     if (node == nodeToTest) {
@@ -716,6 +737,7 @@ namespace ControlTreeView
 
                 if (descendant) { break; }
             }
+            // ----------------------------------------------------
 
             return descendant;
         }
