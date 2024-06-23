@@ -11,7 +11,7 @@ namespace ControlTreeView
 {
     // -------------------------------------------------------------------------
     /// <summary>
-    /// Drag And Drop iplementation
+    /// Drag And Drop implementation
     /// </summary>
     // -------------------------------------------------------------------------
     public partial class CTreeView
@@ -620,7 +620,6 @@ namespace ControlTreeView
         }
         #endregion
 
-
         #region CheckValidDrop
         /// <summary>Checking a valid of drop operation in current destination.</summary>
         /// <param name="sourceNodes">The source nodes of drag and drop operation.</param>
@@ -635,6 +634,9 @@ namespace ControlTreeView
             CTreeNode NodeBefore = DragTargetPosition.NodeBefore;
             CTreeNode NodeAfter  = DragTargetPosition.NodeAfter;
 
+            // ----------------------------------------------------------------------------
+            // have node direct
+            // ----------------------------------------------------------------------------
             if (DragTargetPosition.NodeDirect != null)
             {
                 if (DragAndDropMode == CTreeViewDragAndDropMode.Reorder)
@@ -644,19 +646,12 @@ namespace ControlTreeView
                 else
                 {
                     //Check that destination node is not descendant of source nodes
-                    foreach (CTreeNode sourceNode in sourceNodes)
-                    {
-                        sourceNode.TraverseNodes(node => isValid, node =>
-                        {
-                            if (node == DragTargetPosition.NodeDirect)
-                                isValid = false;
-                        });
-
-                        if (!isValid)
-                            return false;
-                    }
+                    if ( isDescendant(sourceNodes, DragTargetPosition.NodeDirect) ) return false;
                 }
             }
+            // ----------------------------------------------------------------------------
+            // have node before or node after
+            // ----------------------------------------------------------------------------
             else if (NodeBefore != null || NodeAfter != null)
             {
                 //Check that source nodes are not moved relative themselves
@@ -673,20 +668,33 @@ namespace ControlTreeView
                 else
                 {
                     //Check that destination nodes is not descendants of source nodes
-                    foreach (CTreeNode sourceNode in sourceNodes)
-                    {
-                        sourceNode.Nodes.TraverseNodes(node => isValid, node =>
-                        {
-                            if (NodeBefore == node || NodeAfter == node) isValid = false;
-                        });
-
-                        if (!isValid) return false;
-                    }
+                    if ( isDescendant(sourceNodes, NodeBefore) ) return false;
+                    if ( isDescendant(sourceNodes, NodeAfter ) ) return false;
                 }
             }
-
+            // ----------------------------------------------------------------------------
+            
             return true;
+        }
+
+        private bool isDescendant(List<CTreeNode> sourceNodes, CTreeNode nodeToTest) {
+            bool descendant = false;
+
+            foreach (CTreeNode sourceNode in sourceNodes) {
+                sourceNode.TraverseNodes(node => true, node => {
+                    if (node == nodeToTest) {
+                        descendant = true;
+                        return;
+                    }
+                });
+
+                if (descendant) { break; }
+            }
+
+            return descendant;
         }
     }
     #endregion
+
+
 }
