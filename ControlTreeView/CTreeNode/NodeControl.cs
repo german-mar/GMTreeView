@@ -12,6 +12,9 @@ namespace ControlTreeView
     public class NodeControl : UserControl, INodeControl
     {
         #region Constructor
+        /// <summary>
+        /// Initializes a new instance of the NodeControl class.
+        /// </summary>
         public NodeControl()
         {
             DoubleBuffered = true;
@@ -19,6 +22,9 @@ namespace ControlTreeView
         #endregion
 
         #region OwnerNode
+        /// <summary>
+        /// Owner Node of the node
+        /// </summary>
         public CTreeNode OwnerNode { get; set; }
         #endregion
 
@@ -109,16 +115,17 @@ namespace ControlTreeView
         #endregion
 
         #region InitializeComponent
-        private void InitializeComponent()
-        {
-            this.SuspendLayout();
-            // 
-            // NodeControl
-            // 
-            this.Name = "NodeControl";
-            this.ResumeLayout(false);
+        // NOT USED XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        //private void InitializeComponent()
+        //{
+        //    this.SuspendLayout();
+        //    // 
+        //    // NodeControl
+        //    // 
+        //    this.Name = "NodeControl";
+        //    this.ResumeLayout(false);
 
-        }
+        //}
         #endregion
     }
 }

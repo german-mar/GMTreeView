@@ -5,6 +5,7 @@ using System.Text;
 
 namespace ControlTreeView
 {
+    /// <summary>Events Arguments for a TreeView Node</summary>
     public class CTreeViewEventArgs : EventArgs
     {
         /// <summary>

@@ -29,6 +29,7 @@ namespace ControlTreeView
         /// Initializes a new instance of the CTreeNode class with the specified name and control.
         /// </summary>
         /// <param name="name"></param>
+        /// <param name="control"></param>
         public CTreeNode(string name, Control control)
         {
             Nodes       = new CTreeNodeCollection(this);
@@ -388,6 +389,9 @@ namespace ControlTreeView
 
         #region Drag
         //?
+        /// <summary>
+        /// Drag Node
+        /// </summary>
         public void Drag()
         {
             if (OwnerCTreeView.DragAndDropMode != CTreeViewDragAndDropMode.Nothing && IsSelected)
@@ -400,6 +404,7 @@ namespace ControlTreeView
                     if (selectedNode.ParentNode != OwnerCTreeView.SelectedNodes[0].ParentNode)
                         checkSameParent = false;
                 }
+
                 //Prepare and sort the dragged nodes
                 if (checkSameParent)
                 {

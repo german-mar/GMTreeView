@@ -76,6 +76,7 @@ namespace ControlTreeView
         #region Properties
 
         #region OwnerCTreeView
+        /// <summary>Owner TreeView</summary>
         [BrowsableAttribute(false)]
         public CTreeView OwnerCTreeView
         {
@@ -275,11 +276,11 @@ namespace ControlTreeView
         #endregion
 
         #region DragAndDropMode
+        private CTreeViewDragAndDropMode _DragAndDropMode;
+
         /// <summary>
         /// Gets or sets DragAndDrop mode
         /// </summary>
-        private CTreeViewDragAndDropMode _DragAndDropMode;
-
         [DefaultValue(typeof(CTreeViewDragAndDropMode), "ReplaceReorder")]
         public CTreeViewDragAndDropMode DragAndDropMode
         {
