@@ -9,20 +9,11 @@ namespace ControlTreeView
         #region Properties
 
         #region Location and Size
-        private Point _location;
-        /// <summary>
-        /// The location of this node.
-        /// </summary>
-        internal Point Location
-        {
-            get { return _location;  }
-            set { _location = value; }
-        }
+        /// <summary>The location of the node.</summary>
+        internal Point Location { get; set; }
 
         //private Size _size;
-        /// <summary>
-        /// The size of this node.
-        /// </summary>
+        /// <summary>The size of the node.</summary>
         internal Size Size
         {
             get
@@ -35,9 +26,7 @@ namespace ControlTreeView
         #endregion
 
         #region Lines
-        /// <summary>
-        /// The list of lines for this node.
-        /// </summary>
+        /// <summary>The list of lines for the node.</summary>
         internal List<Line> Lines { get; set; }
 
         internal struct Line
@@ -54,11 +43,10 @@ namespace ControlTreeView
         #endregion
 
         #region PlusMinus
-        /// <summary>
-        /// The plus-sign (+) or minus-sign (-) button's area for this node.
-        /// </summary>
+        /// <summary>The plus-sign (+) or minus-sign (-) button's area for this node to determine is mouse is over.</summary>
         internal NodePlusMinus PlusMinus { get; set; }
 
+        /// <summary>The plus-sign (+) or minus-sign (-) button's area for this node to determine is mouse is over.</summary>
         internal class NodePlusMinus
         {
             private  const int MinCursorDistance = 3;
@@ -236,14 +224,14 @@ namespace ControlTreeView
         /// </summary>
         internal void CalculateBounds()
         {
-            _boundsSubtree = new Rectangle(Location, Size);
+            BoundsSubtree = new Rectangle(Location, Size);
 
             foreach (CTreeNode child in Nodes)
             {
                 if (child.Visible)
                 {
                     child.CalculateBounds();
-                    _boundsSubtree = Rectangle.Union(child.BoundsSubtree, _boundsSubtree);
+                    BoundsSubtree = Rectangle.Union(child.BoundsSubtree, BoundsSubtree);
                 }
             }
         }

@@ -12,9 +12,7 @@ namespace ControlTreeView
     public partial class CTreeNode : INodeContainer
     {
         #region Constructors (3)
-        /// <summary>
-        /// Initializes a new instance of the CTreeNode class with the default control.
-        /// </summary>
+        /// <summary>Initializes a new instance of the CTreeNode class with the default control.</summary>
         public CTreeNode()
             : this("", new Control()) { }
 
@@ -44,68 +42,60 @@ namespace ControlTreeView
         #region Properties
 
         #region Control
-        private Control _Control;
-        /// <summary>
-        /// Gets or sets the user control assigned to the current tree node.
-        /// </summary>
+        /// <summary>Gets or sets the user control assigned to the current tree node.</summary>
         [BrowsableAttribute(false)]
         public Control Control
         {
-            get { return _Control; }
+            get { return this.Control; }
             set
             {
                 bool notNull = (OwnerCTreeView != null);
 
                 if (notNull)
                 {
-                    OwnerCTreeView.Controls.Remove(_Control);
+                    OwnerCTreeView.Controls.Remove(this.Control);
                     OwnerCTreeView.Controls.Add(value);
                 }
 
-                _Control = value;
+                this.Control = value;
 
-                if (value is INodeControl)((INodeControl)_Control).OwnerNode = this;
-                if (notNull) OwnerCTreeView.Recalculate();
+                if (value is INodeControl)
+                    ((INodeControl)this.Control).OwnerNode = this;
+
+                if (notNull)
+                    OwnerCTreeView.Recalculate();
             }
         }
         #endregion
 
         #region Nodes, ParentNode, Parent
-        /// <summary>
-        /// Gets the collection of CTreeNode objects assigned to the current tree node.
-        /// </summary>
+        /// <summary>Gets the collection of CTreeNode objects assigned to the current tree node.</summary>
         [BrowsableAttribute(false)]
         public CTreeNodeCollection Nodes { get; private set; }
 
-        /// <summary>
-        /// Gets the parent tree node of the current tree node.
-        /// </summary>
+        /// <summary>Gets the parent tree node of the current tree node.</summary>
         [BrowsableAttribute(false)]
         public CTreeNode ParentNode { get; internal set; }
 
-        /// <summary>
-        /// Gets the parent INodeContainer of the current tree node.
-        /// </summary>
+        /// <summary>Gets the parent INodeContainer of the current tree node.</summary>
         [BrowsableAttribute(false)]
         public INodeContainer Parent
         {
             get
             {
-                if (ParentNode != null) return ParentNode;
-                else return OwnerCTreeView;
+                if (ParentNode != null)
+                    return ParentNode;
+                else
+                    return OwnerCTreeView;
             }
         }
         #endregion
 
         #region Name, Index
-        /// <summary>
-        /// Gets or sets the name of the tree node.
-        /// </summary>
+        /// <summary>Gets or sets the name of the tree node.</summary>
         public string Name { get; set; }
 
-        /// <summary>
-        /// Gets the position of the tree node in the tree node collection.
-        /// </summary>
+        /// <summary>Gets the position of the tree node in the tree node collection.</summary>
         //[BrowsableAttribute(false)]
         public int Index
         {
@@ -117,17 +107,14 @@ namespace ControlTreeView
         #endregion
 
         #region OwnerCTreeView
-        private CTreeView _OwnerCTreeView;
-        /// <summary>
-        /// Gets the parent tree view that the tree node is assigned to.
-        /// </summary>
+        /// <summary>Gets the parent tree view that the tree node is assigned to.</summary>
         [BrowsableAttribute(false)]
         public CTreeView OwnerCTreeView
         {
-            get { return _OwnerCTreeView; }
+            get { return this.OwnerCTreeView; }
             internal set
             {
-                TraverseNodes(node => { node._OwnerCTreeView = value; });
+                TraverseNodes(node => { node.OwnerCTreeView = value; });
             }
         }
         //{
@@ -141,16 +128,12 @@ namespace ControlTreeView
         #endregion
 
         #region Tag
-        /// <summary>
-        /// Gets or sets the object that contains data about the tree node.
-        /// </summary>
+        /// <summary>Gets or sets the object that contains data about the tree node.</summary>
         public object Tag { get; set; }
         #endregion
 
         #region NextNode, PrevNode, FirstNode, LastNode
-        /// <summary>
-        /// Gets the next sibling tree node.
-        /// </summary>
+        /// <summary>Gets the next sibling tree node.</summary>
         [BrowsableAttribute(false)]
         public CTreeNode NextNode
         {
@@ -160,9 +143,7 @@ namespace ControlTreeView
             }
         }
 
-        /// <summary>
-        /// Gets the previous sibling tree node.
-        /// </summary>
+        /// <summary>Gets the previous sibling tree node.</summary>
         [BrowsableAttribute(false)]
         public CTreeNode PrevNode
         {
@@ -200,18 +181,15 @@ namespace ControlTreeView
         #endregion
 
         #region Level
-        private int _Level;
-        /// <summary>
-        /// Gets the zero-based depth of the tree node in the CTreeView.
-        /// </summary>
+        /// <summary>Gets the zero-based depth of the tree node in the CTreeView.</summary>
         //[BrowsableAttribute(false)]
         public int Level
         {
-            get { return _Level; }
+            get { return this.Level; }
             internal set
             {
-                _Level = value;
-                Nodes.TraverseNodes(node => { node._Level = node.ParentNode.Level + 1; });
+                this.Level = value;
+                Nodes.TraverseNodes(node => { node.Level = node.ParentNode.Level + 1; });
             }
         }
         #endregion
@@ -234,15 +212,11 @@ namespace ControlTreeView
         #endregion
 
         #region IsExpanded, IsSelected, Visible
-        /// <summary>
-        /// Gets a value indicating whether the tree node is in the expanded state.
-        /// </summary>
+        /// <summary>Gets a value indicating whether the tree node is in the expanded state.</summary>
         //[BrowsableAttribute(false)]
         public bool IsExpanded { get; private set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the tree node is in the selected state.
-        /// </summary>
+        /// <summary>Gets or sets a value indicating whether the tree node is in the selected state.</summary>
         [BrowsableAttribute(false)]
         public bool IsSelected
         {
@@ -258,7 +232,7 @@ namespace ControlTreeView
                 }
                 else
                 {
-                    if (value == true)
+                    if (value)
                     {
                         OwnerCTreeView._selectedNodes.Add(this);
                         OwnerCTreeView.OnSelectNode(new CTreeViewEventArgs(this));
@@ -274,29 +248,28 @@ namespace ControlTreeView
             }
         }
 
-        private bool _Visible;
-        /// <summary>
-        /// Gets a value indicating whether the tree node is not hidden by its ancestors.
-        /// </summary>
+        //private bool _Visible;
+        /// <summary>Gets a value indicating whether the tree node is not hidden by its ancestors.</summary>
         //[BrowsableAttribute(false)]
-        public bool Visible
-        {
-            get { return _Visible; }
-            internal set
-            {
-                _Visible = value;
-                //if (value) Nodes.TraverseNodes(node => node.ParentNode.IsExpanded, node => { node._Visible = true; });
-                //else Nodes.TraverseNodes(node => node.Visible, node => { node._Visible = false; });
-            }
-        }
+        public bool Visible { get; internal set; }
+        //public bool Visible
         //{
-        //    get
+        //    get { return _Visible; }
+        //    internal set
         //    {
-        //        if (Parent == null) return true;
-        //        else if (!Parent.IsExpanded) return false;
-        //        else return Parent.IsShown;
+        //        _Visible = value;
+        //        //if (value) Nodes.TraverseNodes(node => node.ParentNode.IsExpanded, node => { node._Visible = true; });
+        //        //else Nodes.TraverseNodes(node => node.Visible, node => { node._Visible = false; });
         //    }
         //}
+        ////////{
+        ////////    get
+        ////////    {
+        ////////        if (Parent == null) return true;
+        ////////        else if (!Parent.IsExpanded) return false;
+        ////////        else return Parent.IsShown;
+        ////////    }
+        ////////}
         #endregion
 
         #region Bounds, BoundsSubtree
@@ -309,11 +282,10 @@ namespace ControlTreeView
         {
             get
             {
-                return (!Visible) ? Rectangle.Empty : new Rectangle(Location, Size);
+                return Visible ? new Rectangle(Location, Size) : Rectangle.Empty;
             }
         }
 
-        private Rectangle _boundsSubtree;
         /// <summary>
         /// Gets the bounds of the tree node includes all tree nodes indirectly rooted at this tree node.
         /// </summary>
@@ -321,10 +293,8 @@ namespace ControlTreeView
         //[BrowsableAttribute(false)]
         public Rectangle BoundsSubtree
         {
-            get
-            {
-                return (!Visible) ? Rectangle.Empty : _boundsSubtree;
-            }
+            get { return Visible ? BoundsSubtree : Rectangle.Empty; }
+            private set { this.BoundsSubtree = value; }
         }
         #endregion
 
@@ -333,33 +303,29 @@ namespace ControlTreeView
         #region Methods
 
         #region Expand, Collapse, ExpandAll, CollapseAll, Toggle
-        /// <summary>
-        /// Expands the tree node.
-        /// </summary>
+        /// <summary>Expands the tree node.</summary>
         public void Expand()
         {
             IsExpanded = true;
+
             //if (Visible) foreach (CTreeNode child in Nodes) child.Visible = true;
             //Nodes.TraverseNodes(node => node.ParentNode.IsExpanded, node => { node.IsShown = true; });
             if (OwnerCTreeView != null)
                 OwnerCTreeView.OnExpandNode(new CTreeViewEventArgs(this));
         }
 
-        /// <summary>
-        /// Collapses the tree node.
-        /// </summary>
+        /// <summary>Collapses the tree node.</summary>
         public void Collapse()
         {
             IsExpanded = false;
+
             //foreach (CTreeNode child in Nodes) child.Visible = false;
             //Nodes.TraverseNodes(node => node.IsShown, node => { node.IsShown = false; });
             if (OwnerCTreeView != null)
                 OwnerCTreeView.OnCollapseNode(new CTreeViewEventArgs(this));
         }
 
-        /// <summary>
-        /// Expands the CTreeNode and all the child tree nodes.
-        /// </summary>
+        /// <summary>Expands the CTreeNode and all the child tree nodes.</summary>
         public void ExpandAll()
         {
             BeginUpdateCTreeView();
@@ -367,9 +333,7 @@ namespace ControlTreeView
             EndUpdateCTreeView();
         }
 
-        /// <summary>
-        /// Collapses the CTreeNode and all the child tree nodes.
-        /// </summary>
+        /// <summary>Collapses the CTreeNode and all the child tree nodes.</summary>
         public void CollapseAll()
         {
             BeginUpdateCTreeView();
@@ -377,9 +341,7 @@ namespace ControlTreeView
             EndUpdateCTreeView();
         }
 
-        /// <summary>
-        /// Toggles the tree node to either the expanded or collapsed state.
-        /// </summary>
+        /// <summary>Toggles the tree node to either the expanded or collapsed state.</summary>
         public void Toggle()
         {
             if (IsExpanded) Collapse();
@@ -389,14 +351,14 @@ namespace ControlTreeView
 
         #region Drag
         //?
-        /// <summary>
-        /// Drag Node
-        /// </summary>
+        /// <summary>Drag Node</summary>
         public void Drag()
         {
             if (OwnerCTreeView.DragAndDropMode != CTreeViewDragAndDropMode.Nothing && IsSelected)
             {
-                //Checking that all selected nodes has same parent
+                // ------------------------------------------------
+                // Checking that all selected nodes has same parent
+                // ------------------------------------------------
                 bool checkSameParent = true;
 
                 foreach (CTreeNode selectedNode in OwnerCTreeView.SelectedNodes)
@@ -405,7 +367,9 @@ namespace ControlTreeView
                         checkSameParent = false;
                 }
 
-                //Prepare and sort the dragged nodes
+                // ------------------------------------------------
+                // Prepare and sort the dragged nodes
+                // ------------------------------------------------
                 if (checkSameParent)
                 {
                     List<CTreeNode> draggedNodes = new List<CTreeNode>(OwnerCTreeView.SelectedNodes);
@@ -427,7 +391,10 @@ namespace ControlTreeView
             if (includeSubTrees)
             {
                 int result = 0;
-                foreach (CTreeNode child in Nodes) result += child.GetNodeCount(true);
+
+                foreach (CTreeNode child in Nodes)
+                    result += child.GetNodeCount(true);
+
                 return result;
             }
             else
@@ -445,6 +412,7 @@ namespace ControlTreeView
         public void TraverseNodes(Action<CTreeNode> action)
         {
             action(this);
+
             foreach (CTreeNode childNode in Nodes)
                 childNode.TraverseNodes(action);
         }
