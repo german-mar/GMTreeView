@@ -31,17 +31,17 @@ namespace ControlTreeView
         //// rectangle indicating the drag target position
         //private Rectangle dragDropRectangle;
 
-        private struct DragAnDropTarget {
-            // line indicating the drag target position
-            internal Point LinePoint1;
-            internal Point LinePoint2;
+        private struct DragAnDropTarget { 
+            // line indicating the drag target position 
+            internal Point LinePoint1; 
+            internal Point LinePoint2; 
 
-            // rectangle indicating the drag target position
-            internal Rectangle Rectangle;
+            // rectangle indicating the drag target position 
+            internal Rectangle Rectangle; 
 
-            internal void setLinePoints(int x1, int y1, int x2, int y2) {
-                LinePoint1 = new Point(x1, y1);
-                LinePoint2 = new Point(x2, y2);
+            internal void setLinePoints(int x1, int y1, int x2, int y2) { 
+                LinePoint1 = new Point(x1, y1); 
+                LinePoint2 = new Point(x2, y2); 
             }
 
             internal void EmptyLinePoints() {

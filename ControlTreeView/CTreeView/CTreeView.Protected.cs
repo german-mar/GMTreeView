@@ -260,11 +260,11 @@ namespace ControlTreeView
             //Paint drag and drop destination animation.
             if (DragTargetPosition.Enabled)
             {
-                if ( dragDrop.haveRectangle() )
-                    e.Graphics.FillRectangle(selectionBrush, dragDrop.Rectangle);
+                if ( dragDrop.haveRectangle() ) 
+                    e.Graphics.FillRectangle(selectionBrush, dragDrop.Rectangle); 
 
-                if ( dragDrop.haveLines() )
-                    e.Graphics.DrawLine(dragDropLinePen, dragDrop.LinePoint1, dragDrop.LinePoint2);
+                if ( dragDrop.haveLines() ) 
+                    e.Graphics.DrawLine(dragDropLinePen, dragDrop.LinePoint1, dragDrop.LinePoint2); 
             }
             #endregion
 
