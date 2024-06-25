@@ -31,6 +31,7 @@ namespace ControlTreeView
         //// rectangle indicating the drag target position
         //private Rectangle dragDropRectangle;
 
+        /// <summary>Drag And Drop target position structure</summary>
         private struct DragAnDropTarget { 
             // line indicating the drag target position 
             internal Point LinePoint1; 
@@ -68,6 +69,7 @@ namespace ControlTreeView
             
         }
 
+        /// <summary>Drag And Drop target position</summary>
         private DragAnDropTarget dragDrop;
 
         // ---------------------------------------------------
@@ -143,38 +145,40 @@ namespace ControlTreeView
 
         #region struct DragTargetPositionClass
         /// <summary>Struct that stores nodeDirect, nodeBefore and nodeAfter.</summary>
-        public struct DragTargetPositionClass
-        {
-            #region Constructor
-            internal DragTargetPositionClass(CTreeNode nodeDirect, CTreeNode nodeBefore, CTreeNode nodeAfter)
-            {
-                _nodeDirect = nodeDirect;
-                _nodeBefore = nodeBefore;
-                _nodeAfter  = nodeAfter;
-            }
-            #endregion
+        public struct DragTargetPositionClass {
 
-            #region Ebabled
+            /// <summary>Constructor</summary>
+            internal DragTargetPositionClass(CTreeNode nodeDirect, CTreeNode nodeBefore, CTreeNode nodeAfter) {
+                this.NodeDirect = nodeDirect;
+                this.NodeBefore = nodeBefore;
+                this.NodeAfter  = nodeAfter;
+            }
+
             /// <summary>Gets a value indicating whether drag destination nodes are not empty.</summary>
-            public bool Enabled
-            {
-                get { return (_nodeDirect != null || _nodeBefore != null || _nodeAfter != null); }
+            public bool Enabled {
+                get { return haveNodeDirect() ||
+                             haveNodeBefore() ||
+                             haveNodeAfter();
+                }
             }
-            #endregion
 
-            #region get nodes of drag target position: NodeDirect, NodeBefore, NodeAfter
-            private CTreeNode _nodeDirect;
             /// <summary>The direct node of drag target position.</summary>
-            public  CTreeNode NodeDirect    {  get { return _nodeDirect; }  }
-            
-            private CTreeNode _nodeBefore;
+            public CTreeNode NodeDirect { get; }
+
             /// <summary>The upper node of drag target position.</summary>
-            public  CTreeNode NodeBefore    {  get { return _nodeBefore; }  }
-            
-            private CTreeNode _nodeAfter;
+            public CTreeNode NodeBefore { get; }
+
             /// <summary>The lower node of drag target position.</summary>
-            public  CTreeNode NodeAfter     {  get { return _nodeAfter;  }  }
-            #endregion
+            public CTreeNode NodeAfter  { get; }
+
+            /// <summary>NodeDirect is not null</summary>
+            public bool haveNodeDirect() { return this.NodeDirect != null; }
+
+            /// <summary>NodeBefore is not null</summary>
+            public bool haveNodeBefore() { return this.NodeBefore != null; }
+
+            /// <summary>NodeAfter is not null</summary>
+            public bool haveNodeAfter()  { return this.NodeAfter  != null; }
         }
         #endregion
 
@@ -183,11 +187,7 @@ namespace ControlTreeView
         #region updateDragTargetPosition()
         private void UpdateDragTargetPosition()
         {
-            bool haveANode  =  (DragTargetPosition.NodeDirect != null ||
-                                DragTargetPosition.NodeBefore != null ||
-                                DragTargetPosition.NodeAfter  != null);
-
-            if (haveANode)
+            if (DragTargetPosition.Enabled)
             {
                 DragTargetPosition = new DragTargetPositionClass(null, null, null);
 

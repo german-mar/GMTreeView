@@ -164,17 +164,17 @@ namespace ControlTreeView
                     foreach (CTreeNode sourceNode in sourceNodes) 
                         sourceNode.Parent.Nodes.Remove(sourceNode);
 
-                    if (DragTargetPosition.NodeDirect != null)
+                    if ( DragTargetPosition.haveNodeDirect() )
                     {
                         DragTargetPosition.NodeDirect.Nodes.AddRange(sourceNodes.ToArray());
                     }
-                    else if (DragTargetPosition.NodeBefore != null && !sourceNodes.Contains(DragTargetPosition.NodeBefore))
+                    else if (DragTargetPosition.haveNodeBefore() && !sourceNodes.Contains(DragTargetPosition.NodeBefore))
                     {
                         int index = DragTargetPosition.NodeBefore.Index + 1;
                         DragTargetPosition.NodeBefore.Parent.Nodes.InsertRange(index, sourceNodes.ToArray());
                         //foreach (CTreeNode sourceNode in sourceNodes) DragTargetPosition.NodeBefore.Parent.Nodes.Insert(index++, sourceNode);
                     }
-                    else if (DragTargetPosition.NodeAfter != null && !sourceNodes.Contains(DragTargetPosition.NodeAfter))
+                    else if (DragTargetPosition.haveNodeAfter() && !sourceNodes.Contains(DragTargetPosition.NodeAfter))
                     {
                         int index = DragTargetPosition.NodeAfter.Index;
                         DragTargetPosition.NodeAfter.Parent.Nodes.InsertRange(index, sourceNodes.ToArray());
