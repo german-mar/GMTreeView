@@ -25,11 +25,50 @@ namespace ControlTreeView
         // ---------------------------------------------------
         // drag and drop target position in a drag and drop operation
         // ---------------------------------------------------
-        // line indicating the drag target position
-        private Point dragDropLinePoint1, dragDropLinePoint2;
+        //// line indicating the drag target position
+        //private Point dragDropLinePoint1, dragDropLinePoint2;
 
-        // rectangle indicating the drag target position
-        private Rectangle dragDropRectangle;
+        //// rectangle indicating the drag target position
+        //private Rectangle dragDropRectangle;
+
+        private struct DragAnDropTarget {
+            // line indicating the drag target position
+            internal Point LinePoint1;
+            internal Point LinePoint2;
+
+            // rectangle indicating the drag target position
+            internal Rectangle Rectangle;
+
+            internal void setLinePoints(int x1, int y1, int x2, int y2) {
+                LinePoint1 = new Point(x1, y1);
+                LinePoint2 = new Point(x2, y2);
+            }
+
+            internal void EmptyLinePoints() {
+                LinePoint1 = Point.Empty;
+                LinePoint2 = Point.Empty;
+            }
+                        
+            internal void EmptyRectangle() {
+                Rectangle = Rectangle.Empty;
+            }
+
+            internal void EmptyAll() {
+                EmptyLinePoints();
+                EmptyRectangle();
+            }
+
+            internal bool haveRectangle() {
+                return Rectangle != Rectangle.Empty;
+            }
+
+            internal bool haveLines() {
+                return !LinePoint1.IsEmpty && !LinePoint2.IsEmpty;
+            }
+            
+        }
+
+        private DragAnDropTarget dragDrop;
 
         // ---------------------------------------------------
         // scrolling
@@ -152,10 +191,7 @@ namespace ControlTreeView
             {
                 DragTargetPosition = new DragTargetPositionClass(null, null, null);
 
-                dragDropLinePoint1 = Point.Empty;
-                dragDropLinePoint2 = Point.Empty;
-
-                dragDropRectangle  = Rectangle.Empty;
+                dragDrop.EmptyAll();
 
                 Refresh();
             }
@@ -169,11 +205,10 @@ namespace ControlTreeView
             {
                 DragTargetPosition = new DragTargetPositionClass(node, null, null);
 
-                dragDropLinePoint1 = Point.Empty;
-                dragDropLinePoint2 = Point.Empty;
+                dragDrop.EmptyLinePoints();
 
-                dragDropRectangle  = node.Bounds;
-                dragDropRectangle.Inflate(2, 2);
+                dragDrop.Rectangle  = node.Bounds;
+                dragDrop.Rectangle.Inflate(2, 2);
                 
                 Refresh();
             }
@@ -195,7 +230,7 @@ namespace ControlTreeView
                 else if (nodeAfter  == null) { SetCoordinates(nodeBefore, offset,    isVerticalDiagram); } 
                 else                         { SetCoordinates(nodeBefore, nodeAfter, isVerticalDiagram); }
 
-                dragDropRectangle = Rectangle.Empty;
+                dragDrop.EmptyRectangle();
 
                 Refresh();
             }
@@ -242,8 +277,7 @@ namespace ControlTreeView
             int x1 = rect.X;        int y1 = YY + offset;
             int x2 = rect.Right;    int y2 = y1;
 
-            dragDropLinePoint1 = new Point(x1, y1);
-            dragDropLinePoint2 = new Point(x2, y2);
+            dragDrop.setLinePoints(x1, y1, x2, y2);
         }
 
         private void SetCoordinates(CTreeNode nodeBefore, CTreeNode nodeAfter, bool isVerticalDiagram) {
@@ -296,8 +330,7 @@ namespace ControlTreeView
             int x1 = rect_B.X;  int y1 = rect_B.Bottom + offset;
             int x2 = maxRight;  int y2 = y1;
             
-            dragDropLinePoint1 = new Point(x1, y1);
-            dragDropLinePoint2 = new Point(x2, y2);
+            dragDrop.setLinePoints(x1, y1, x2, y2);
         }
         #endregion
 
