@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.ComponentModel;
 using System.Reflection;
+using System.IO;
 
 namespace ControlTreeView
 {
@@ -49,20 +50,20 @@ namespace ControlTreeView
             _LinesPen = new Pen(Color.Black, 1.0F);
             _LinesPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
 
-            Bitmap imagePlus = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("ControlTreeView.Resources.plus.bmp"));
-            Bitmap imageMinus = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("ControlTreeView.Resources.minus.bmp"));
+            Bitmap imagePlus  = GetBitmap("plus.bmp");
+            Bitmap imageMinus = GetBitmap("minus.bmp");
             PlusMinus = new CTreeViewPlusMinus(imagePlus, imageMinus);
 
             scrollTimer = new Timer();
             scrollTimer.Tick += new EventHandler(ScrollTimer_Tick);
             scrollTimer.Interval = 1;
-
-            dragDropLinePen = new Pen(Color.Black, 2.0F);
-
+                        
             GraphicsPath path = new GraphicsPath();
             path.AddLines(new Point[] { new Point(0, 0), new Point(1, 1), new Point(-1, 1), new Point(0, 0) });
             CustomLineCap cap = new CustomLineCap(null, path);
             cap.WidthScale = 1.0f;
+
+            dragDropLinePen = new Pen(Color.Black, 2.0F);
             dragDropLinePen.CustomStartCap = cap;
             dragDropLinePen.CustomEndCap = cap;
 
@@ -71,6 +72,13 @@ namespace ControlTreeView
             //this.AutoScrollMinSize = new Size(0, 0);
             EndUpdate();
         }
+
+        private Bitmap GetBitmap(string name) {
+            string resource = "ControlTreeView.Resources." + name;
+            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
+            return new Bitmap(stream);
+        }
+
         #endregion
 
         #region Properties

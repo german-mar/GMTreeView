@@ -205,7 +205,7 @@ namespace ControlTreeView
                 if (!Focused) Focus();//?
                 CTreeNode toggleNode = null;
 
-                this.Nodes.TraverseNodes(node => node.Visible && node.Nodes.Count > 0, node =>
+                this.Nodes.TraverseNodes(node => node.Visible && node.Nodes.HasChildren, node =>
                 {
                     Point cursorLocation = e.Location;
                     cursorLocation.Offset(-AutoScrollPosition.X, -AutoScrollPosition.Y);
@@ -287,7 +287,7 @@ namespace ControlTreeView
             //Paint PlusMinus buttons
             if (ShowPlusMinus)
             {
-                this.Nodes.TraverseNodes(node => node.Visible && node.Nodes.Count > 0, node =>
+                this.Nodes.TraverseNodes(node => node.Visible && node.Nodes.HasChildren, node =>
                 {
                     if (node.PlusMinus != null)
                     {

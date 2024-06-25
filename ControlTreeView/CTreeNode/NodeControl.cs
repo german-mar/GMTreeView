@@ -114,7 +114,7 @@ namespace ControlTreeView
         }
         #endregion
 
-        #region InitializeComponent
+        #region InitializeComponent NOT USED
         // NOT USED XXXXXXXXXXXXXXXXXXXXXXXXXXXX
         //private void InitializeComponent()
         //{

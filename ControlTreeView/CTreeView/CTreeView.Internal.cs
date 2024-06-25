@@ -28,14 +28,15 @@ namespace ControlTreeView {
         #endregion
 
         #region Line_Coordinates struct: Delegates for Lines and PlusMinus coordinates calculus
-        private struct Line_Coordinates {
+        private struct Line_Coordinates_Sruct {
             public Func<CTreeNode, Point>                    plusMinusCalc;
             public Func<CTreeNode, CTreeNode.Line>           parentLineCalc;
             public Func<CTreeNodeCollection, CTreeNode.Line> commonLineCalc;
             public Func<CTreeNode, CTreeNode.Line>           childLineCalc;
         }
 
-        private Line_Coordinates LC;
+        /// <summary>Line Coordinates for PlusMinus button, Parent lines, Common Lines, Child Lines</summary>
+        private Line_Coordinates_Sruct LC;
         #endregion
 
         #region Recalculate
@@ -102,8 +103,8 @@ namespace ControlTreeView {
                                    getPoint(parent, 5, parent.FirstNode)));
 
             LC.commonLineCalc = new Func<CTreeNodeCollection, CTreeNode.Line>(nodes =>
-                new CTreeNode.Line(getPoint(nodes[0], -IndentDepth + 5, nodes[0]),
-                                   getPoint(nodes[0], -IndentDepth + 5, nodes[nodes.Count - 1])));
+                new CTreeNode.Line(getPoint(nodes.FirstNode, -IndentDepth + 5, nodes.FirstNode),
+                                   getPoint(nodes.FirstNode, -IndentDepth + 5, nodes.LastNode)));
 
             LC.childLineCalc = new Func<CTreeNode, CTreeNode.Line>(child =>
                 new CTreeNode.Line(getPoint(child, -IndentDepth + 5),
@@ -131,8 +132,8 @@ namespace ControlTreeView {
                                     getHD_Point2(parent, IndentDepth / 2)));
 
             LC.commonLineCalc = new Func<CTreeNodeCollection, CTreeNode.Line>(nodes =>
-                new CTreeNode.Line( getHD_Point(nodes[0], -IndentDepth / 2),
-                                    getHD_Point(nodes[0], -IndentDepth / 2, nodes[nodes.Count - 1])));
+                new CTreeNode.Line( getHD_Point(nodes.FirstNode, -IndentDepth / 2),
+                                    getHD_Point(nodes.FirstNode, -IndentDepth / 2, nodes.LastNode)));
 
             LC.childLineCalc = new Func<CTreeNode, CTreeNode.Line>(child =>
                 new CTreeNode.Line( getHD_Point(child, -IndentDepth / 2),
@@ -160,8 +161,8 @@ namespace ControlTreeView {
                                     getVD_Point2(parent, IndentDepth / 2)));
 
             LC.commonLineCalc = new Func<CTreeNodeCollection, CTreeNode.Line>(nodes =>
-                new CTreeNode.Line( getVD_Point(nodes[0], -IndentDepth / 2),
-                                    getVD_Point(nodes[nodes.Count - 1], -IndentDepth / 2, nodes[0])));
+                new CTreeNode.Line( getVD_Point(nodes.FirstNode, -IndentDepth / 2),
+                                    getVD_Point(nodes.LastNode, -IndentDepth / 2, nodes.FirstNode)));
 
             LC.childLineCalc = new Func<CTreeNode, CTreeNode.Line>(child =>
                 new CTreeNode.Line( getVD_Point(child, -IndentDepth / 2),

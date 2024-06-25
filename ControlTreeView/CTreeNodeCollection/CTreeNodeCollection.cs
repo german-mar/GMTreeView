@@ -189,5 +189,14 @@ namespace ControlTreeView
         }
         #endregion
 
+        ///  <summary>Determines if the collection has children</summary>
+        internal bool HasChildren  {  get { return Count > 0; }  }
+
+        /// <summary>First Node of the Collection</summary>
+        internal CTreeNode FirstNode  {  get { return this[0]; }  }
+
+        /// <summary>Last Node of the Collection</summary>
+        internal CTreeNode LastNode  {  get { return this[Count - 1]; }  }
+
     }
 }

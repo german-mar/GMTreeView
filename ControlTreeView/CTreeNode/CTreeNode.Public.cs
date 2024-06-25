@@ -181,7 +181,7 @@ namespace ControlTreeView
         {
             get
             {
-                return (Nodes.Count > 0) ? Nodes[0] : null;
+                return (Nodes.HasChildren) ? Nodes.FirstNode : null;
             }
         }
 
@@ -194,7 +194,7 @@ namespace ControlTreeView
         {
             get
             {
-                return (Nodes.Count > 0) ? Nodes[Nodes.Count - 1] : null;
+                return (Nodes.HasChildren) ? Nodes.LastNode : null;
             }
         }
         #endregion

@@ -121,7 +121,7 @@ namespace ControlTreeView
         {
             int nextYMax = currentYMax;
 
-            if (Nodes.Count > 0 && (IsExpanded || !OwnerCTreeView.MinimizeCollapsed))
+            if (Nodes.HasChildren && (IsExpanded || !OwnerCTreeView.MinimizeCollapsed))
             {
                 foreach (CTreeNode child in Nodes)
                 {
@@ -155,7 +155,7 @@ namespace ControlTreeView
         /// <returns></returns>
         internal int NextXMax(int currentXMax, int currentY)
         {
-            if (Nodes.Count > 0 && (IsExpanded || !OwnerCTreeView.MinimizeCollapsed))
+            if (Nodes.HasChildren && (IsExpanded || !OwnerCTreeView.MinimizeCollapsed))
             {
                 foreach (CTreeNode child in Nodes)
                 {
@@ -185,7 +185,7 @@ namespace ControlTreeView
         /// <param name="needRootPlusMinus"></param>
         internal void CalculatePlusMinus(Func<CTreeNode, Point> plusMinusCalc, bool needRootPlusMinus)
         {
-            if (Visible && Nodes.Count > 0)
+            if (Visible && Nodes.HasChildren)
             {
                 PlusMinus = null;
 
@@ -214,7 +214,7 @@ namespace ControlTreeView
         {
             if (Visible && IsExpanded)
             {
-                if (Nodes.Count > 0)
+                if (Nodes.HasChildren)
                 {
                     Lines = new List<Line>();
                     Lines.Add(parentLineCalc(this));
