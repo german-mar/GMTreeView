@@ -392,19 +392,19 @@ namespace ControlTreeView
         /// <returns>The number of child tree nodes assigned to the Nodes collection.</returns>
         public int GetNodeCount(bool includeSubTrees)
         {
+            int result = 0;
+
             if (includeSubTrees)
             {
-                int result = 0;
-
                 foreach (CTreeNode child in Nodes)
                     result += child.GetNodeCount(true);
-
-                return result;
             }
             else
             {
-                return Nodes.Count;
+                result = Nodes.Count;
             }
+
+            return result;
         }
         #endregion
 

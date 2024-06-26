@@ -151,11 +151,13 @@ namespace ControlTreeView
             if (ParentCTreeView != null)
             {
                 ParentCTreeView.SuspendLayout();
+
                 foreach (CTreeNode childNode in this)
                 {
                     childNode.TraverseNodes(eachNode => { ParentCTreeView.Controls.Remove(eachNode.Control); });
                     childNode.OwnerCTreeView = null;
                 }
+
                 ParentCTreeView.ResumeLayout(false);
                 ParentCTreeView.Recalculate();//?
             }
