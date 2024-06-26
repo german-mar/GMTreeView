@@ -43,10 +43,10 @@ namespace ControlTreeView
         #endregion
 
         #region PlusMinus
-        /// <summary>The plus-sign (+) or minus-sign (-) button's area for this node to determine is mouse is over.</summary>
+        /// <summary>The plus-sign (+) minus-sign (-) button's class to determine is mouse is over.</summary>
         internal NodePlusMinus PlusMinus { get; set; }
 
-        /// <summary>The plus-sign (+) or minus-sign (-) button's area for this node to determine is mouse is over.</summary>
+        /// <summary>The plus-sign (+) minus-sign (-) button's class to determine is mouse is over.</summary>
         internal class NodePlusMinus
         {
             private  const int MinCursorDistance = 3;
@@ -184,7 +184,8 @@ namespace ControlTreeView
                     Point locationPlusMinus = plusMinusCalc(this);
                     locationPlusMinus.Offset(offset, offset);
 
-                    PlusMinus = new NodePlusMinus(new Rectangle(locationPlusMinus, OwnerCTreeView.PlusMinus.Size));
+                    Rectangle rect = new Rectangle(locationPlusMinus, OwnerCTreeView.PlusMinus.Size);
+                    PlusMinus      = new NodePlusMinus(rect);
                 }
                 
                 foreach (CTreeNode child in Nodes)
@@ -198,7 +199,9 @@ namespace ControlTreeView
         /// <param name="parentLineCalc"></param>
         /// <param name="commonLineCalc"></param>
         /// <param name="childLineCalc"></param>
-        internal void CalculateLines(Func<CTreeNode, Line> parentLineCalc, Func<CTreeNodeCollection, Line> commonLineCalc, Func<CTreeNode, Line> childLineCalc)
+        internal void CalculateLines(Func<CTreeNode, Line>           parentLineCalc,
+                                     Func<CTreeNodeCollection, Line> commonLineCalc,
+                                     Func<CTreeNode, Line>           childLineCalc)
         {
             if (Visible && IsExpanded)
             {
@@ -215,7 +218,6 @@ namespace ControlTreeView
                 {
                     Lines = null;//?
                 }
-                    
             }
         }
 
