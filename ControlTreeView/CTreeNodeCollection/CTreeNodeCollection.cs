@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Collections.Generic;
+using static ControlTreeView.CTreeView;
 
 namespace ControlTreeView
 {
@@ -168,22 +169,25 @@ namespace ControlTreeView
         /// <summary>
         /// Get the list includes common line and lines for nodes of this CTreeNodeCollection.
         /// </summary>
-        /// <param name="commonLineCalc">Function that calculates common line of nodes collection.</param>
-        /// <param name="childLineCalc">Function that calculates line of each node in collection.</param>
+        /// <param name="LC">Delegates for Lines and PlusMinus coordinates calculus</param>
+        /// <remarks>
+        /// LC is a struct that contains Functions to calculate node lines and PlusMinus address.
+        /// Here we use commonLineCalc and childLineCalc functions to calculate lines
+        /// for each node in the collection.
+        /// </remarks>
         /// <returns>List of lines of this nodes collection.</returns>
-        internal List<CTreeNode.Line> GetLines(
-                                                Func<CTreeNodeCollection,
-                                                CTreeNode.Line> commonLineCalc,
-                                                Func<CTreeNode,
-                                                CTreeNode.Line> childLineCalc)
+        
+        ///// <param name="commonLineCalc">Function that calculates common line of nodes collection.</param>
+        ///// <param name="childLineCalc">Function that calculates line of each node in collection.</param>
+        internal List<CTreeNode.Line> GetLines(Line_Coordinates_Sruct LC)
         {
             List<CTreeNode.Line> lines = new List<CTreeNode.Line>();
 
             if (Count > 1)
-                lines.Add(commonLineCalc(this));
+                lines.Add(LC.commonLineCalc(this));
 
             foreach (CTreeNode childNode in this)
-                lines.Add(childLineCalc(childNode));
+                lines.Add(LC.childLineCalc(childNode));
 
             return lines;
         }

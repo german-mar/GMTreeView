@@ -196,23 +196,28 @@ namespace ControlTreeView
         /// <summary>
         /// Calculates coordinats for lines of this node and all child nodes.
         /// </summary>
-        /// <param name="parentLineCalc"></param>
-        /// <param name="commonLineCalc"></param>
-        /// <param name="childLineCalc"></param>
-        internal void CalculateLines(Func<CTreeNode, Line>           parentLineCalc,
-                                     Func<CTreeNodeCollection, Line> commonLineCalc,
-                                     Func<CTreeNode, Line>           childLineCalc)
+        /// <param name="LC">Delegates for Lines and PlusMinus coordinates calculus</param>
+        /// <remarks>
+        /// LC is a struct that contains Functions to calculate node lines and PlusMinus address.
+        /// Here we use parentLineCalc, commonLineCalc, childLineCalc functions to calculate lines
+        /// for each node in the collection.
+        /// </remarks>
+
+        ///// <param name="parentLineCalc"></param>
+        ///// <param name="commonLineCalc"></param>
+        ///// <param name="childLineCalc"></param>
+        internal void CalculateLines(CTreeView.Line_Coordinates_Sruct LC)
         {
             if (Visible && IsExpanded)
             {
                 if (Nodes.HasChildren)
                 {
                     Lines = new List<Line>();
-                    Lines.Add(parentLineCalc(this));
-                    Lines.AddRange( Nodes.GetLines(commonLineCalc, childLineCalc) );
+                    Lines.Add(LC.parentLineCalc(this));
+                    Lines.AddRange( Nodes.GetLines(LC) );
 
                     foreach (CTreeNode child in Nodes)
-                        child.CalculateLines(parentLineCalc, commonLineCalc, childLineCalc);
+                        child.CalculateLines(LC);
                 }
                 else
                 {

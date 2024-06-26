@@ -28,7 +28,8 @@ namespace ControlTreeView {
         #endregion
 
         #region Line_Coordinates struct: Delegates for Lines and PlusMinus coordinates calculus
-        private struct Line_Coordinates_Sruct {
+        /// <summary>Delegates for Lines and PlusMinus coordinates calculus</summary>
+        internal struct Line_Coordinates_Sruct {
             public Func<CTreeNode, Point>                    plusMinusCalc;
             public Func<CTreeNode, CTreeNode.Line>           parentLineCalc;
             public Func<CTreeNodeCollection, CTreeNode.Line> commonLineCalc;
@@ -36,7 +37,7 @@ namespace ControlTreeView {
         }
 
         /// <summary>Line Coordinates for PlusMinus button, Parent lines, Common Lines, Child Lines</summary>
-        private Line_Coordinates_Sruct LC;
+        internal Line_Coordinates_Sruct LC;
         #endregion
 
         #region Recalculate
@@ -231,9 +232,9 @@ namespace ControlTreeView {
 
             if (ShowLines) {
                 foreach (CTreeNode node in Nodes)
-                    node.CalculateLines(LC.parentLineCalc, LC.commonLineCalc, LC.childLineCalc);
+                    node.CalculateLines(LC);
 
-                rootLines = (ShowRootLines) ? Nodes.GetLines(LC.commonLineCalc, LC.childLineCalc) : null;
+                rootLines = (ShowRootLines) ? Nodes.GetLines(LC) : null;
             }
         }
         #endregion
