@@ -42,25 +42,26 @@ namespace ControlTreeView
         #region Properties
 
         #region Control
+        private Control _Control;
         /// <summary>Gets or sets the user control assigned to the current tree node.</summary>
         [BrowsableAttribute(false)]
         public Control Control
         {
-            get { return this.Control; }
+            get { return _Control; }
             set
             {
                 bool notNull = (OwnerCTreeView != null);
 
                 if (notNull)
                 {
-                    OwnerCTreeView.Controls.Remove(this.Control);
+                    OwnerCTreeView.Controls.Remove(_Control);
                     OwnerCTreeView.Controls.Add(value);
                 }
 
-                this.Control = value;
+                _Control = value;
 
                 if (value is INodeControl)
-                    ((INodeControl)this.Control).OwnerNode = this;
+                    ((INodeControl)_Control).OwnerNode = this;
 
                 if (notNull)
                     OwnerCTreeView.Recalculate();
@@ -107,14 +108,15 @@ namespace ControlTreeView
         #endregion
 
         #region OwnerCTreeView
+        private CTreeView _OwnerCTreeView;
         /// <summary>Gets the parent tree view that the tree node is assigned to.</summary>
         [BrowsableAttribute(false)]
         public CTreeView OwnerCTreeView
         {
-            get { return this.OwnerCTreeView; }
+            get { return _OwnerCTreeView; }
             internal set
             {
-                TraverseNodes(node => { node.OwnerCTreeView = value; });
+                TraverseNodes(node => { node._OwnerCTreeView = value; });
             }
         }
         //{
@@ -181,15 +183,16 @@ namespace ControlTreeView
         #endregion
 
         #region Level
+        private int _Level;
         /// <summary>Gets the zero-based depth of the tree node in the CTreeView.</summary>
         //[BrowsableAttribute(false)]
         public int Level
         {
-            get { return this.Level; }
+            get { return _Level; }
             internal set
             {
-                this.Level = value;
-                Nodes.TraverseNodes(node => { node.Level = node.ParentNode.Level + 1; });
+                _Level = value;
+                Nodes.TraverseNodes(node => { node._Level = node.ParentNode.Level + 1; });
             }
         }
         #endregion
@@ -286,6 +289,7 @@ namespace ControlTreeView
             }
         }
 
+        private Rectangle _boundsSubtree;
         /// <summary>
         /// Gets the bounds of the tree node includes all tree nodes indirectly rooted at this tree node.
         /// </summary>
@@ -293,8 +297,8 @@ namespace ControlTreeView
         //[BrowsableAttribute(false)]
         public Rectangle BoundsSubtree
         {
-            get { return Visible ? BoundsSubtree : Rectangle.Empty; }
-            private set { this.BoundsSubtree = value; }
+            get { return Visible ? _boundsSubtree : Rectangle.Empty; }
+            private set { _boundsSubtree = value; }
         }
         #endregion
 
