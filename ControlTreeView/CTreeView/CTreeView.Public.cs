@@ -118,7 +118,7 @@ namespace ControlTreeView
         [BrowsableAttribute(false)]
         public CTreeNode FirstNode
         {
-            get { return Nodes[0]; }
+            get { return Nodes.FirstNode; }
         }
         
         /// <summary>
@@ -128,7 +128,7 @@ namespace ControlTreeView
         [BrowsableAttribute(false)]
         public CTreeNode LastNode
         {
-            get { return Nodes[Nodes.Count - 1]; }
+            get { return Nodes[Nodes.LastNodeIndex]; }
         }
         #endregion
 

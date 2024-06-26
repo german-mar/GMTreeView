@@ -687,7 +687,7 @@ namespace ControlTreeView
                     // Check that destination node is not descendant of source nodes
                     // test to draw or not a box around a node
                     // ---------------------------------------------
-                    if ( isDescendant(sourceNodes, NodeDirect) ) return false;
+                    if ( IsDescendant(sourceNodes, NodeDirect) ) return false;
                 }
             }
             // ------------------------------------------------------------------
@@ -729,15 +729,15 @@ namespace ControlTreeView
                 // ---------------------------------------------------
                 // Check that source and destination nodes have same parent
                 // ---------------------------------------------------
-                if ( ! haveSameParent(sourceNodes, NodeBefore) ) return false;
-                if ( ! haveSameParent(sourceNodes, NodeAfter ) ) return false;
+                if ( ! HaveSameParent(sourceNodes, NodeBefore) ) return false;
+                if ( ! HaveSameParent(sourceNodes, NodeAfter ) ) return false;
 
             } else {
                 // ---------------------------------------------------
                 // Check that destination nodes are not descendants of source nodes
                 // ---------------------------------------------------
-                if ( isDescendant(sourceNodes, NodeBefore) ) return false;
-                if ( isDescendant(sourceNodes, NodeAfter ) ) return false;
+                if ( IsDescendant(sourceNodes, NodeBefore) ) return false;
+                if ( IsDescendant(sourceNodes, NodeAfter ) ) return false;
             }
             // ------------------------------------------------------------------
 
@@ -747,14 +747,14 @@ namespace ControlTreeView
         // -------------------------------------------------------------------------------------
         // Check that a node and destination nodes have same parent
         // -------------------------------------------------------------------------------------
-        private bool haveSameParent(List<CTreeNode> sourceNodes, CTreeNode node) {
+        private bool HaveSameParent(List<CTreeNode> sourceNodes, CTreeNode node) {
             return ! ( node != null  &&  node.Parent != sourceNodes[0].Parent );
         }
 
         // -------------------------------------------------------------------------------------
         // Check that a node is not descendant of source nodes
         // -------------------------------------------------------------------------------------
-        private bool isDescendant(List<CTreeNode> sourceNodes, CTreeNode nodeToTest) {
+        private bool IsDescendant(List<CTreeNode> sourceNodes, CTreeNode nodeToTest) {
             bool descendant = false;
 
             // ----------------------------------------------------

@@ -202,5 +202,11 @@ namespace ControlTreeView
         /// <summary>Last Node of the Collection</summary>
         internal CTreeNode LastNode  {  get { return this[Count - 1]; }  }
 
+        /// <summary>First Node index of the Collection</summary>
+        internal int FirstNodeIndex { get { return HasChildren ? 0 : -1; } }
+
+        /// <summary>Last Node index of the Collection</summary>
+        internal int LastNodeIndex { get { return HasChildren ? Count - 1 : -1; } }
+
     }
 }

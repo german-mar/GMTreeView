@@ -141,7 +141,7 @@ namespace ControlTreeView
         {
             get
             {
-                return (Index >= 0 && Index < Parent.Nodes.Count - 1) ? Parent.Nodes[Index + 1] : null;
+                return (Index >= 0 && Index < Parent.Nodes.LastNodeIndex) ? Parent.Nodes[Index + 1] : null;
             }
         }
 
