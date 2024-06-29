@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
+using System.Windows.Forms;
+using System.Xml.Linq;
 
-namespace ControlTreeView
-{
+namespace ControlTreeView {
     // ---------------------------------------------------------------------------------------------
     /// <summary>
     /// Drag And Drop implementation
@@ -17,11 +15,7 @@ namespace ControlTreeView
     public partial class CTreeView
     {
         #region drag and drop properties
-        // ---------------------------------------------------
-        // CTreeView line pen
-        // ---------------------------------------------------
-        private Pen dragDropLinePen;
-
+        
         // ---------------------------------------------------
         // drag and drop target position in a drag and drop operation
         // ---------------------------------------------------
@@ -32,19 +26,38 @@ namespace ControlTreeView
         //private Rectangle dragDropRectangle;
 
         /// <summary>Drag And Drop target position structure</summary>
-        private struct DragAnDropTarget { 
+        private struct DragAnDropTarget {
+            // ---------------------------------------------------
+            // CTreeView line pen
+            // ---------------------------------------------------
+            internal Pen LinePen;
+
+            // ------------------------------------------------------------------
+            // Line Points and Rectangle
+            // ------------------------------------------------------------------
             // line indicating the drag target position 
             internal Point LinePoint1; 
             internal Point LinePoint2; 
 
             // rectangle indicating the drag target position 
-            internal Rectangle Rectangle; 
+            internal Rectangle Rectangle;
 
+            // ------------------------------------------------------------------
+            // Set Line Points
+            // ------------------------------------------------------------------
             internal void setLinePoints(int x1, int y1, int x2, int y2) { 
                 LinePoint1 = new Point(x1, y1); 
                 LinePoint2 = new Point(x2, y2); 
             }
 
+            //internal void setLinePoints(Geometry geometry) {
+            //    LinePoint1 = geometry.GetPoint1();
+            //    LinePoint2 = geometry.GetPoint2();
+            //}
+
+            // ------------------------------------------------------------------
+            // Empty Line Points and Rectangle
+            // ------------------------------------------------------------------
             internal void EmptyLinePoints() {
                 LinePoint1 = Point.Empty;
                 LinePoint2 = Point.Empty;
@@ -59,14 +72,17 @@ namespace ControlTreeView
                 EmptyRectangle();
             }
 
-            internal bool haveRectangle() {
+            // ------------------------------------------------------------------
+            // Have Line Points and Rectangle
+            // ------------------------------------------------------------------
+            internal bool HaveLines() {
+                return !LinePoint1.IsEmpty && !LinePoint2.IsEmpty;
+            }
+
+            internal bool HaveRectangle() {
                 return Rectangle != Rectangle.Empty;
             }
 
-            internal bool haveLines() {
-                return !LinePoint1.IsEmpty && !LinePoint2.IsEmpty;
-            }
-            
         }
 
         /// <summary>Drag And Drop target position</summary>
@@ -156,10 +172,7 @@ namespace ControlTreeView
 
             /// <summary>Gets a value indicating whether drag destination nodes are not empty.</summary>
             public bool Enabled {
-                get { return haveNodeDirect() ||
-                             haveNodeBefore() ||
-                             haveNodeAfter();
-                }
+                get { return HaveNodeDirect() || HaveNodeBefore() || HaveNodeAfter(); }
             }
 
             /// <summary>The direct node of drag target position.</summary>
@@ -172,13 +185,13 @@ namespace ControlTreeView
             public CTreeNode NodeAfter  { get; }
 
             /// <summary>NodeDirect is not null</summary>
-            public bool haveNodeDirect() { return this.NodeDirect != null; }
+            public bool HaveNodeDirect() { return this.NodeDirect != null; }
 
             /// <summary>NodeBefore is not null</summary>
-            public bool haveNodeBefore() { return this.NodeBefore != null; }
+            public bool HaveNodeBefore() { return this.NodeBefore != null; }
 
             /// <summary>NodeAfter is not null</summary>
-            public bool haveNodeAfter()  { return this.NodeAfter  != null; }
+            public bool HaveNodeAfter()  { return this.NodeAfter  != null; }
         }
         #endregion
 
@@ -239,9 +252,14 @@ namespace ControlTreeView
 
         #region set oordinates for one or tuo nodes (2 methods)
         // ------------------------------------------------------------------------------------
-        // same method for nodeBefore and nodeAffter,
-        // the only difference is the offset = -2 and +2 respectively
+        // Draw a box
         // ------------------------------------------------------------------------------------
+        /// <summary>
+        /// Calculates the coordinates for a box around a node
+        /// </summary>
+        /// <param name="node">Node from which the coordinates of the box will be returned. It can be nodeAfter or nodeBefore</param>
+        /// <param name="offset">The offset is positive for nodeBefore and negative for nodeAfter</param>
+        /// <param name="isVerticalDiagram">Indicate if it is a Vertical Diagram</param>
         private void SetCoordinates(CTreeNode node, int offset, bool isVerticalDiagram) {
             //Rectangle rect = (!isVerticalDiagram) ? node.BoundsSubtree : rotateRectangle(node.BoundsSubtree);
             Rectangle rect = node.BoundsSubtree;
@@ -329,8 +347,18 @@ namespace ControlTreeView
 
             int x1 = rect_B.X;  int y1 = rect_B.Bottom + offset;
             int x2 = maxRight;  int y2 = y1;
-            
-            dragDrop.setLinePoints(x1, y1, x2, y2);
+
+            if (isVerticalDiagram) {
+                Rectangle result = new Rectangle(x1, y1, x2 - x1, y2 - y1);
+                result = RotateRectangle(result);
+
+                dragDrop.setLinePoints(result.X, result.Y, result.Right, result.Bottom);
+
+            } else {
+                dragDrop.setLinePoints(x1, y1, x2, y2);
+            }
+
+
         }
         #endregion
 

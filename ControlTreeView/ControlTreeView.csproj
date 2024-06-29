@@ -78,6 +78,7 @@
     <Compile Include="CTreeNode\NodeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="CTreeView\CTreeView.Geometry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CTreeView\Other Declarations.cs" />
   </ItemGroup>

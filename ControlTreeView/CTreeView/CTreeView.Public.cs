@@ -63,9 +63,9 @@ namespace ControlTreeView
             CustomLineCap cap = new CustomLineCap(null, path);
             cap.WidthScale = 1.0f;
 
-            dragDropLinePen = new Pen(Color.Black, 2.0F);
-            dragDropLinePen.CustomStartCap = cap;
-            dragDropLinePen.CustomEndCap = cap;
+            dragDrop.LinePen = new Pen(Color.Black, 2.0F);
+            dragDrop.LinePen.CustomStartCap = cap;
+            dragDrop.LinePen.CustomEndCap = cap;
 
             this.DoubleBuffered = true;
             //this.ResizeRedraw = true;

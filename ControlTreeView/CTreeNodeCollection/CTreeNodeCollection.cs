@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Collections.Generic;
 using static ControlTreeView.CTreeView;
+using System.Windows.Forms;
 
 namespace ControlTreeView
 {
@@ -185,9 +186,11 @@ namespace ControlTreeView
         {
             List<CTreeNode.Line> lines = new List<CTreeNode.Line>();
 
+            // If the node has at least one child
             if (Count > 1)
                 lines.Add(LC.commonLineCalc(this));
 
+            // For each child of the node
             foreach (CTreeNode childNode in this)
                 lines.Add(LC.childLineCalc(childNode));
 

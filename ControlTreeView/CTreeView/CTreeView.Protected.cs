@@ -164,17 +164,17 @@ namespace ControlTreeView
                     foreach (CTreeNode sourceNode in sourceNodes) 
                         sourceNode.Parent.Nodes.Remove(sourceNode);
 
-                    if ( DragTargetPosition.haveNodeDirect() )
+                    if ( DragTargetPosition.HaveNodeDirect() )
                     {
                         DragTargetPosition.NodeDirect.Nodes.AddRange(sourceNodes.ToArray());
                     }
-                    else if (DragTargetPosition.haveNodeBefore() && !sourceNodes.Contains(DragTargetPosition.NodeBefore))
+                    else if (DragTargetPosition.HaveNodeBefore() && !sourceNodes.Contains(DragTargetPosition.NodeBefore))
                     {
                         int index = DragTargetPosition.NodeBefore.Index + 1;
                         DragTargetPosition.NodeBefore.Parent.Nodes.InsertRange(index, sourceNodes.ToArray());
                         //foreach (CTreeNode sourceNode in sourceNodes) DragTargetPosition.NodeBefore.Parent.Nodes.Insert(index++, sourceNode);
                     }
-                    else if (DragTargetPosition.haveNodeAfter() && !sourceNodes.Contains(DragTargetPosition.NodeAfter))
+                    else if (DragTargetPosition.HaveNodeAfter() && !sourceNodes.Contains(DragTargetPosition.NodeAfter))
                     {
                         int index = DragTargetPosition.NodeAfter.Index;
                         DragTargetPosition.NodeAfter.Parent.Nodes.InsertRange(index, sourceNodes.ToArray());
@@ -202,18 +202,9 @@ namespace ControlTreeView
         {
             if (e.Button == MouseButtons.Left && ShowPlusMinus)
             {
-                if (!Focused) Focus();//?
-                CTreeNode toggleNode = null;
+                //if (!Focused) Focus();//?
 
-                this.Nodes.TraverseNodes(node => node.Visible && node.Nodes.HasChildren, node =>
-                {
-                    Point cursorLocation = e.Location;
-                    cursorLocation.Offset(-AutoScrollPosition.X, -AutoScrollPosition.Y);
-                    if (node.PlusMinus != null && node.PlusMinus.IsUnderMouse(cursorLocation))
-                    {
-                        toggleNode = node;
-                    }
-                });
+                CTreeNode toggleNode = GetTogleeNode(e);
 
                 ClearSelection();
 
@@ -228,6 +219,23 @@ namespace ControlTreeView
 
             base.OnMouseDown(e);
         }
+
+        private CTreeNode GetTogleeNode(MouseEventArgs e) {
+            CTreeNode toggleNode = null;
+
+            this.Nodes.TraverseNodes(node => node.Visible && node.Nodes.HasChildren, node =>
+            {
+                Point cursorLocation = e.Location;
+                cursorLocation.Offset(-AutoScrollPosition.X, -AutoScrollPosition.Y);
+
+                if (node.PlusMinus != null && node.PlusMinus.IsUnderMouse(cursorLocation)) {
+                    toggleNode = node;
+                    return;
+                }
+            });
+
+            return toggleNode;
+        }
         #endregion
 
         #region OnPaint
@@ -239,39 +247,48 @@ namespace ControlTreeView
         {
             e.Graphics.TranslateTransform(AutoScrollPosition.X, AutoScrollPosition.Y);
 
-            #region Paint lines
-            //Paint lines
-            if (ShowLines)
-            {
+            PaintLines(e);
+            PaintDragAndDropDestinationAnimation(e);
+            PaintSelection(e);
+            PaintPlusMinusButtons(e);
+
+            ////Test bounds
+            //this.Nodes.TraverseNodes(node => node.Visible, node =>
+            //{
+            //    e.Graphics.DrawRectangle(new Pen(Color.Silver, 1.0F), node.BoundsSubtree);
+            //});
+
+            base.OnPaint(e);
+        }
+
+        private void PaintLines(PaintEventArgs e) {
+            if (ShowLines) {
                 this.Nodes.TraverseNodes(node => node.IsExpanded, node =>
-                {
-                    if (node.Lines != null)
-                        foreach (CTreeNode.Line line in node.Lines)
-                            e.Graphics.DrawLine(LinesPen, line.Point1, line.Point2);
-                });
+                { DrawLines(e, node.Lines); }
+                );
 
-                if (rootLines != null)
-                    foreach (CTreeNode.Line line in rootLines)
-                        e.Graphics.DrawLine(LinesPen, line.Point1, line.Point2);
+                DrawLines(e, rootLines);
             }
-            #endregion
+        }
 
-            #region Paint drag and drop destination animation
-            //Paint drag and drop destination animation.
-            if (DragTargetPosition.Enabled)
-            {
-                if ( dragDrop.haveRectangle() ) 
-                    e.Graphics.FillRectangle(selectionBrush, dragDrop.Rectangle); 
+        private void DrawLines(PaintEventArgs e, List<CTreeNode.Line> lines) {
+            if (lines != null)
+                foreach (CTreeNode.Line line in lines)
+                    e.Graphics.DrawLine(LinesPen, line.Point1, line.Point2);
+        }
 
-                if ( dragDrop.haveLines() ) 
-                    e.Graphics.DrawLine(dragDropLinePen, dragDrop.LinePoint1, dragDrop.LinePoint2); 
+        private void PaintDragAndDropDestinationAnimation(PaintEventArgs e) {
+            if (DragTargetPosition.Enabled) {
+                if (dragDrop.HaveRectangle())
+                    e.Graphics.FillRectangle(selectionBrush, dragDrop.Rectangle);
+
+                if (dragDrop.HaveLines())
+                    e.Graphics.DrawLine(dragDrop.LinePen, dragDrop.LinePoint1, dragDrop.LinePoint2);
             }
-            #endregion
+        }
 
-            #region Paint selection
-            //Paint selection
-            foreach (CTreeNode node in SelectedNodes)
-            {
+        private void PaintSelection(PaintEventArgs e) {
+            foreach (CTreeNode node in SelectedNodes) {
                 Rectangle selectionRectangle = node.Bounds;
                 selectionRectangle.Inflate(2, 2);
 
@@ -281,32 +298,19 @@ namespace ControlTreeView
                 selectionRectangle.Width--; selectionRectangle.Height--;    //костыль
                 e.Graphics.DrawRectangle(selectionPen, selectionRectangle);
             }
-            #endregion
+        }
 
-            #region Paint PlusMinus buttons
-            //Paint PlusMinus buttons
-            if (ShowPlusMinus)
-            {
-                this.Nodes.TraverseNodes(node => node.Visible && node.Nodes.HasChildren, node =>
-                {
-                    if (node.PlusMinus != null)
-                    {
-                        Bitmap image    = (node.IsExpanded) ? PlusMinus.Minus : PlusMinus.Plus;
-                        Point  location = node.PlusMinus.Location;
+        private void PaintPlusMinusButtons(PaintEventArgs e) {
+            if (ShowPlusMinus) {
+                this.Nodes.TraverseNodes(node => node.Visible && node.Nodes.HasChildren, node => {
+                    if (node.PlusMinus != null) {
+                        Bitmap image = (node.IsExpanded) ? PlusMinus.Minus : PlusMinus.Plus;
+                        Point location = node.PlusMinus.Location;
 
                         e.Graphics.DrawImage(image, location);
                     }
                 });
             }
-            #endregion
-
-            ////Test bounds
-            //this.Nodes.TraverseNodes(node => node.Visible, node =>
-            //{
-            //    e.Graphics.DrawRectangle(new Pen(Color.Silver, 1.0F), node.BoundsSubtree);
-            //});
-
-            base.OnPaint(e);
         }
         #endregion
 
