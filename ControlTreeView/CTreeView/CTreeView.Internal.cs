@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.ComponentModel;
 using System.Drawing.Text;
+using System.Xml.Linq;
 
 namespace ControlTreeView {
     /// <summary>
@@ -125,21 +126,7 @@ namespace ControlTreeView {
             foreach (CTreeNode node in Nodes)
                 startYMax = node.NextYMax(startX, startYMax);
 
-            LC.plusMinusCalc = new Func<CTreeNode, Point>(eachNode =>
-                                    getHD_Point2(eachNode, PlusMinus.Size.Width / 2 + 2));
-
-            LC.parentLineCalc = new Func<CTreeNode, CTreeNode.Line>(parent =>
-                new CTreeNode.Line( getHD_Point2(parent, endLineIndent),
-                                    getHD_Point2(parent, IndentDepth / 2)));
-
-            LC.commonLineCalc = new Func<CTreeNodeCollection, CTreeNode.Line>(nodes =>
-                new CTreeNode.Line( getHD_Point(nodes.FirstNode, -IndentDepth / 2),
-                                    getHD_Point(nodes.FirstNode, -IndentDepth / 2, nodes.LastNode)));
-
-            LC.childLineCalc = new Func<CTreeNode, CTreeNode.Line>(child =>
-                new CTreeNode.Line( getHD_Point(child, -IndentDepth / 2),
-                                    getHD_Point(child, -endLineIndent)));
-
+            Recalculate_Lines(endLineIndent);
         }
         #endregion
 
@@ -154,22 +141,26 @@ namespace ControlTreeView {
             foreach (CTreeNode node in Nodes)
                 startXMax = node.NextXMax(startXMax, startY);
 
-            LC.plusMinusCalc = new Func<CTreeNode, Point>(eachNode =>
-                                    getVD_Point2(eachNode, PlusMinus.Size.Width / 2 + 2));
-
-            LC.parentLineCalc = new Func<CTreeNode, CTreeNode.Line>(parent =>
-                new CTreeNode.Line( getVD_Point2(parent, endLineIndent),
-                                    getVD_Point2(parent, IndentDepth / 2)));
-
-            LC.commonLineCalc = new Func<CTreeNodeCollection, CTreeNode.Line>(nodes =>
-                new CTreeNode.Line( getVD_Point(nodes.FirstNode, -IndentDepth / 2),
-                                    getVD_Point(nodes.LastNode, -IndentDepth / 2, nodes.FirstNode)));
-
-            LC.childLineCalc = new Func<CTreeNode, CTreeNode.Line>(child =>
-                new CTreeNode.Line( getVD_Point(child, -IndentDepth / 2),
-                                    getVD_Point(child, -endLineIndent)));
+            Recalculate_Lines(endLineIndent);
         }
         #endregion
+
+        private void Recalculate_Lines(int endLineIndent) {
+            LC.plusMinusCalc = new Func<CTreeNode, Point>(eachNode =>
+                                    GetGeneralPoint1b(eachNode, PlusMinus.Size.Width / 2 + 2));
+
+            LC.parentLineCalc = new Func<CTreeNode, CTreeNode.Line>(parent =>
+                new CTreeNode.Line(GetGeneralPoint1b(parent, endLineIndent),
+                                    GetGeneralPoint1b(parent, IndentDepth / 2)));
+
+            LC.commonLineCalc = new Func<CTreeNodeCollection, CTreeNode.Line>(nodes =>
+                new CTreeNode.Line(GetGeneralPoint1a(nodes.FirstNode, -IndentDepth / 2),
+                                    GetGeneralPoint1c(nodes, -IndentDepth / 2)));
+
+            LC.childLineCalc = new Func<CTreeNode, CTreeNode.Line>(child =>
+                new CTreeNode.Line(GetGeneralPoint1a(child, -IndentDepth / 2),
+                                    GetGeneralPoint1a(child, -endLineIndent)));
+        }
 
         #region getPoint  CTreeViewDrawStyle LinearTree, HorizontalTree, VerticalTree
         // -------------------- LinearTree -------------------------------------------------
@@ -184,34 +175,41 @@ namespace ControlTreeView {
             return new Point(nodeX.Location.X + offsetX,
                              nodeY.Location.Y + offsetY + nodeY.Bounds.Height / 2);
         }
-        // -------------------- HorizontalTree ---------------------------------------------
-        private Point getHD_Point(CTreeNode node, int offsetX) {
-            return getHD_Point(node, offsetX, node);
+        // -------------------- Horizontal & Vertical Tree ---------------------------------
+        private Point GetGeneralPoint1a(CTreeNode node, int offset) {
+            return GetGeneralPoint3(node, offset, node, false);
+        }
+                
+        private Point GetGeneralPoint1b(CTreeNode node, int offset) {
+            return GetGeneralPoint3(node, offset, node, true);
         }
 
-        private Point getHD_Point(CTreeNode node, int offsetX, CTreeNode node2) {
-            return new Point( node.Location.X + offsetX,
-                             node2.Location.Y + node2.Bounds.Height / 2);
+        private Point GetGeneralPoint1c(CTreeNodeCollection nodes, int offset) {
+            bool isVertical = DrawStyle == CTreeViewDrawStyle.VerticalDiagram;
+
+            CTreeNode nodeA = (isVertical) ? nodes.LastNode  : nodes.FirstNode;
+            CTreeNode nodeB = (isVertical) ? nodes.FirstNode : nodes.LastNode;
+
+            return GetGeneralPoint3(nodeA, offset, nodeB, false);
         }
 
-        private Point getHD_Point2(CTreeNode node, int offsetX) {
-            return new Point(node.Location.X  + node.Bounds.Width + offsetX,
-                             node.Location.Y  + node.Bounds.Height / 2);
-        }
-        // -------------------- VerticalTree -----------------------------------------------
-        private Point getVD_Point(CTreeNode node, int offsetY) {
-            return getVD_Point(node, offsetY, node);
+        private Point GetGeneralPoint2(CTreeNode node1, int offset, CTreeNode node2) {
+            return GetGeneralPoint3(node1, offset, node2, false);
         }
 
-        private Point getVD_Point(CTreeNode node, int offsetY, CTreeNode node2) {
-            return new Point( node.Location.X + node.Bounds.Width / 2,
-                             node2.Location.Y + offsetY);
-        }
+        private Point GetGeneralPoint3(CTreeNode node1, int offset, CTreeNode node2, bool addBounds) {
+            int bounds_width  = (addBounds) ? node1.Bounds.Width  : 0;
+            int bounds_height = (addBounds) ? node1.Bounds.Height : 0;
 
-        private Point getVD_Point2(CTreeNode node, int offsetY) {
-            return new Point(node.Location.X  + node.Bounds.Width / 2,
-                             node.Location.Y  + node.Bounds.Height + offsetY);
+            bool isVertical = DrawStyle == CTreeViewDrawStyle.VerticalDiagram;
+
+            int offsetX = (isVertical) ? node1.Bounds.Width / 2 : bounds_width + offset;
+            int offsetY = (isVertical) ? bounds_height + offset : node2.Bounds.Height / 2;
+
+            return new Point(node1.Location.X + offsetX, node2.Location.Y + offsetY);
         }
+        // ---------------------------------------------------------------------------------
+
         #endregion
 
         #endregion

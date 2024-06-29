@@ -20,6 +20,10 @@ namespace ControlTreeView {
         internal int x2;
         internal int y2;
 
+        public Geometry(CTreeNode node)
+            : this(node.Location.X, node.Location.Y, node.Bounds.Width, node.Bounds.Height) { }
+
+
         // -------------------------------------------------------------
         // constructors
         // -------------------------------------------------------------
