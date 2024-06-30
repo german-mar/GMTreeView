@@ -350,11 +350,9 @@ namespace ControlTreeView
         /// Gets or sets the Pen for drawing lines of this CTreeView
         /// </summary>
         [Browsable(false)]
-        public Pen LinesPen
-        {
+        public Pen LinesPen {
             get { return _LinesPen; }
-            set
-            {
+            set {
                 _LinesPen.Dispose();
                 _LinesPen = value;
                 Refresh();

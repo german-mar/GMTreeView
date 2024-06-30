@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using static ControlTreeView.CTreeNode;
 
 namespace ControlTreeView
 {
-    public partial class CTreeNode
-    {
+    public partial class CTreeNode {
         #region Properties
 
         #region Location and Size
@@ -14,10 +15,8 @@ namespace ControlTreeView
 
         //private Size _size;
         /// <summary>The size of the node.</summary>
-        internal Size Size
-        {
-            get
-            {
+        internal Size Size {
+            get {
                 return (Control is NodeControl) ? ((NodeControl)Control).Area.Size : Control.Size;
             }
 
@@ -27,7 +26,55 @@ namespace ControlTreeView
 
         #region Lines
         /// <summary>The list of lines for the node.</summary>
-        internal List<Line> Lines { get; set; }
+        //internal List<Line> Lines { get; set; }
+
+        internal ColorLines colorLines;
+
+        internal class ColorLines {
+            // ---------------------------------------------------------
+            // lines
+            // ---------------------------------------------------------
+            internal List<Line> Root   { get; set; }
+            internal List<Line> Parent { get; set; }
+            internal List<Line> Child  { get; set; }
+            internal List<Line> Common { get; set; }
+
+            // ---------------------------------------------------------
+            // Constructor
+            // ---------------------------------------------------------
+            public ColorLines() {
+                Root   = new List<Line>();
+                Parent = new List<Line>();
+                Child  = new List<Line>();
+                Common = new List<Line>();
+
+                _rootPen   = GetPen(Color.Orange);
+                _parentPen = GetPen(Color.Red);
+                _childPen  = GetPen(Color.Green);
+                _commonPen = GetPen(Color.Blue);
+            }
+
+            private static Pen GetPen(Color color) {
+                Pen pen = new Pen(color, 4.0F);
+                //pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+                return pen;
+            }
+
+            // ---------------------------------------------------------
+            // Pen for each line type
+            // ---------------------------------------------------------
+            private Pen _rootPen, _parentPen, _childPen, _commonPen;
+
+            internal Pen Root_Pen   { get { return _rootPen;   }   set { SetPen(_rootPen,   value); } }
+            internal Pen Parent_Pen { get { return _parentPen; }   set { SetPen(_parentPen, value); } }
+            internal Pen Child_Pen  { get { return _childPen;  }   set { SetPen(_childPen,  value); } }
+            internal Pen Common_Pen { get { return _commonPen; }   set { SetPen(_commonPen, value); } }
+
+            private void SetPen(Pen pen, Pen value) {
+                pen.Dispose();
+                pen = value;
+            }
+        }
 
         internal struct Line
         {
@@ -212,16 +259,25 @@ namespace ControlTreeView
             {
                 if (Nodes.HasChildren)
                 {
-                    Lines = new List<Line>();
-                    Lines.Add(LC.parentLineCalc(this));
-                    Lines.AddRange( Nodes.GetLines(LC) );
+                    //Lines = new List<Line>();
+                                colorLines = new ColorLines();
+
+                    //Lines.Add(LC.parentLineCalc(this));
+                                colorLines.Parent.Add(LC.parentLineCalc(this));
+
+                    //Lines.AddRange( Nodes.GetLines(LC) );
+                                ColorLines A = Nodes.GetLines2(LC);
+
+                                colorLines.Common.AddRange(A.Common);
+                                colorLines.Child.AddRange(A.Child);
 
                     foreach (CTreeNode child in Nodes)
                         child.CalculateLines(LC);
                 }
                 else
                 {
-                    Lines = null;//?
+                    //Lines = null;//?
+                    colorLines = null;
                 }
             }
         }

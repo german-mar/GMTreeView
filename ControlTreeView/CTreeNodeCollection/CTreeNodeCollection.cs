@@ -195,6 +195,26 @@ namespace ControlTreeView
 
             return lines;
         }
+
+        internal CTreeNode.ColorLines GetLines2(Line_Coordinates_Sruct LC) {
+            //List<CTreeNode.Line> lines = new List<CTreeNode.Line>();
+            CTreeNode.ColorLines colorLines = new CTreeNode.ColorLines();
+
+            // If the node has at least one child
+            if (Count > 1) {
+                //lines.Add(LC.commonLineCalc(this));
+                colorLines.Common.Add(LC.commonLineCalc(this));
+
+            }
+
+            // For each child of the node
+            foreach (CTreeNode childNode in this) {
+                //lines.Add(LC.childLineCalc(childNode));
+                colorLines.Child.Add(LC.childLineCalc(childNode));
+            }
+
+            return colorLines;
+        }
         #endregion
 
         ///  <summary>Determines if the collection has children</summary>

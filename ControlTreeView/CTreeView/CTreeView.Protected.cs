@@ -282,9 +282,8 @@ namespace ControlTreeView
 
         private void PaintLines(PaintEventArgs e) {
             if (ShowLines) {
-                this.Nodes.TraverseNodes(node => node.IsExpanded, node =>
-                { DrawLines(e, node.Lines); }
-                );
+                //this.Nodes.TraverseNodes(node => node.IsExpanded, node => { DrawLines(e, node.Lines); } );
+                this.Nodes.TraverseNodes(node => node.IsExpanded, node => { DrawLines(e, node.colorLines); });
 
                 DrawLines(e, rootLines);
             }
@@ -294,6 +293,18 @@ namespace ControlTreeView
             if (lines != null)
                 foreach (CTreeNode.Line line in lines)
                     e.Graphics.DrawLine(LinesPen, line.Point1, line.Point2);
+        }
+        private void DrawLines(PaintEventArgs e, CTreeNode.ColorLines colorLines) {
+            if (colorLines != null) {
+                foreach (CTreeNode.Line line in colorLines.Parent)
+                    e.Graphics.DrawLine(colorLines.Parent_Pen, line.Point1, line.Point2);
+
+                foreach (CTreeNode.Line line in colorLines.Common)
+                    e.Graphics.DrawLine(colorLines.Common_Pen, line.Point1, line.Point2);
+
+                foreach (CTreeNode.Line line in colorLines.Child)
+                    e.Graphics.DrawLine(colorLines.Child_Pen, line.Point1, line.Point2);
+            }
         }
 
         private void PaintDragAndDropDestinationAnimation(PaintEventArgs e) {
