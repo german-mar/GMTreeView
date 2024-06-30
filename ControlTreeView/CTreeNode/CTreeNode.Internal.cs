@@ -107,13 +107,13 @@ namespace ControlTreeView
         /// <returns></returns>
         internal int NextYMax(int currentX, int currentYMax)
         {
-            int nextYMax = currentYMax;
+            //int nextYMax = currentYMax;
 
             if (Nodes.HasChildren && (IsExpanded || !OwnerCTreeView.MinimizeCollapsed))
             {
                 foreach (CTreeNode child in Nodes)
                 {
-                    nextYMax = child.NextYMax(currentX + Bounds.Width + OwnerCTreeView.IndentDepth, nextYMax);
+                    currentYMax = child.NextYMax(currentX + Bounds.Width + OwnerCTreeView.IndentDepth, currentYMax);
                 }
 
                 int minY = FirstNode.Location.Y + FirstNode.Size.Height / 2;
@@ -128,11 +128,11 @@ namespace ControlTreeView
             }
             else
             {
-                Location  = new Point(currentX, nextYMax);
-                nextYMax += Size.Height + OwnerCTreeView.IndentWidth;
+                Location  = new Point(currentX, currentYMax);
+                currentYMax += Size.Height + OwnerCTreeView.IndentWidth;
             }
 
-            return nextYMax;
+            return currentYMax;
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.ComponentModel;
 using System.Drawing.Text;
 using System.Xml.Linq;
+using static System.Windows.Forms.AxHost;
 
 namespace ControlTreeView {
     /// <summary>
@@ -41,22 +42,26 @@ namespace ControlTreeView {
         internal Line_Coordinates_Sruct LC;
         #endregion
 
+        private const int endLineIndent = 2;
+
         #region Recalculate
         internal void Recalculate() {
             if (!SuspendUpdate) {
-                const int endLineIndent = 2;
+                //const int endLineIndent = 2;
                 bool showRootPlusMinus  = true;
 
                 Calculate_Visible();
 
                 switch (DrawStyle) {
                     case CTreeViewDrawStyle.LinearTree:
-                                                                showRootPlusMinus = ShowRootLines;
-                                                                Recalculate_LinearTree(endLineIndent);      break;
+                                                showRootPlusMinus = ShowRootLines;
+                                                Recalculate_LinearTree();
+                                                break;
 
-                    case CTreeViewDrawStyle.HorizontalDiagram:  Recalculate_HorizontalTree(endLineIndent);  break;
-
-                    case CTreeViewDrawStyle.VerticalDiagram:    Recalculate_VerticalTree(endLineIndent);    break;
+                    case CTreeViewDrawStyle.HorizontalDiagram:
+                    case CTreeViewDrawStyle.VerticalDiagram:
+                                                Recalculate_Horizontal_or_Vertical_Tree();
+                                                break;
                 }
 
                 Calculate_PlusMinus(showRootPlusMinus);
@@ -85,10 +90,10 @@ namespace ControlTreeView {
         }
         #endregion
 
-        #region Recalculating the coordinates of the tree lines
+        #region Recalculating the coordinates of the tree lines and PlusMinus location
 
-        #region Recalculate_LinearTree
-        private void Recalculate_LinearTree(int endLineIndent) {
+        #region Recalculate_LinearTree, Recalculate_HorizontalTree, Recalculate_VerticalTree
+        private void Recalculate_LinearTree() {
             Point startLocation = new Point(Padding.Left + 3, Padding.Top + 3);
 
             if (ShowRootLines)
@@ -97,6 +102,36 @@ namespace ControlTreeView {
             foreach (CTreeNode node in Nodes)
                 startLocation.Y = node.NextLocation(startLocation).Y;
 
+            RecalculateLines_LinearTree();
+        }
+
+        private void Recalculate_Horizontal_or_Vertical_Tree() {
+            bool isVertical = DrawStyle == CTreeViewDrawStyle.VerticalDiagram;
+
+            int start    = (isVertical) ? Padding.Top  + 3 : Padding.Left + 3;
+            int startMax = (isVertical) ? Padding.Left + 3 : Padding.Top  + 3;
+
+            if (ShowRootLines)
+                start += IndentDepth;
+
+            if (isVertical) {
+                foreach (CTreeNode node in Nodes)
+                    startMax = node.NextXMax(startMax, start);
+
+            } else {
+                foreach (CTreeNode node in Nodes)
+                    startMax = node.NextYMax(start, startMax);
+            }
+
+            RecalculateLines_HorizontalVerticalTree();
+        }
+        #endregion
+
+        #region Recalculate LinearTree
+
+        #region calculate linear tree
+        // -------------------- LinearTree -------------------------------------------------
+        private void RecalculateLines_LinearTree() {
             LC.plusMinusCalc = new Func<CTreeNode, Point>(eachNode =>
                                    getPoint(eachNode, -IndentDepth + 5));
 
@@ -111,41 +146,29 @@ namespace ControlTreeView {
             LC.childLineCalc = new Func<CTreeNode, CTreeNode.Line>(child =>
                 new CTreeNode.Line(getPoint(child, -IndentDepth + 5),
                                    getPoint(child, -endLineIndent)));
-
         }
         #endregion
 
-        #region Recalculate_HorizontalTree
-        private void Recalculate_HorizontalTree(int endLineIndent) {
-            int startX    = Padding.Left + 3;
-            int startYMax = Padding.Top  + 3;
+        #region calculate points
+        private Point getPoint(CTreeNode nodeX, int offsetX) {
+            return getPoint(nodeX, offsetX, nodeX);
+        }
+        private Point getPoint(CTreeNode nodeX, int offsetX, CTreeNode nodeY) {
+            return getPoint(nodeX, offsetX, nodeY, 0);
+        }
 
-            if (ShowRootLines)
-                startX += IndentDepth;
-
-            foreach (CTreeNode node in Nodes)
-                startYMax = node.NextYMax(startX, startYMax);
-
-            Recalculate_Lines(endLineIndent);
+        private Point getPoint(CTreeNode nodeX, int offsetX, CTreeNode nodeY, int offsetY) {
+            return new Point(nodeX.Location.X + offsetX, nodeY.Location.Y + offsetY + nodeY.Bounds.Height / 2);
         }
         #endregion
 
-        #region Recalculate_VerticalTree
-        private void Recalculate_VerticalTree(int endLineIndent) {
-            int startXMax = Padding.Left + 3;
-            int startY    = Padding.Top  + 3;
-
-            if (ShowRootLines)
-                startY += IndentDepth;
-
-            foreach (CTreeNode node in Nodes)
-                startXMax = node.NextXMax(startXMax, startY);
-
-            Recalculate_Lines(endLineIndent);
-        }
         #endregion
 
-        private void Recalculate_Lines(int endLineIndent) {
+        #region Recalculate  Horizontal or Vertical Tree
+
+        #region calculate horizontal or vertical tree
+        // -------------------- Horizontal & Vertical Tree ---------------------------------
+        private void RecalculateLines_HorizontalVerticalTree() {
             LC.plusMinusCalc = new Func<CTreeNode, Point>(eachNode =>
                                     GetGeneralPoint1b(eachNode, PlusMinus.Size.Width / 2 + 2));
 
@@ -161,21 +184,9 @@ namespace ControlTreeView {
                 new CTreeNode.Line(GetGeneralPoint1a(child, -IndentDepth / 2),
                                     GetGeneralPoint1a(child, -endLineIndent)));
         }
+        #endregion
 
-        #region getPoint  CTreeViewDrawStyle LinearTree, HorizontalTree, VerticalTree
-        // -------------------- LinearTree -------------------------------------------------
-        private Point getPoint(CTreeNode nodeX, int offsetX) {
-            return getPoint(nodeX, offsetX, nodeX);
-        }
-        private Point getPoint(CTreeNode nodeX, int offsetX, CTreeNode nodeY) {
-            return getPoint(nodeX, offsetX, nodeY, 0);
-        }
-
-        private Point getPoint(CTreeNode nodeX, int offsetX, CTreeNode nodeY, int offsetY) {
-            return new Point(nodeX.Location.X + offsetX,
-                             nodeY.Location.Y + offsetY + nodeY.Bounds.Height / 2);
-        }
-        // -------------------- Horizontal & Vertical Tree ---------------------------------
+        #region calculate points
         private Point GetGeneralPoint1a(CTreeNode node, int offset) {
             return GetGeneralPoint3(node, offset, node, false);
         }
@@ -209,6 +220,7 @@ namespace ControlTreeView {
             return new Point(node1.Location.X + offsetX, node2.Location.Y + offsetY);
         }
         // ---------------------------------------------------------------------------------
+        #endregion
 
         #endregion
 

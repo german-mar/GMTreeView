@@ -252,6 +252,8 @@ namespace ControlTreeView
             PaintSelection(e);
             PaintPlusMinusButtons(e);
 
+            DrawStatusText(e);
+
             ////Test bounds
             //this.Nodes.TraverseNodes(node => node.Visible, node =>
             //{
@@ -259,6 +261,23 @@ namespace ControlTreeView
             //});
 
             base.OnPaint(e);
+        }
+
+        private void DrawStatusText(PaintEventArgs e) {
+            Graphics g = e.Graphics;
+
+            int x = 200;
+            int y = 5;
+
+            string text = "Hello World!";
+
+            Font font = new Font("Arial", 14);
+
+            
+
+            Brush textColor = Brushes.Red;
+
+            g.DrawString(text, font, textColor, x, y);
         }
 
         private void PaintLines(PaintEventArgs e) {
