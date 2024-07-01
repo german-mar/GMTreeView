@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.ComponentModel;
 using System.Collections.Generic;
+using static ControlTreeView.CTreeNode;
 
 namespace ControlTreeView
 {
@@ -275,15 +276,18 @@ namespace ControlTreeView
 
         private void DrawLines2(PaintEventArgs e, CTreeNode.ColorLines colorLines) {
             if (colorLines != null) {
-                foreach (CTreeNode.Line line in colorLines.Parent)
-                    e.Graphics.DrawLine(colorLines.Parent_Pen, line.Point1, line.Point2);
-
-                foreach (CTreeNode.Line line in colorLines.Common)
-                    e.Graphics.DrawLine(colorLines.Common_Pen, line.Point1, line.Point2);
-
-                foreach (CTreeNode.Line line in colorLines.Child)
-                    e.Graphics.DrawLine(colorLines.Child_Pen, line.Point1, line.Point2);
+                DrawLine(e, colorLines, ColorLines.Type.PARENT);
+                DrawLine(e, colorLines, ColorLines.Type.COMMON);
+                DrawLine(e, colorLines, ColorLines.Type.CHILD);
             }
+        }
+
+        private void DrawLine(PaintEventArgs e, ColorLines colorLines, ColorLines.Type type) {
+            var lines = colorLines.getLine(type);
+            var pen   = colorLines.getPen(type);
+
+            foreach ( CTreeNode.Line line in lines)
+                e.Graphics.DrawLine(pen, line.Point1, line.Point2);
         }
 
         private void PaintDragAndDropDestinationAnimation(PaintEventArgs e) {

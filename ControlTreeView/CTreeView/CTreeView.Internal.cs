@@ -30,10 +30,10 @@ namespace ControlTreeView {
         #region Line_Coordinates struct: Delegates for Lines and PlusMinus coordinates calculus
         /// <summary>Delegates for Lines and PlusMinus coordinates calculus</summary>
         internal struct Line_Coordinates_Sruct {
-            public Func<CTreeNode, Point> plusMinusCalc;
-            public Func<CTreeNode, CTreeNode.Line> parentLineCalc;
-            public Func<CTreeNodeCollection, CTreeNode.Line> commonLineCalc;
-            public Func<CTreeNode, CTreeNode.Line> childLineCalc;
+            public Func<CTreeNode,           Point>             plusMinusCalc;
+            public Func<CTreeNode,           CTreeNode.Line>    parentLineCalc;
+            public Func<CTreeNodeCollection, CTreeNode.Line>    commonLineCalc;
+            public Func<CTreeNode,           CTreeNode.Line>    childLineCalc;
         }
 
         /// <summary>Line Coordinates for PlusMinus button, Parent lines, Common Lines, Child Lines</summary>
@@ -200,20 +200,27 @@ namespace ControlTreeView {
         #region calculate linear tree
         // -------------------- LinearTree -------------------------------------------------
         private void RecalculateLines_LinearTree() {
-            LC.plusMinusCalc = new Func<CTreeNode, Point>(eachNode =>
-                                   getPoint(eachNode, -IndentDepth + 5));
+            LC.plusMinusCalc = new Func<CTreeNode,            Point>         ( eachNode => getPoint(eachNode, -IndentDepth + 5)     );
+            LC.parentLineCalc = new Func<CTreeNode,           CTreeNode.Line>( parent   => GetLine2(parent)                         );
+            LC.commonLineCalc = new Func<CTreeNodeCollection, CTreeNode.Line>( nodes    => GetLine(nodes.FirstNode, nodes.LastNode) );
+            LC.childLineCalc  = new Func<CTreeNode,           CTreeNode.Line>( child    => GetLine(child)                           );
+        }
+        #endregion
 
-            LC.parentLineCalc = new Func<CTreeNode, CTreeNode.Line>(parent =>
-                new CTreeNode.Line(getPoint(parent, 5, parent, endLineIndent),
-                                   getPoint(parent, 5, parent.FirstNode)));
+        #region calculate lines
+        private CTreeNode.Line GetLine2(CTreeNode parent) {
+            return new CTreeNode.Line(getPoint(parent, 5, parent, endLineIndent),
+                                      getPoint(parent, 5, parent.FirstNode));
+        }
 
-            LC.commonLineCalc = new Func<CTreeNodeCollection, CTreeNode.Line>(nodes =>
-                new CTreeNode.Line(getPoint(nodes.FirstNode, -IndentDepth + 5, nodes.FirstNode),
-                                   getPoint(nodes.FirstNode, -IndentDepth + 5, nodes.LastNode)));
+        private CTreeNode.Line GetLine(CTreeNode FirstNode, CTreeNode LastNode) {
+            return new CTreeNode.Line(getPoint(FirstNode, -IndentDepth + 5, FirstNode),
+                                      getPoint(FirstNode, -IndentDepth + 5, LastNode));
+        }
 
-            LC.childLineCalc = new Func<CTreeNode, CTreeNode.Line>(child =>
-                new CTreeNode.Line(getPoint(child, -IndentDepth + 5),
-                                   getPoint(child, -endLineIndent)));
+        private CTreeNode.Line GetLine(CTreeNode child) {
+            return new CTreeNode.Line(getPoint(child, -IndentDepth + 5),
+                                      getPoint(child, -endLineIndent));
         }
         #endregion
 

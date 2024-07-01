@@ -32,23 +32,38 @@ namespace ControlTreeView
 
         internal class ColorLines {
             // ---------------------------------------------------------
+            // type of line
+            // ---------------------------------------------------------
+            internal enum Type {
+                //ROOT,               // not used
+                PARENT,
+                CHILD,
+                COMMON
+            }
+
+            // ---------------------------------------------------------
             // lines
             // ---------------------------------------------------------
-            internal List<Line> Root   { get; set; }
+            //internal List<Line> Root   { get; set; }
             internal List<Line> Parent { get; set; }
             internal List<Line> Child  { get; set; }
             internal List<Line> Common { get; set; }
 
             // ---------------------------------------------------------
+            // pens
+            // ---------------------------------------------------------
+            private Pen /*_rootPen,*/ _parentPen, _childPen, _commonPen;
+
+            // ---------------------------------------------------------
             // Constructor
             // ---------------------------------------------------------
             public ColorLines() {
-                Root   = new List<Line>();
+                //Root   = new List<Line>();
                 Parent = new List<Line>();
                 Child  = new List<Line>();
                 Common = new List<Line>();
 
-                _rootPen   = GetPen(Color.Brown);
+                //_rootPen   = GetPen(Color.Brown);
                 _parentPen = GetPen(Color.Red);
                 _childPen  = GetPen(Color.Green);
                 _commonPen = GetPen(Color.Blue);
@@ -61,19 +76,42 @@ namespace ControlTreeView
             }
 
             // ---------------------------------------------------------
-            // Pen for each line type
+            // methods
             // ---------------------------------------------------------
-            private Pen _rootPen, _parentPen, _childPen, _commonPen;
-
-            internal Pen Root_Pen   { get { return _rootPen;   }   set { SetPen(_rootPen,   value); } }
-            internal Pen Parent_Pen { get { return _parentPen; }   set { SetPen(_parentPen, value); } }
-            internal Pen Child_Pen  { get { return _childPen;  }   set { SetPen(_childPen,  value); } }
-            internal Pen Common_Pen { get { return _commonPen; }   set { SetPen(_commonPen, value); } }
-
-            private void SetPen(Pen pen, Pen value) {
-                pen.Dispose();
-                pen = value;
+            internal List<Line> getLine(Type type) {
+                switch (type) {
+                    //case Type.ROOT:   return Root;
+                    case Type.PARENT: return Parent;
+                    case Type.CHILD:  return Child;
+                    case Type.COMMON: return Common;
+                    default:          return null;
+                }
             }
+
+            internal Pen getPen(Type type) {
+                switch (type) {
+                    //case Type.ROOT:   return _rootPen;
+                    case Type.PARENT: return _parentPen;
+                    case Type.CHILD:  return _childPen;
+                    case Type.COMMON: return _commonPen;
+                    default:          return null;
+                }
+            }
+
+            //// ---------------------------------------------------------
+            //// Pen for each line type
+            //// ---------------------------------------------------------
+            //private Pen _rootPen, _parentPen, _childPen, _commonPen;
+
+            //internal Pen Root_Pen   { get { return _rootPen;   }   set { SetPen(_rootPen,   value); } }
+            //internal Pen Parent_Pen { get { return _parentPen; }   set { SetPen(_parentPen, value); } }
+            //internal Pen Child_Pen  { get { return _childPen;  }   set { SetPen(_childPen,  value); } }
+            //internal Pen Common_Pen { get { return _commonPen; }   set { SetPen(_commonPen, value); } }
+
+            //private void SetPen(Pen pen, Pen value) {
+            //    pen.Dispose();
+            //    pen = value;
+            //}
         }
 
         internal struct Line
