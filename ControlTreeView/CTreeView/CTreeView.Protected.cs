@@ -283,18 +283,19 @@ namespace ControlTreeView
         private void PaintLines(PaintEventArgs e) {
             if (ShowLines) {
                 //this.Nodes.TraverseNodes(node => node.IsExpanded, node => { DrawLines(e, node.Lines); } );
-                this.Nodes.TraverseNodes(node => node.IsExpanded, node => { DrawLines(e, node.colorLines); });
+                this.Nodes.TraverseNodes(node => node.IsExpanded, node => { DrawLines2(e, node.colorLines); });
 
-                DrawLines(e, rootLines);
+                DrawLines2(e, rootLines2);
             }
         }
 
-        private void DrawLines(PaintEventArgs e, List<CTreeNode.Line> lines) {
-            if (lines != null)
-                foreach (CTreeNode.Line line in lines)
-                    e.Graphics.DrawLine(LinesPen, line.Point1, line.Point2);
-        }
-        private void DrawLines(PaintEventArgs e, CTreeNode.ColorLines colorLines) {
+        //private void DrawLines(PaintEventArgs e, List<CTreeNode.Line> lines) {
+        //    if (lines != null)
+        //        foreach (CTreeNode.Line line in lines)
+        //            e.Graphics.DrawLine(LinesPen, line.Point1, line.Point2);
+        //}
+
+        private void DrawLines2(PaintEventArgs e, CTreeNode.ColorLines colorLines) {
             if (colorLines != null) {
                 foreach (CTreeNode.Line line in colorLines.Parent)
                     e.Graphics.DrawLine(colorLines.Parent_Pen, line.Point1, line.Point2);

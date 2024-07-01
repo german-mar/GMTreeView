@@ -16,7 +16,8 @@ namespace ControlTreeView {
     public partial class CTreeView
     {
         #region drag and drop properties
-        
+
+        #region drag and drop target struct
         // ---------------------------------------------------
         // drag and drop target position in a drag and drop operation
         // ---------------------------------------------------
@@ -88,7 +89,47 @@ namespace ControlTreeView {
 
         /// <summary>Drag And Drop target position</summary>
         private DragAnDropTarget dragDrop;
+        #endregion
 
+        #region struct DragTargetPositionClass
+        /// <summary>Struct that stores nodeDirect, nodeBefore and nodeAfter.</summary>
+        public struct DragTargetPositionClass {
+
+            /// <summary>Constructor</summary>
+            internal DragTargetPositionClass(CTreeNode nodeDirect, CTreeNode nodeBefore, CTreeNode nodeAfter) {
+                this.NodeDirect = nodeDirect;
+                this.NodeBefore = nodeBefore;
+                this.NodeAfter  = nodeAfter;
+            }
+
+            /// <summary>Gets a value indicating whether drag destination nodes are not empty.</summary>
+            public bool Enabled {
+                get { return HaveNodeDirect() || HaveNodeBefore() || HaveNodeAfter(); }
+            }
+
+            /// <summary>The direct node of drag target position.</summary>
+            public CTreeNode NodeDirect { get; }
+
+            /// <summary>The upper node of drag target position.</summary>
+            public CTreeNode NodeBefore { get; }
+
+            /// <summary>The lower node of drag target position.</summary>
+            public CTreeNode NodeAfter  { get; }
+
+            /// <summary>NodeDirect is not null</summary>
+            public bool HaveNodeDirect() { return this.NodeDirect != null; }
+
+            /// <summary>NodeBefore is not null</summary>
+            public bool HaveNodeBefore() { return this.NodeBefore != null; }
+
+            /// <summary>NodeAfter is not null</summary>
+            public bool HaveNodeAfter()  { return this.NodeAfter  != null; }
+        }
+        #endregion
+        
+        #endregion
+
+        #region scroll management:  scrollTimer_Tick event handler, SetScrollDirections
         // ---------------------------------------------------
         // scrolling
         // ---------------------------------------------------
@@ -97,9 +138,7 @@ namespace ControlTreeView {
 
         // indicates what type of scrolling the CTreeView requires
         private bool scrollUp, scrollDown, scrollRight, scrollLeft;
-        #endregion
-
-        #region scroll management:  scrollTimer_Tick event handler, SetScrollDirections
+        
         [DllImport("user32.dll")]
         static extern int SendMessage(
                int hWnd,     // handle to destination window
@@ -107,7 +146,7 @@ namespace ControlTreeView {
                long wParam,  // first message parameter
                long lParam   // second message parameter
         );
-
+        
         // -------------------------------------------------------------------------
         // Timer tick event handler. Used to scroll the CTreeView
         // -------------------------------------------------------------------------
@@ -157,42 +196,6 @@ namespace ControlTreeView {
             this.scrollDown  = scrollDown;
             this.scrollRight = scrollRigh;
             this.scrollLeft  = scrollLeft;
-        }
-        #endregion
-
-        #region struct DragTargetPositionClass
-        /// <summary>Struct that stores nodeDirect, nodeBefore and nodeAfter.</summary>
-        public struct DragTargetPositionClass {
-
-            /// <summary>Constructor</summary>
-            internal DragTargetPositionClass(CTreeNode nodeDirect, CTreeNode nodeBefore, CTreeNode nodeAfter) {
-                this.NodeDirect = nodeDirect;
-                this.NodeBefore = nodeBefore;
-                this.NodeAfter  = nodeAfter;
-            }
-
-            /// <summary>Gets a value indicating whether drag destination nodes are not empty.</summary>
-            public bool Enabled {
-                get { return HaveNodeDirect() || HaveNodeBefore() || HaveNodeAfter(); }
-            }
-
-            /// <summary>The direct node of drag target position.</summary>
-            public CTreeNode NodeDirect { get; }
-
-            /// <summary>The upper node of drag target position.</summary>
-            public CTreeNode NodeBefore { get; }
-
-            /// <summary>The lower node of drag target position.</summary>
-            public CTreeNode NodeAfter  { get; }
-
-            /// <summary>NodeDirect is not null</summary>
-            public bool HaveNodeDirect() { return this.NodeDirect != null; }
-
-            /// <summary>NodeBefore is not null</summary>
-            public bool HaveNodeBefore() { return this.NodeBefore != null; }
-
-            /// <summary>NodeAfter is not null</summary>
-            public bool HaveNodeAfter()  { return this.NodeAfter  != null; }
         }
         #endregion
 
@@ -806,6 +809,7 @@ namespace ControlTreeView {
         #endregion
 
         #endregion
+
     }
 
 

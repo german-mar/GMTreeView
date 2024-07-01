@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
+using static ControlTreeView.CTreeNode;
 
 namespace ControlTreeView {
     /// <summary>
@@ -22,7 +23,8 @@ namespace ControlTreeView {
         /// <summary>
         /// The list of lines for the CTreeView.
         /// </summary>
-        private List<CTreeNode.Line> rootLines;
+        //private List<CTreeNode.Line> rootLines;
+        private CTreeNode.ColorLines rootLines2;
         #endregion
 
         #region Line_Coordinates struct: Delegates for Lines and PlusMinus coordinates calculus
@@ -113,7 +115,7 @@ namespace ControlTreeView {
                 foreach (CTreeNode node in Nodes)
                     node.CalculateLines(LC);
 
-                rootLines = (ShowRootLines) ? Nodes.GetLines(LC) : null;
+                rootLines2 = (ShowRootLines) ? Nodes.GetLines2(LC) : null;
             }
         }
         #endregion

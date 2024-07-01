@@ -28,7 +28,7 @@ namespace ControlTreeView
         /// <summary>The list of lines for the node.</summary>
         //internal List<Line> Lines { get; set; }
 
-        internal ColorLines colorLines;
+        internal ColorLines  colorLines;
 
         internal class ColorLines {
             // ---------------------------------------------------------
@@ -48,7 +48,7 @@ namespace ControlTreeView
                 Child  = new List<Line>();
                 Common = new List<Line>();
 
-                _rootPen   = GetPen(Color.Orange);
+                _rootPen   = GetPen(Color.Brown);
                 _parentPen = GetPen(Color.Red);
                 _childPen  = GetPen(Color.Green);
                 _commonPen = GetPen(Color.Blue);

@@ -181,20 +181,20 @@ namespace ControlTreeView
         
         ///// <param name="commonLineCalc">Function that calculates common line of nodes collection.</param>
         ///// <param name="childLineCalc">Function that calculates line of each node in collection.</param>
-        internal List<CTreeNode.Line> GetLines(Line_Coordinates_Sruct LC)
-        {
-            List<CTreeNode.Line> lines = new List<CTreeNode.Line>();
+        //internal List<CTreeNode.Line> GetLines(Line_Coordinates_Sruct LC)
+        //{
+        //    List<CTreeNode.Line> lines = new List<CTreeNode.Line>();
 
-            // If the node has at least one child
-            if (Count > 1)
-                lines.Add(LC.commonLineCalc(this));
+        //    // If the node has at least one child
+        //    if (Count > 1)
+        //        lines.Add(LC.commonLineCalc(this));
 
-            // For each child of the node
-            foreach (CTreeNode childNode in this)
-                lines.Add(LC.childLineCalc(childNode));
+        //    // For each child of the node
+        //    foreach (CTreeNode childNode in this)
+        //        lines.Add(LC.childLineCalc(childNode));
 
-            return lines;
-        }
+        //    return lines;
+        //}
 
         internal CTreeNode.ColorLines GetLines2(Line_Coordinates_Sruct LC) {
             //List<CTreeNode.Line> lines = new List<CTreeNode.Line>();
